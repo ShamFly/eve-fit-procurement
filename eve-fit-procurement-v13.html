@@ -1,0 +1,1702 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Локальный калькулятор списка покупок по двум фитам EVE Online.">
+  <title>EVE Fit Procurement</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23070d12'/%3E%3Cpath d='M12 16h40L40 27H22l-4 5 4 5h18l12 11H12l-5-16z' fill='%236ed8e8'/%3E%3C/svg%3E">
+  <script>
+    (() => {
+      const themes = ['amarr', 'caldari', 'gallente', 'minmatar'];
+      let theme = 'caldari';
+      try {
+        const saved = localStorage.getItem('eve-fit-procurement-theme-v1');
+        if (themes.includes(saved)) theme = saved;
+      } catch (_) {}
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --accent: #55a8d4;
+      --accent-2: #9bd8f2;
+      --accent-dark: #28516c;
+      --accent-rgb: 85, 168, 212;
+      --accent-dark-rgb: 40, 81, 108;
+      --bg: #05090d;
+      --panel: rgba(10, 20, 28, .88);
+      --panel-2: rgba(14, 28, 37, .82);
+      --line: rgba(var(--accent-rgb), .2);
+      --line-strong: rgba(var(--accent-rgb), .48);
+      --text: #e7f1f4;
+      --muted: #8fa4ad;
+      --cyan: var(--accent);
+      --cyan-2: var(--accent-2);
+      --amber: #e5b86a;
+      --green: #70d7a1;
+      --danger: #e27b76;
+      --fit-a: #6ed8e8;
+      --fit-b: #d6a56c;
+      --radius: 6px;
+      --shadow: 0 18px 70px rgba(0, 0, 0, .38);
+    }
+
+    :root[data-theme="amarr"] {
+      --accent: #d8a93d; --accent-2: #f4d780; --accent-dark: #6d4e1e;
+      --accent-rgb: 216, 169, 61; --accent-dark-rgb: 109, 78, 30;
+    }
+    :root[data-theme="gallente"] {
+      --accent: #55b978; --accent-2: #9cdfb0; --accent-dark: #285d3e;
+      --accent-rgb: 85, 185, 120; --accent-dark-rgb: 40, 93, 62;
+    }
+    :root[data-theme="minmatar"] {
+      --accent: #d66542; --accent-2: #f29a72; --accent-dark: #6d3023;
+      --accent-rgb: 214, 101, 66; --accent-dark-rgb: 109, 48, 35;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; background: var(--bg); }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font: 16px/1.48 Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(rgba(var(--accent-rgb), .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), .025) 1px, transparent 1px),
+        radial-gradient(circle at 18% 0%, rgba(var(--accent-dark-rgb), .3), transparent 31rem),
+        radial-gradient(circle at 92% 42%, rgba(var(--accent-rgb), .08), transparent 34rem),
+        var(--bg);
+      background-size: 48px 48px, 48px 48px, auto, auto, auto;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+
+    .shell { width: min(1500px, calc(100% - 32px)); margin: 0 auto; padding: 26px 0 48px; }
+
+    .topbar {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 2px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(145deg, rgba(var(--accent-rgb),.14), rgba(var(--accent-rgb),.02));
+      color: var(--cyan);
+      clip-path: polygon(0 0, 82% 0, 100% 18%, 100% 100%, 18% 100%, 0 82%);
+      font-weight: 800;
+      letter-spacing: -.08em;
+    }
+
+    .eyebrow { margin: 0 0 3px; color: var(--cyan); font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(1.35rem, 2.5vw, 2rem); line-height: 1.08; letter-spacing: .04em; font-weight: 560; }
+    .top-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 9px 14px; }
+    .local-note { color: var(--muted); font-size: .82rem; text-align: right; }
+    .language-toggle, .theme-toggle {
+      display: grid;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, .28);
+    }
+    .language-toggle { grid-template-columns: 1fr 1fr; }
+    .theme-toggle { grid-template-columns: auto repeat(4, 1fr); align-items: center; }
+    .theme-prefix { padding: 0 5px 0 7px; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .1em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
+    .language-toggle button, .theme-toggle button {
+      min-width: 40px;
+      min-height: 30px;
+      padding: 4px 8px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+    .theme-toggle button { min-width: 68px; letter-spacing: .025em; text-transform: uppercase; }
+    .language-toggle button:hover, .theme-toggle button:hover { color: var(--cyan-2); }
+    .language-toggle button.active, .theme-toggle button.active { border-color: rgba(var(--accent-rgb),.28); color: var(--cyan-2); background: rgba(var(--accent-rgb),.14); }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(380px, .85fr); gap: 18px; margin-top: 18px; }
+    .stack { display: grid; gap: 18px; align-content: start; }
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, rgba(16, 32, 42, .93), rgba(7, 15, 21, .93));
+      box-shadow: var(--shadow);
+    }
+    .panel::before { content: ""; position: absolute; inset: 0 auto auto 0; width: 92px; height: 1px; background: var(--cyan); opacity: .65; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 17px; border-bottom: 1px solid var(--line); background: rgba(var(--accent-rgb),.025); }
+    .panel-title { margin: 0; font-size: .83rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 650; }
+    .panel-body { padding: 16px; }
+
+    .fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .fit-card { min-width: 0; }
+    .fit-label { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 1.65rem; margin-bottom: 8px; }
+    .fit-index { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; font-size: .88rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .fit-index::before { content: ""; width: 8px; height: 8px; transform: rotate(45deg); background: var(--fit-a); box-shadow: 0 0 12px color-mix(in srgb, var(--fit-a), transparent 25%); }
+    .fit-card:nth-child(2) .fit-index::before { background: var(--fit-b); box-shadow: 0 0 12px rgba(214,165,108,.5); }
+    .fit-status { flex: 1 1 auto; min-width: 0; color: var(--muted); font-size: .76rem; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 330px;
+      resize: vertical;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: none;
+      color: #dcebef;
+      background: rgba(1, 6, 9, .72);
+      font: .82rem/1.55 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      caret-color: var(--cyan);
+      transition: border-color .18s, box-shadow .18s;
+    }
+    textarea:focus, input:focus-visible, button:focus-visible { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.1); outline: none; }
+    textarea::placeholder { color: #587079; }
+    .fit-actions { display: flex; gap: 7px; margin-top: 8px; }
+    .warning-panel { margin: 0 16px 16px; border: 1px solid rgba(229,184,106,.28); background: rgba(229,184,106,.045); }
+    .warning-panel summary { padding: 10px 12px; color: var(--amber); cursor: pointer; font-size: .8rem; letter-spacing: .035em; }
+    .warning-list { display: grid; gap: 6px; margin: 0; padding: 0 12px 12px 30px; color: #c9b995; font-size: .76rem; }
+    .warning-list code { color: #e6d8b9; font-size: .74rem; overflow-wrap: anywhere; }
+
+    .button {
+      min-height: 36px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: rgba(var(--accent-rgb),.055);
+      cursor: pointer;
+      font-size: .8rem;
+      letter-spacing: .035em;
+      transition: .15s ease;
+    }
+    .button:hover { border-color: var(--line-strong); background: rgba(var(--accent-rgb),.11); color: var(--cyan-2); }
+    .button.primary { border-color: rgba(var(--accent-rgb),.6); background: linear-gradient(180deg, rgba(var(--accent-rgb),.25), rgba(var(--accent-dark-rgb),.22)); color: var(--cyan-2); }
+    .button.danger:hover { border-color: rgba(226,123,118,.55); background: rgba(226,123,118,.08); color: #ffc0bc; }
+
+    .controls { display: grid; gap: 16px; }
+    .control-row { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 14px; }
+    .label { display: block; margin-bottom: 7px; color: var(--muted); font-size: .76rem; letter-spacing: .11em; text-transform: uppercase; }
+    .segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: rgba(0,0,0,.22); }
+    .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+    .segmented label { display: grid; place-items: center; min-height: 38px; padding: 6px 9px; border-radius: 2px; cursor: pointer; color: var(--muted); font-size: .82rem; text-align: center; }
+    .segmented input:checked + label { color: var(--cyan-2); background: rgba(var(--accent-rgb),.13); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb),.18); }
+    .number-input, .search-input {
+      width: 100%;
+      min-height: 47px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: 0;
+      background: rgba(0,0,0,.3);
+      color: var(--text);
+      padding: 8px 11px;
+    }
+    .number-input { text-align: center; font-size: 1.05rem; }
+    .toggles { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+    .check { display: inline-flex; align-items: center; gap: 8px; color: #c5d3d8; font-size: .86rem; cursor: pointer; }
+    .check input { accent-color: var(--cyan); width: 16px; height: 16px; }
+    .price-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+    .price-controls .button { min-height: 31px; padding-block: 4px; }
+    .price-controls .button:disabled { opacity: .42; cursor: default; }
+    .price-source { color: var(--muted); font-size: .76rem; }
+    .mode-help { margin: 0; color: var(--muted); font-size: .78rem; }
+
+    .snapshot-form { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; }
+    .text-input {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: 0;
+      background: rgba(0,0,0,.3);
+      color: var(--text);
+      padding: 8px 11px;
+    }
+    .saved-list { display: grid; gap: 6px; max-height: 280px; overflow: auto; margin-top: 12px; padding-right: 3px; scrollbar-color: rgba(var(--accent-rgb),.3) transparent; }
+    .saved-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 7px;
+      min-height: 52px;
+      padding: 7px 8px 7px 11px;
+      border: 1px solid rgba(var(--accent-rgb),.11);
+      border-left: 2px solid rgba(var(--accent-rgb),.25);
+      background: rgba(4,11,15,.5);
+    }
+    .saved-row.active { border-left-color: var(--cyan); background: rgba(var(--accent-rgb),.06); }
+    .saved-name { overflow: hidden; color: #dcebee; font-size: .86rem; white-space: nowrap; text-overflow: ellipsis; }
+    .saved-meta { margin-top: 2px; color: var(--muted); font-size: .69rem; }
+    .saved-empty { padding: 18px; border: 1px dashed var(--line); color: var(--muted); font-size: .8rem; text-align: center; }
+    .icon-button { min-width: 38px; padding-inline: 9px; }
+
+    .result-panel { min-height: 520px; }
+    .result-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: flex-end; }
+    .result-panel > .panel-head { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: 11px; }
+    .result-panel > .panel-head .panel-title { white-space: nowrap; }
+    .result-panel > .panel-head .result-tools { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, .9fr); align-items: stretch; width: 100%; }
+    .result-panel > .panel-head .button { width: 100%; min-width: 0; line-height: 1.2; white-space: normal; }
+    .count-badge { min-width: 31px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 99px; color: var(--cyan-2); font-size: .76rem; text-align: center; }
+    .summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 13px; }
+    .metric { min-width: 0; padding: 12px 13px; border: 1px solid rgba(var(--accent-rgb),.11); background: rgba(var(--accent-rgb),.035); }
+    .metric span { display: block; color: var(--muted); font-size: .68rem; letter-spacing: .09em; text-transform: uppercase; }
+    .metric strong { display: block; max-width: 100%; margin-top: 2px; font: 600 1.15rem/1.2 "SFMono-Regular", Consolas, monospace; overflow-wrap: anywhere; }
+    .metric small { display: block; min-height: 1em; max-width: 100%; margin-top: 4px; color: var(--muted); font-size: .68rem; line-height: 1.25; overflow-wrap: anywhere; }
+    .metric .price-total { color: #c5d3d8; font-size: .72rem; }
+    #priceRemaining { font-size: clamp(1.05rem, 2vw, 1.35rem); }
+    .metric .progress-detail { min-height: 0; }
+    .search-input { min-height: 38px; margin-bottom: 10px; font-size: .85rem; }
+    .list { display: grid; gap: 5px; max-height: 620px; overflow: auto; padding-right: 4px; scrollbar-color: rgba(var(--accent-rgb),.3) transparent; }
+    .item-group { display: grid; gap: 5px; }
+    .item-group + .item-group { margin-top: 7px; }
+    .group-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 9px; border-bottom: 1px solid rgba(var(--accent-rgb),.16); color: var(--cyan-2); background: rgba(var(--accent-rgb),.035); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .group-heading span:last-child { color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+    .item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 47px;
+      padding: 7px 10px 7px 9px;
+      border: 1px solid rgba(var(--accent-rgb),.1);
+      border-left-color: transparent;
+      background: rgba(4, 11, 15, .56);
+      transition: opacity .15s, border-color .15s;
+    }
+    .item:hover { border-color: rgba(var(--accent-rgb),.28); border-left-color: transparent; }
+    .item::before {
+      content: "";
+      position: absolute;
+      inset: -1px auto -1px -1px;
+      width: 6px;
+      pointer-events: none;
+    }
+    .item.only-a::before { background: linear-gradient(90deg, var(--fit-a) 0 2px, transparent 2px 6px); }
+    .item.only-b::before { background: linear-gradient(90deg, var(--fit-b) 0 2px, transparent 2px 6px); }
+    .item.both::before { background: linear-gradient(90deg, var(--fit-a) 0 2px, transparent 2px 4px, var(--fit-b) 4px 6px); }
+    .item.bought { opacity: .46; }
+    .item.bought .item-name { text-decoration: line-through; }
+    .buy-check { width: 17px; height: 17px; accent-color: var(--green); cursor: pointer; }
+    .item-name { overflow-wrap: anywhere; font-size: .86rem; }
+    .item-meta { color: var(--muted); font-size: .69rem; text-transform: uppercase; letter-spacing: .06em; }
+    .item-numbers { min-width: 82px; text-align: right; }
+    .qty { min-width: 47px; color: var(--cyan-2); text-align: right; font: 700 .92rem/1 "SFMono-Regular", Consolas, monospace; }
+    .item-price { margin-top: 5px; color: var(--amber); font: 600 .68rem/1.1 "SFMono-Regular", Consolas, monospace; white-space: nowrap; }
+    .empty { display: grid; place-items: center; min-height: 250px; padding: 28px; border: 1px dashed var(--line); color: var(--muted); text-align: center; }
+    .empty strong { display: block; margin-bottom: 6px; color: #cbdadf; font-weight: 500; }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; color: var(--muted); font-size: .7rem; }
+    .legend span::before { content: ""; display: inline-block; width: 16px; height: 6px; margin: 0 6px 1px 0; }
+    .legend .a { color: var(--fit-a); }
+    .legend .b { color: var(--fit-b); }
+    .legend .both { color: var(--text); }
+    .legend .a::before { background: linear-gradient(90deg, var(--fit-a) 0 6px, transparent 6px 16px); }
+    .legend .b::before { background: linear-gradient(90deg, var(--fit-b) 0 6px, transparent 6px 16px); }
+    .legend .both::before { background: linear-gradient(90deg, var(--fit-a) 0 6px, transparent 6px 10px, var(--fit-b) 10px 16px); }
+    .toast { position: fixed; left: 50%; bottom: 24px; z-index: 10; transform: translate(-50%, 20px); padding: 10px 15px; border: 1px solid var(--line-strong); background: #0b171d; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .2s; font-size: .84rem; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1350px) {
+      .top-actions { column-gap: 10px; }
+      .theme-toggle button { min-width: 62px; padding-inline: 6px; }
+    }
+    @media (max-width: 1040px) {
+      .workspace { grid-template-columns: 1fr; }
+      .result-panel { min-height: 0; }
+    }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 20px, 1500px); padding-top: 16px; }
+      .topbar { align-items: flex-start; }
+      .local-note { display: none; }
+      .theme-prefix { display: none; }
+      .theme-toggle { grid-template-columns: repeat(4, 1fr); }
+      .top-actions { flex-direction: column; align-items: flex-end; gap: 8px; }
+      .fit-grid { grid-template-columns: 1fr; }
+      textarea { min-height: 260px; }
+      .control-row { grid-template-columns: 1fr; }
+      .snapshot-form { grid-template-columns: 1fr 1fr; }
+      .snapshot-form .text-input { grid-column: 1 / -1; }
+      .panel-head { padding: 13px; }
+      .panel-body { padding: 12px; }
+      .result-tools .button span { display: none; }
+    }
+    @media (max-width: 430px) {
+      .topbar { flex-direction: column; }
+      .top-actions { width: 100%; align-items: stretch; }
+      .theme-toggle button { min-width: 0; padding-inline: 4px; font-size: .66rem; }
+      .segmented { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">E</div>
+        <div>
+          <p class="eyebrow" data-i18n="procurementConsole">Панель закупок</p>
+          <h1 data-i18n="pageTitle">EVE FIT // СПИСОК ПОКУПОК</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="local-note" data-i18n-html="localNote">Локальная обработка<br>данные не покидают браузер</div>
+        <div class="theme-toggle" role="group" aria-label="Тема интерфейса" data-i18n-aria-label="themeLabel">
+          <span class="theme-prefix" data-i18n="themeIdentity">Я —</span>
+          <button type="button" data-theme-option="amarr" aria-pressed="false">Amarr</button>
+          <button type="button" data-theme-option="caldari" aria-pressed="true">Caldari</button>
+          <button type="button" data-theme-option="gallente" aria-pressed="false">Gallente</button>
+          <button type="button" data-theme-option="minmatar" aria-pressed="false">Minmatar</button>
+        </div>
+        <div class="language-toggle" role="group" aria-label="Язык интерфейса" data-i18n-aria-label="languageLabel">
+          <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <section class="stack" aria-label="Исходные фиты" data-i18n-aria-label="sourceFits">
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title" data-i18n="sourceFits">Исходные фиты</h2>
+            <button class="button danger" id="clearAll" type="button" data-i18n="clearAll">Очистить всё</button>
+          </div>
+          <div class="panel-body fit-grid">
+            <article class="fit-card">
+              <div class="fit-label">
+                <div class="fit-index" id="fitLabelA" data-i18n="fitA">Фит 1</div>
+                <div class="fit-status" id="statusA">Ожидает данные</div>
+              </div>
+              <textarea id="fitA" spellcheck="false" aria-label="Фит 1" data-i18n-aria-label="fitA" placeholder="[Tengu, Название фита]&#10;Модуль&#10;Модуль..." data-i18n-placeholder="fitAPlaceholder"></textarea>
+              <div class="fit-actions">
+                <button class="button" type="button" data-paste="fitA" data-i18n="paste">Вставить</button>
+                <button class="button danger" type="button" data-clear="fitA" data-i18n="clear">Очистить</button>
+              </div>
+            </article>
+
+            <article class="fit-card">
+              <div class="fit-label">
+                <div class="fit-index" id="fitLabelB" data-i18n="fitB">Фит 2</div>
+                <div class="fit-status" id="statusB">Необязательный</div>
+              </div>
+              <textarea id="fitB" spellcheck="false" aria-label="Фит 2" data-i18n-aria-label="fitB" placeholder="Вставьте второй фит, если он нужен" data-i18n-placeholder="fitBPlaceholder"></textarea>
+              <div class="fit-actions">
+                <button class="button" type="button" data-paste="fitB" data-i18n="paste">Вставить</button>
+                <button class="button danger" type="button" data-clear="fitB" data-i18n="clear">Очистить</button>
+              </div>
+            </article>
+          </div>
+          <details class="warning-panel" id="warningPanel" hidden>
+            <summary><span data-i18n="parseWarnings">Проверка данных</span> · <span id="warningCount">0</span></summary>
+            <ul class="warning-list" id="warningList"></ul>
+          </details>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2 class="panel-title" data-i18n="calculationSettings">Параметры расчёта</h2></div>
+          <div class="panel-body controls">
+            <div class="control-row">
+              <div>
+                <span class="label" data-i18n="mergeMode">Режим объединения</span>
+                <div class="segmented" role="radiogroup" aria-label="Режим объединения" data-i18n-aria-label="mergeMode">
+                  <input type="radio" name="mode" id="sumMode" value="sum" checked>
+                  <label for="sumMode" data-i18n="twoShips">Два корабля</label>
+                  <input type="radio" name="mode" id="maxMode" value="max">
+                  <label for="maxMode" data-i18n="refit">Переоснащение</label>
+                  <input type="radio" name="mode" id="shortageMode" value="shortage">
+                  <label for="shortageMode" data-i18n="topUp">Дозакупка</label>
+                </div>
+              </div>
+              <div>
+                <label class="label" for="multiplier" data-i18n="multiplier">Множитель</label>
+                <input class="number-input" id="multiplier" type="number" min="1" max="9999" step="1" value="1" inputmode="numeric">
+              </div>
+            </div>
+            <p class="mode-help" id="modeHelp">Количество одинаковых предметов из двух фитов складывается.</p>
+            <div class="toggles">
+              <label class="check"><input type="checkbox" id="includeHull" checked> <span data-i18n="includeHulls">Включать корпуса</span></label>
+              <label class="check"><input type="checkbox" id="includeCharges" checked> <span data-i18n="includeCharges">Включать заряды</span></label>
+              <label class="check"><input type="checkbox" id="hideBought"> <span data-i18n="hidePurchased">Скрывать купленное</span></label>
+              <label class="check"><input type="checkbox" id="groupItems" checked> <span data-i18n="groupItems">Группировать список</span></label>
+            </div>
+            <div class="price-controls">
+              <button class="button primary" id="priceAction" type="button" disabled>Загрузить цены Jita</button>
+              <button class="button" id="hidePrices" type="button" hidden data-i18n="hidePrices">Скрыть цены</button>
+              <span class="price-source" data-i18n="fuzzworkSource">Цены — по данным Fuzzwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title" data-i18n="savedStates">Сохранённые состояния</h2>
+            <div class="result-tools">
+              <button class="button" id="exportSnapshots" type="button" data-i18n="exportStates">Экспорт</button>
+              <button class="button" id="importSnapshots" type="button" data-i18n="importStates">Импорт</button>
+              <span class="count-badge" id="snapshotCount">0</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="snapshot-form">
+              <input class="text-input" id="snapshotName" placeholder="Название состояния" data-i18n-placeholder="stateName" aria-label="Название состояния" data-i18n-aria-label="stateName">
+              <button class="button primary" id="saveSnapshot" type="button">Сохранить</button>
+              <button class="button" id="newSnapshot" type="button" data-i18n="newState">Новое</button>
+            </div>
+            <div class="saved-list" id="snapshotList" aria-live="polite"></div>
+            <input id="snapshotFile" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel result-panel" aria-label="Итоговый список" data-i18n-aria-label="resultList">
+        <div class="panel-head">
+          <h2 class="panel-title" data-i18n="resultList">Итоговый список</h2>
+          <div class="result-tools">
+            <button class="button primary" id="copyList" type="button" data-i18n="copyList">Копировать весь список</button>
+            <button class="button" id="copyMultibuy" type="button" data-i18n="copyMultibuy">Копировать остаток для Multibuy</button>
+            <button class="button" id="resetChecks" type="button" data-i18n-html="resetChecks">Сбросить <span>отметки</span></button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="summary">
+            <div class="metric"><span data-i18n="positions">Позиций</span><strong id="uniqueCount">0</strong></div>
+            <div class="metric"><span data-i18n="units">Единиц</span><strong id="totalCount">0</strong></div>
+            <div class="metric"><span data-i18n="purchased">Закуплено</span><strong id="doneCount">0%</strong><small class="progress-detail" id="donePositions">0 / 0 поз.</small><small class="progress-detail" id="doneUnits">0 / 0 ед.</small><small class="progress-detail" id="doneValue">ISK: —</small></div>
+            <div class="metric"><span data-i18n="jitaEstimate">Оценка Jita</span><strong id="priceRemaining">—</strong><small class="price-total" id="priceTotal">Всего: —</small><small id="priceStatus">Цены не загружены</small></div>
+          </div>
+          <input class="search-input" id="search" type="search" placeholder="Фильтр по названию предмета" data-i18n-placeholder="filterPlaceholder" aria-label="Фильтр списка" data-i18n-aria-label="filterLabel">
+          <div class="list" id="resultList" aria-live="polite"></div>
+          <div class="legend" aria-label="Легенда" data-i18n-aria-label="legend">
+            <span class="a" data-i18n="onlyFitA">только фит 1</span>
+            <span class="b" data-i18n="onlyFitB">только фит 2</span>
+            <span class="both" data-i18n="bothFits">оба фита</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const STORAGE_KEY = 'eve-fit-procurement-v2';
+      const SNAPSHOTS_KEY = 'eve-fit-procurement-snapshots-v1';
+      const LANGUAGE_KEY = 'eve-fit-procurement-language-v1';
+      const THEME_KEY = 'eve-fit-procurement-theme-v1';
+      const PRICE_CACHE_KEY = 'eve-fit-procurement-jita-prices-v1';
+      const PRICE_TTL_MS = 5 * 60 * 1000;
+      const STATE_SAVE_DELAY_MS = 180;
+      const UI = {
+        ru: {
+          pageTitle: 'EVE FIT // СПИСОК ПОКУПОК',
+          procurementConsole: 'Панель закупок',
+          localNote: 'Локальная обработка<br>данные не покидают браузер',
+          languageLabel: 'Язык интерфейса',
+          themeLabel: 'Тема интерфейса',
+          themeIdentity: 'Я —',
+          sourceFits: 'Исходные фиты', clearAll: 'Очистить всё', fitA: 'Фит 1', fitB: 'Фит 2', existingFit: 'Имеющийся фит', targetFit: 'Целевой фит',
+          waitingForData: 'Ожидает данные', optional: 'Необязательный', checkHeader: 'Проверьте заголовок',
+          fitAPlaceholder: '[Tengu, Название фита]\nМодуль\nМодуль...',
+          fitBPlaceholder: 'Вставьте второй фит, если он нужен',
+          paste: 'Вставить', clear: 'Очистить', calculationSettings: 'Параметры расчёта',
+          mergeMode: 'Режим объединения', twoShips: 'Два корабля', refit: 'Переоснащение', topUp: 'Дозакупка', multiplier: 'Множитель',
+          sumHelp: 'Количество одинаковых предметов из двух фитов складывается.',
+          maxHelp: 'Для одинаковых предметов берётся большее количество из двух фитов.',
+          shortageHelp: 'Левый фит — имеющийся, правый — целевой. В список попадает только недостающее количество.',
+          includeHulls: 'Включать корпуса', includeCharges: 'Включать заряды', hidePurchased: 'Скрывать купленное',
+          groupItems: 'Группировать список', parseWarnings: 'Проверка данных', invalidHeaderWarning: 'Фит {fit}: не найден корректный заголовок в квадратных скобках.',
+          invalidLineWarning: 'Фит {fit}, строка {line}: не удалось разобрать «{text}».', unknownItemWarning: 'Не найдено в ESI: {name}.',
+          loadPrices: 'Загрузить цены Jita', refreshPrices: 'Обновить цены', retryPrices: 'Повторить', hidePrices: 'Скрыть цены', fuzzworkSource: 'Цены — по данным Fuzzwork', jitaEstimate: 'Оценка Jita',
+          pricesOff: 'Цены не загружены', pricesLoading: 'Загрузка цен…', pricesReady: 'Минимальные цены продажи', pricesReadyAt: 'Мин. sell · {time}',
+          noItemsToPrice: 'Нет позиций для оценки',
+          totalCost: 'Всего: {price}',
+          pricesPartial: 'Найдено цен: {priced} из {total}', pricesError: 'Не удалось обновить цены', noPrice: 'Цена недоступна',
+          itemPriceTitle: '{price} ISK за единицу',
+          savedStates: 'Сохранённые состояния', stateName: 'Название состояния', save: 'Сохранить', update: 'Обновить', newState: 'Новое', exportStates: 'Экспорт', importStates: 'Импорт',
+          statesExported: 'Резервная копия сохранена', statesImported: 'Импортировано состояний: {count}', statesImportFailed: 'Не удалось импортировать файл', noStatesToExport: 'Нет состояний для экспорта',
+          resultList: 'Итоговый список', copyList: 'Копировать весь список', copyMultibuy: 'Копировать остаток для Multibuy', resetChecks: 'Сбросить <span>отметки</span>',
+          positions: 'Позиций', units: 'Единиц', purchased: 'Закуплено', filterPlaceholder: 'Фильтр по названию предмета',
+          progressPositions: '{done} / {total} поз.', progressUnits: '{done} / {total} ед.', progressValue: 'ISK: {done} / {total}',
+          filterLabel: 'Фильтр списка', legend: 'Легенда', onlyFitA: 'только фит 1', onlyFitB: 'только фит 2', bothFits: 'оба фита',
+          positionsShort: 'поз.', positionOne: 'поз.', positionMany: 'поз.', unitOne: 'ед.', unitMany: 'ед.', onlyAQty: 'только фит 1: {count}', onlyBQty: 'только фит 2: {count}', bothQty: 'Фит 1: {a} · Фит 2: {b}', haveNeed: 'Есть: {have} · Нужно: {need}',
+          noResults: 'Ничего не найдено', noResultsHint: 'Измените фильтр или покажите купленные позиции.',
+          emptyList: 'Список пока пуст', emptyListHint: 'Вставьте фит в левое поле — расчёт появится автоматически.', shortageEmptyHint: 'Вставьте целевой фит в правое поле.',
+          nothingToBuy: 'Докупать ничего не нужно', nothingToBuyHint: 'Имеющийся фит полностью покрывает целевой.',
+          boughtItem: 'Куплено: {name}', unnamedList: 'Список {date}', noSavedStates: 'Именованных состояний пока нет.',
+          savedLocally: 'Сохранено локально', open: 'Открыть', remove: 'Удалить', openState: 'Открыть состояние {name}',
+          removeState: 'Удалить состояние {name}', removeConfirm: 'Удалить состояние «{name}»?', stateSaved: 'Состояние сохранено',
+          stateLoaded: 'Состояние загружено', stateDeleted: 'Состояние удалено', listEmpty: 'Список пуст',
+          listCopied: 'Список скопирован', copyFailed: 'Не удалось скопировать', fitPasted: 'Фит вставлен',
+          pasteManually: 'Нажмите Ctrl/Cmd+V в поле', checksReset: 'Отметки сброшены', multibuyCopied: 'Остаток скопирован для Multibuy', allPurchased: 'Все позиции уже куплены',
+          groupHull: 'Корпуса', groupLow: 'Low-слоты', groupMid: 'Mid-слоты', groupHigh: 'High-слоты', groupRigs: 'Риги', groupSubsystems: 'Подсистемы', groupDrones: 'Дроны и файтеры', groupCharges: 'Заряды и скрипты', groupImplants: 'Импланты и бустеры', groupModules: 'Модули', groupCargo: 'Груз и прочее', groupOther: 'Прочее', groupMeta: '{positions} поз. · {units} ед.'
+        },
+        en: {
+          pageTitle: 'EVE FIT // SHOPPING LIST',
+          procurementConsole: 'Procurement console',
+          localNote: 'Processed locally<br>data never leaves your browser',
+          languageLabel: 'Interface language',
+          themeLabel: 'Interface theme',
+          themeIdentity: 'I’M',
+          sourceFits: 'Source fits', clearAll: 'Clear all', fitA: 'Fit 1', fitB: 'Fit 2', existingFit: 'Existing fit', targetFit: 'Target fit',
+          waitingForData: 'Waiting for data', optional: 'Optional', checkHeader: 'Check fit header',
+          fitAPlaceholder: '[Tengu, Fit name]\nModule\nModule...',
+          fitBPlaceholder: 'Paste a second fit if needed',
+          paste: 'Paste', clear: 'Clear', calculationSettings: 'Calculation settings',
+          mergeMode: 'Merge mode', twoShips: 'Two ships', refit: 'Refit', topUp: 'Top-up', multiplier: 'Multiplier',
+          sumHelp: 'Quantities of matching items from both fits are added together.',
+          maxHelp: 'For matching items, the larger quantity from the two fits is used.',
+          shortageHelp: 'The left fit is what you have; the right fit is the target. Only missing quantities are added to the list.',
+          includeHulls: 'Include hulls', includeCharges: 'Include charges', hidePurchased: 'Hide purchased',
+          groupItems: 'Group shopping list', parseWarnings: 'Data check', invalidHeaderWarning: 'Fit {fit}: no valid bracketed fit header was found.',
+          invalidLineWarning: 'Fit {fit}, line {line}: could not parse “{text}”.', unknownItemWarning: 'Not found in ESI: {name}.',
+          loadPrices: 'Load Jita prices', refreshPrices: 'Refresh prices', retryPrices: 'Retry', hidePrices: 'Hide prices', fuzzworkSource: 'Prices by Fuzzwork', jitaEstimate: 'Jita estimate',
+          pricesOff: 'Prices not loaded', pricesLoading: 'Loading prices…', pricesReady: 'Lowest sell prices', pricesReadyAt: 'Lowest sell · {time}',
+          noItemsToPrice: 'No items to price',
+          totalCost: 'Total: {price}',
+          pricesPartial: 'Prices found: {priced} of {total}', pricesError: 'Could not update prices', noPrice: 'Price unavailable',
+          itemPriceTitle: '{price} ISK per unit',
+          savedStates: 'Saved states', stateName: 'State name', save: 'Save', update: 'Update', newState: 'New', exportStates: 'Export', importStates: 'Import',
+          statesExported: 'Backup downloaded', statesImported: 'States imported: {count}', statesImportFailed: 'Could not import file', noStatesToExport: 'No states to export',
+          resultList: 'Shopping list', copyList: 'Copy full list', copyMultibuy: 'Copy remaining for Multibuy', resetChecks: 'Reset <span>checks</span>',
+          positions: 'Items', units: 'Units', purchased: 'Purchased', filterPlaceholder: 'Filter by item name',
+          progressPositions: '{done} / {total} items', progressUnits: '{done} / {total} units', progressValue: 'ISK: {done} / {total}',
+          filterLabel: 'Filter list', legend: 'Legend', onlyFitA: 'fit 1 only', onlyFitB: 'fit 2 only', bothFits: 'both fits',
+          positionsShort: 'items', positionOne: 'item', positionMany: 'items', unitOne: 'unit', unitMany: 'units', onlyAQty: 'fit 1 only: {count}', onlyBQty: 'fit 2 only: {count}', bothQty: 'Fit 1: {a} · Fit 2: {b}', haveNeed: 'Have: {have} · Need: {need}',
+          noResults: 'No results', noResultsHint: 'Change the filter or show purchased items.',
+          emptyList: 'The list is empty', emptyListHint: 'Paste a fit into the left field — the list will update automatically.', shortageEmptyHint: 'Paste the target fit into the right field.',
+          nothingToBuy: 'Nothing to buy', nothingToBuyHint: 'The existing fit fully covers the target fit.',
+          boughtItem: 'Purchased: {name}', unnamedList: 'List {date}', noSavedStates: 'No saved states yet.',
+          savedLocally: 'Saved locally', open: 'Open', remove: 'Delete', openState: 'Open state {name}',
+          removeState: 'Delete state {name}', removeConfirm: 'Delete state “{name}”?', stateSaved: 'State saved',
+          stateLoaded: 'State loaded', stateDeleted: 'State deleted', listEmpty: 'The list is empty',
+          listCopied: 'List copied', copyFailed: 'Could not copy', fitPasted: 'Fit pasted',
+          pasteManually: 'Press Ctrl/Cmd+V in the field', checksReset: 'Checks reset', multibuyCopied: 'Remaining items copied for Multibuy', allPurchased: 'All items are already purchased',
+          groupHull: 'Hulls', groupLow: 'Low slots', groupMid: 'Mid slots', groupHigh: 'High slots', groupRigs: 'Rigs', groupSubsystems: 'Subsystems', groupDrones: 'Drones and fighters', groupCharges: 'Charges and scripts', groupImplants: 'Implants and boosters', groupModules: 'Modules', groupCargo: 'Cargo and other', groupOther: 'Other', groupMeta: '{positions} items · {units} units'
+        }
+      };
+      const GROUP_ORDER = ['hull', 'low', 'mid', 'high', 'rigs', 'subsystems', 'drones', 'charges', 'implants', 'modules', 'cargo', 'other'];
+      const GROUP_LABELS = {
+        hull: 'groupHull', low: 'groupLow', mid: 'groupMid', high: 'groupHigh', rigs: 'groupRigs',
+        subsystems: 'groupSubsystems', drones: 'groupDrones', charges: 'groupCharges', implants: 'groupImplants',
+        modules: 'groupModules', cargo: 'groupCargo', other: 'groupOther'
+      };
+      const $ = (selector) => document.querySelector(selector);
+      const elements = {
+        fitA: $('#fitA'), fitB: $('#fitB'), statusA: $('#statusA'), statusB: $('#statusB'),
+        multiplier: $('#multiplier'), includeHull: $('#includeHull'), includeCharges: $('#includeCharges'),
+        hideBought: $('#hideBought'), groupItems: $('#groupItems'), search: $('#search'), resultList: $('#resultList'),
+        uniqueCount: $('#uniqueCount'), totalCount: $('#totalCount'),
+        doneCount: $('#doneCount'), donePositions: $('#donePositions'), doneUnits: $('#doneUnits'), doneValue: $('#doneValue'), modeHelp: $('#modeHelp'), toast: $('#toast'),
+        snapshotName: $('#snapshotName'), snapshotList: $('#snapshotList'),
+        snapshotCount: $('#snapshotCount'), saveSnapshot: $('#saveSnapshot'),
+        fitLabelA: $('#fitLabelA'), fitLabelB: $('#fitLabelB'),
+        priceAction: $('#priceAction'), hidePrices: $('#hidePrices'), priceTotal: $('#priceTotal'), priceRemaining: $('#priceRemaining'), priceStatus: $('#priceStatus'),
+        warningPanel: $('#warningPanel'), warningCount: $('#warningCount'), warningList: $('#warningList'), snapshotFile: $('#snapshotFile')
+      };
+
+      let bought = new Set();
+      let currentItems = [];
+      let currentFits = { a: null, b: null };
+      let snapshots = [];
+      let activeSnapshotId = null;
+      let snapshotNameEdited = false;
+      let toastTimer;
+      let priceTimer;
+      let stateSaveTimer;
+      let calculateFrame;
+      let priceRequestToken = 0;
+      let priceActive = false;
+      let priceLoading = false;
+      let priceError = false;
+      let priceUpdatedAt = null;
+      let priceCache = new Map();
+      let currentLanguage = 'ru';
+      let currentTheme = document.documentElement.dataset.theme || 'caldari';
+      try { currentLanguage = localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'ru'; } catch (_) {}
+
+      function t(key, values = {}) {
+        const value = UI[currentLanguage][key] ?? UI.ru[key] ?? key;
+        return String(value).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+      }
+
+      function applyLanguage() {
+        document.documentElement.lang = currentLanguage;
+        document.querySelectorAll('[data-i18n]').forEach(node => { node.textContent = t(node.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-html]').forEach(node => { node.innerHTML = t(node.dataset.i18nHtml); });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(node => { node.placeholder = t(node.dataset.i18nPlaceholder); });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach(node => { node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel)); });
+        document.querySelectorAll('[data-lang]').forEach(button => {
+          const active = button.dataset.lang === currentLanguage;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      }
+
+      function setLanguage(language) {
+        if (!UI[language]) return;
+        currentLanguage = language;
+        try { localStorage.setItem(LANGUAGE_KEY, language); } catch (_) {}
+        applyLanguage();
+        calculate();
+        renderSnapshots();
+      }
+
+      function applyTheme() {
+        document.documentElement.dataset.theme = currentTheme;
+        document.querySelectorAll('[data-theme-option]').forEach(button => {
+          const active = button.dataset.themeOption === currentTheme;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      }
+
+      function setTheme(theme) {
+        if (!['amarr', 'caldari', 'gallente', 'minmatar'].includes(theme)) return;
+        currentTheme = theme;
+        try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
+        applyTheme();
+      }
+
+      function loadPriceCache() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(PRICE_CACHE_KEY) || '{}');
+          priceCache = new Map(Object.entries(stored).filter(([, value]) => value && typeof value === 'object'));
+        } catch (_) { priceCache = new Map(); }
+      }
+
+      function persistPriceCache() {
+        try { localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify(Object.fromEntries(priceCache))); } catch (_) {}
+      }
+
+      function formatIsk(value, compact = true) {
+        if (!Number.isFinite(value)) return '—';
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        if (!compact) return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value)} ISK`;
+        const scales = currentLanguage === 'ru'
+          ? [[1e9, 'млрд'], [1e6, 'млн'], [1e3, 'тыс.']]
+          : [[1e9, 'B'], [1e6, 'M'], [1e3, 'K']];
+        const scale = scales.find(([threshold]) => Math.abs(value) >= threshold);
+        if (!scale) return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value)} ISK`;
+        const [divisor, suffix] = scale;
+        const scaled = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value / divisor);
+        return `${scaled} ${suffix} ISK`;
+      }
+
+      function formatPriceTime(timestamp) {
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        return new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(timestamp);
+      }
+
+      function formatIskProgress(value) {
+        return formatIsk(value).replace(/ ISK$/, '');
+      }
+
+      function formatGroupMeta(positions, units) {
+        return `${positions} ${t(positions === 1 ? 'positionOne' : 'positionMany')} · ${units} ${t(units === 1 ? 'unitOne' : 'unitMany')}`;
+      }
+
+      function chunks(values, size) {
+        const result = [];
+        for (let index = 0; index < values.length; index += size) result.push(values.slice(index, index + size));
+        return result;
+      }
+
+      function priceTargets() {
+        const targets = new Map(currentItems.map(item => [item.key, { key: item.key, name: item.name, group: item.group }]));
+        [currentFits.a, currentFits.b].forEach(fit => {
+          fit?.items?.forEach((item, key) => {
+            if ((!elements.includeHull.checked && item.kind === 'hull') ||
+                (!elements.includeCharges.checked && item.kind === 'charge')) return;
+            const existing = targets.get(key);
+            targets.set(key, { key, name: item.name, group: existing?.group || item.group });
+          });
+        });
+        return [...targets.values()];
+      }
+
+      function classifyMetadata(categoryName = '', groupName = '', hint = 'modules') {
+        const category = categoryName.toLocaleLowerCase('en-US');
+        const group = groupName.toLocaleLowerCase('en-US');
+        if (category.includes('ship')) return 'hull';
+        if (category.includes('drone') || category.includes('fighter')) return 'drones';
+        if (category.includes('charge')) return 'charges';
+        if (category.includes('implant')) return 'implants';
+        if (category.includes('subsystem') || group.includes('subsystem')) return 'subsystems';
+        if (group.includes('rig')) return 'rigs';
+        if (category.includes('module')) return ['low', 'mid', 'high'].includes(hint) ? hint : 'modules';
+        return hint && GROUP_LABELS[hint] ? hint : 'other';
+      }
+
+      function effectiveGroup(item) {
+        return priceCache.get(item.key)?.classification || item.group || 'other';
+      }
+
+      async function fetchEsi(path) {
+        const separator = path.includes('?') ? '&' : '?';
+        const response = await fetch(`https://esi.evetech.net/latest${path}${separator}datasource=tranquility&compatibility_date=2026-09-16`);
+        if (!response.ok) throw new Error(`ESI ${response.status}`);
+        return response.json();
+      }
+
+      async function hydrateClassifications(items, token) {
+        const targets = items.filter(item => {
+          const cached = priceCache.get(item.key);
+          return cached?.typeId && !cached.classification;
+        });
+        if (!targets.length) return;
+
+        const typeResults = [];
+        for (const batch of chunks(targets, 8)) {
+          const settled = await Promise.allSettled(batch.map(async item => ({
+            item,
+            data: await fetchEsi(`/universe/types/${priceCache.get(item.key).typeId}/`)
+          })));
+          if (token !== priceRequestToken) return;
+          settled.forEach(result => { if (result.status === 'fulfilled') typeResults.push(result.value); });
+        }
+
+        const groupIds = [...new Set(typeResults.map(result => result.data.group_id).filter(Number.isFinite))];
+        const groupData = new Map();
+        for (const batch of chunks(groupIds, 8)) {
+          const settled = await Promise.allSettled(batch.map(async id => ({ id, data: await fetchEsi(`/universe/groups/${id}/`) })));
+          if (token !== priceRequestToken) return;
+          settled.forEach(result => { if (result.status === 'fulfilled') groupData.set(result.value.id, result.value.data); });
+        }
+
+        const categoryIds = [...new Set([...groupData.values()].map(group => group.category_id).filter(Number.isFinite))];
+        const categoryData = new Map();
+        for (const batch of chunks(categoryIds, 8)) {
+          const settled = await Promise.allSettled(batch.map(async id => ({ id, data: await fetchEsi(`/universe/categories/${id}/`) })));
+          if (token !== priceRequestToken) return;
+          settled.forEach(result => { if (result.status === 'fulfilled') categoryData.set(result.value.id, result.value.data); });
+        }
+
+        typeResults.forEach(({ item, data }) => {
+          const previous = priceCache.get(item.key) || {};
+          const group = groupData.get(data.group_id);
+          const category = group ? categoryData.get(group.category_id) : null;
+          priceCache.set(item.key, {
+            ...previous,
+            groupId: data.group_id || null,
+            marketGroupId: data.market_group_id || null,
+            groupName: group?.name || '',
+            categoryId: group?.category_id || null,
+            categoryName: category?.name || '',
+            classification: classifyMetadata(category?.name, group?.name, item.group)
+          });
+        });
+      }
+
+      function schedulePriceLoad() {
+        clearTimeout(priceTimer);
+        if (!priceActive || !priceTargets().length) return;
+        priceTimer = setTimeout(() => loadPrices(false), 300);
+      }
+
+      async function loadPrices(force = false) {
+        if (!priceActive) return;
+        const items = priceTargets();
+        const token = ++priceRequestToken;
+        priceLoading = true;
+        priceError = false;
+        render();
+
+        try {
+          const now = Date.now();
+          const namesToResolve = items.filter(item => {
+            const cached = priceCache.get(item.key);
+            return !cached?.typeId && (force || !cached?.fetchedAt || now - cached.fetchedAt >= PRICE_TTL_MS);
+          });
+
+          for (const batch of chunks(namesToResolve, 500)) {
+            if (!batch.length) continue;
+            const response = await fetch('https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&compatibility_date=2026-09-16', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(batch.map(item => item.name))
+            });
+            if (!response.ok) throw new Error(`ESI ${response.status}`);
+            const data = await response.json();
+            if (token !== priceRequestToken) return;
+            const resolved = new Map((data.inventory_types || []).map(item => [canonicalKey(item.name), item.id]));
+            batch.forEach(item => {
+              const previous = priceCache.get(item.key) || {};
+              const typeId = resolved.get(item.key) || null;
+              priceCache.set(item.key, {
+                ...previous,
+                typeId,
+                price: typeId ? previous.price ?? null : null,
+                fetchedAt: typeId ? previous.fetchedAt || 0 : now,
+                resolvedAt: now
+              });
+            });
+          }
+
+          const dueItems = items.filter(item => {
+            const cached = priceCache.get(item.key);
+            return cached?.typeId && (force || !cached.fetchedAt || now - cached.fetchedAt >= PRICE_TTL_MS);
+          });
+          const typeIds = [...new Set(dueItems.map(item => priceCache.get(item.key).typeId))];
+
+          for (const idBatch of chunks(typeIds, 100)) {
+            if (!idBatch.length) continue;
+            const response = await fetch(`https://market.fuzzwork.co.uk/aggregates/?station=60003760&types=${idBatch.join(',')}`);
+            if (!response.ok) throw new Error(`Fuzzwork ${response.status}`);
+            const data = await response.json();
+            if (token !== priceRequestToken) return;
+            dueItems.filter(item => idBatch.includes(priceCache.get(item.key).typeId)).forEach(item => {
+              const cached = priceCache.get(item.key);
+              const price = Number(data[String(cached.typeId)]?.sell?.min);
+              priceCache.set(item.key, { ...cached, price: Number.isFinite(price) && price > 0 ? price : null, fetchedAt: now });
+            });
+          }
+
+          await hydrateClassifications(items, token);
+          if (token !== priceRequestToken) return;
+
+          persistPriceCache();
+          const timestamps = items
+            .map(item => priceCache.get(item.key)?.fetchedAt)
+            .filter(timestamp => Number.isFinite(timestamp) && timestamp > 0);
+          priceUpdatedAt = timestamps.length ? Math.max(...timestamps) : Date.now();
+        } catch (_) {
+          if (token === priceRequestToken) priceError = true;
+        } finally {
+          if (token === priceRequestToken) {
+            priceLoading = false;
+            render();
+          }
+        }
+      }
+
+      function deactivatePrices() {
+        clearTimeout(priceTimer);
+        priceRequestToken += 1;
+        priceActive = false;
+        priceLoading = false;
+        priceError = false;
+        priceUpdatedAt = null;
+      }
+
+      function normalizeName(value) {
+        return value.trim().replace(/\s+/g, ' ');
+      }
+
+      function canonicalKey(value) {
+        return normalizeName(value).normalize('NFKC').toLocaleLowerCase('en-US');
+      }
+
+      function normalizeFitText(value) {
+        const lines = String(value)
+          .replace(/\r\n?/g, '\n')
+          .split('\n')
+          .map(line => line.replace(/\t+/g, ' ').trim());
+        const cleaned = [];
+        lines.forEach(line => {
+          if (line) cleaned.push(line);
+          else if (cleaned.length && cleaned.at(-1) !== '') cleaned.push('');
+        });
+        while (cleaned.at(-1) === '') cleaned.pop();
+        return cleaned.join('\n');
+      }
+
+      function insertNormalizedPaste(event) {
+        const pasted = event.clipboardData?.getData('text');
+        if (typeof pasted !== 'string') return;
+        event.preventDefault();
+        const input = event.currentTarget;
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? start;
+        const cleaned = normalizeFitText(pasted);
+        input.value = input.value.slice(0, start) + cleaned + input.value.slice(end);
+        const caret = start + cleaned.length;
+        input.setSelectionRange(caret, caret);
+        calculate();
+      }
+
+      function splitQuantity(line) {
+        const match = line.match(/^(.*?)(?:\s+x(\d+))$/i);
+        if (!match) return { name: normalizeName(line), quantity: 1, valid: !/\s+x\s*\S*$/i.test(line) };
+        const quantity = Number(match[2]);
+        return { name: normalizeName(match[1]), quantity: Math.max(1, quantity || 1), valid: quantity > 0 };
+      }
+
+      function sectionGroup(section, useSections) {
+        if (!useSections) return 'modules';
+        return ['low', 'mid', 'high', 'rigs', 'subsystems', 'drones', 'cargo'][section] || 'cargo';
+      }
+
+      function parseFit(text) {
+        const raw = text.trim();
+        if (!raw) return { valid: false, empty: true, ship: '', fitName: '', items: new Map(), warnings: [] };
+
+        const lines = raw.replace(/\r/g, '').split('\n');
+        const headerIndex = lines.findIndex(line => line.trim());
+        const header = (lines[headerIndex] || '').trim();
+        const headerMatch = header.match(/^\[([^,\]]+),\s*([^\]]*)\]$/);
+        const items = new Map();
+        const warnings = [];
+
+        const add = (name, quantity, kind, group = 'modules') => {
+          if (!name || name === '[Empty Low slot]' || name.startsWith('[Empty ')) return;
+          const key = canonicalKey(name);
+          const prev = items.get(key) || { name, quantity: 0, kind, group };
+          prev.quantity += quantity;
+          if (prev.kind !== kind && kind === 'charge') {
+            prev.kind = 'charge';
+            prev.group = 'charges';
+          }
+          items.set(key, prev);
+        };
+
+        if (headerMatch) add(normalizeName(headerMatch[1]), 1, 'hull', 'hull');
+        else warnings.push({ type: 'header' });
+
+        const itemStartIndex = headerMatch ? headerIndex + 1 : headerIndex;
+        const useSections = lines.slice(itemStartIndex).filter(line => !line.trim()).length >= 2;
+        let section = 0;
+        let previousBlank = false;
+        for (let i = itemStartIndex; i < lines.length; i += 1) {
+          const line = lines[i].trim();
+          if (!line) {
+            if (!previousBlank) section += 1;
+            previousBlank = true;
+            continue;
+          }
+          previousBlank = false;
+          if (line.startsWith(';') || line.startsWith('#')) continue;
+
+          const comma = line.indexOf(',');
+          if (comma >= 0) {
+            const modulePart = line.slice(0, comma).trim();
+            const chargePart = line.slice(comma + 1).trim();
+            const module = splitQuantity(modulePart);
+            if (!module.name || !module.valid) {
+              warnings.push({ type: 'line', line: i + 1, text: line });
+              continue;
+            }
+            add(module.name, module.quantity, 'module', sectionGroup(section, useSections));
+            if (chargePart) {
+              const charge = splitQuantity(chargePart);
+              if (charge.name && charge.valid) add(charge.name, charge.quantity * module.quantity, 'charge', 'charges');
+              else warnings.push({ type: 'line', line: i + 1, text: line });
+            }
+          } else {
+            const item = splitQuantity(line);
+            if (!item.name || !item.valid || (/^\[/.test(line) && !/^\[Empty /i.test(line))) {
+              warnings.push({ type: 'line', line: i + 1, text: line });
+              continue;
+            }
+            add(item.name, item.quantity, 'module', sectionGroup(section, useSections));
+          }
+        }
+
+        return {
+          valid: Boolean(headerMatch), empty: false,
+          ship: headerMatch ? normalizeName(headerMatch[1]) : '',
+          fitName: headerMatch ? normalizeName(headerMatch[2]) : '',
+          items, warnings
+        };
+      }
+
+      function selectedMode() {
+        return document.querySelector('input[name="mode"]:checked').value;
+      }
+
+      function updateFitRoles(mode) {
+        const labelA = mode === 'shortage' ? 'existingFit' : 'fitA';
+        const labelB = mode === 'shortage' ? 'targetFit' : 'fitB';
+        elements.fitLabelA.dataset.i18n = labelA;
+        elements.fitLabelB.dataset.i18n = labelB;
+        elements.fitLabelA.textContent = t(labelA);
+        elements.fitLabelB.textContent = t(labelB);
+        elements.fitA.setAttribute('aria-label', t(labelA));
+        elements.fitB.setAttribute('aria-label', t(labelB));
+      }
+
+      function calculate() {
+        if (calculateFrame) {
+          cancelAnimationFrame(calculateFrame);
+          calculateFrame = 0;
+        }
+        const fitA = parseFit(elements.fitA.value);
+        const fitB = parseFit(elements.fitB.value);
+        currentFits = { a: fitA, b: fitB };
+        const mode = selectedMode();
+        updateFitRoles(mode);
+        updateSnapshotNameSuggestion(fitA, fitB);
+
+        const multiplier = Math.max(1, Math.floor(Number(elements.multiplier.value) || 1));
+        const allKeys = new Set([...fitA.items.keys(), ...fitB.items.keys()]);
+        const merged = [];
+
+        allKeys.forEach(key => {
+          const a = fitA.items.get(key);
+          const b = fitB.items.get(key);
+          if (mode === 'shortage' && !b) return;
+          const base = mode === 'shortage' ? b : a || b;
+          if ((!elements.includeHull.checked && base.kind === 'hull') ||
+              (!elements.includeCharges.checked && base.kind === 'charge')) return;
+          const qa = a?.quantity || 0;
+          const qb = b?.quantity || 0;
+          const quantity = (mode === 'sum' ? qa + qb : mode === 'max' ? Math.max(qa, qb) : Math.max(qb - qa, 0)) * multiplier;
+          if (!quantity) return;
+          merged.push({
+            key,
+            name: base.name,
+            kind: base.kind,
+            group: base.group || (base.kind === 'hull' ? 'hull' : base.kind === 'charge' ? 'charges' : 'modules'),
+            quantity,
+            source: a && b ? 'both' : a ? 'a' : 'b',
+            qa, qb
+          });
+        });
+
+        currentItems = merged.sort((x, y) => {
+          return (GROUP_ORDER.indexOf(effectiveGroup(x)) - GROUP_ORDER.indexOf(effectiveGroup(y))) || x.name.localeCompare(y.name, 'en');
+        });
+
+        elements.modeHelp.textContent = t(mode === 'sum' ? 'sumHelp' : mode === 'max' ? 'maxHelp' : 'shortageHelp');
+        render();
+        scheduleStateSave();
+        schedulePriceLoad();
+      }
+
+      function scheduleCalculate() {
+        if (calculateFrame) return;
+        calculateFrame = requestAnimationFrame(() => {
+          calculateFrame = 0;
+          calculate();
+        });
+      }
+
+      function updateFitStatus(fit, target, optional) {
+        if (fit.empty) {
+          target.textContent = t(optional ? 'optional' : 'waitingForData');
+          target.removeAttribute('title');
+          target.style.color = '';
+          return;
+        }
+        if (!fit.valid) {
+          target.textContent = t('checkHeader');
+          target.removeAttribute('title');
+          target.style.color = 'var(--danger)';
+          return;
+        }
+        const parts = [`${fit.ship} · ${fit.items.size} ${t(fit.items.size === 1 ? 'positionOne' : 'positionMany')}`];
+        if (priceActive) {
+          const included = [...fit.items.entries()].filter(([, item]) =>
+            (elements.includeHull.checked || item.kind !== 'hull') &&
+            (elements.includeCharges.checked || item.kind !== 'charge')
+          );
+          const priced = included.filter(([key]) => Number.isFinite(priceCache.get(key)?.price));
+          if (priced.length === included.length && included.length) {
+            const total = priced.reduce((sum, [key, item]) => sum + priceCache.get(key).price * item.quantity, 0);
+            parts.push(formatIsk(total));
+          } else if (priceLoading) {
+            parts.push('…');
+          }
+        }
+        target.textContent = parts.join(' · ');
+        target.title = `${fit.fitName || fit.ship}${parts.length > 1 ? ` · ${parts.at(-1)}` : ''}`;
+        target.style.color = 'var(--green)';
+      }
+
+      function sourceLabel(item) {
+        if (selectedMode() === 'shortage') return t('haveNeed', { have: item.qa, need: item.qb });
+        if (item.source === 'both') return t('bothQty', { a: item.qa, b: item.qb });
+        return item.source === 'a' ? t('onlyAQty', { count: item.qa }) : t('onlyBQty', { count: item.qb });
+      }
+
+      function renderWarnings() {
+        const warnings = [];
+        [['1', currentFits.a], ['2', currentFits.b]].forEach(([fitLabel, fit]) => {
+          fit?.warnings?.forEach(warning => {
+            warnings.push(warning.type === 'header'
+              ? t('invalidHeaderWarning', { fit: fitLabel })
+              : t('invalidLineWarning', { fit: fitLabel, line: warning.line, text: warning.text }));
+          });
+        });
+        const unknown = new Map();
+        if (priceActive && !priceLoading) {
+          [currentFits.a, currentFits.b].forEach(fit => fit?.items?.forEach((item, key) => {
+            const cached = priceCache.get(key);
+            if (cached?.resolvedAt && !cached.typeId) unknown.set(key, item.name);
+          }));
+        }
+        unknown.forEach(name => warnings.push(t('unknownItemWarning', { name })));
+        elements.warningPanel.hidden = !warnings.length;
+        elements.warningCount.textContent = warnings.length;
+        elements.warningList.replaceChildren(...warnings.map(message => {
+          const row = document.createElement('li');
+          row.textContent = message;
+          return row;
+        }));
+      }
+
+      function createItemRow(item) {
+        const row = document.createElement('label');
+        row.className = `item ${item.source === 'a' ? 'only-a' : item.source === 'b' ? 'only-b' : 'both'} ${bought.has(item.key) ? 'bought' : ''}`;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'buy-check';
+        checkbox.checked = bought.has(item.key);
+        checkbox.setAttribute('aria-label', t('boughtItem', { name: item.name }));
+        checkbox.addEventListener('change', () => toggleBought(item.key, checkbox.checked));
+
+        const content = document.createElement('div');
+        const name = document.createElement('div');
+        name.className = 'item-name';
+        name.textContent = item.name;
+        const meta = document.createElement('div');
+        meta.className = 'item-meta';
+        meta.textContent = sourceLabel(item);
+        content.append(name, meta);
+
+        const numbers = document.createElement('div');
+        numbers.className = 'item-numbers';
+        const quantity = document.createElement('div');
+        quantity.className = 'qty';
+        quantity.textContent = `× ${item.quantity}`;
+        numbers.append(quantity);
+        if (priceActive) {
+          const itemPrice = document.createElement('div');
+          itemPrice.className = 'item-price';
+          const unitPrice = priceCache.get(item.key)?.price;
+          if (Number.isFinite(unitPrice)) {
+            itemPrice.textContent = formatIsk(unitPrice * item.quantity);
+            itemPrice.title = t('itemPriceTitle', { price: formatIsk(unitPrice, false).replace(/ ISK$/, '') });
+          } else {
+            itemPrice.textContent = priceLoading ? '…' : '—';
+            itemPrice.title = t('noPrice');
+          }
+          numbers.append(itemPrice);
+        }
+        row.append(checkbox, content, numbers);
+        return row;
+      }
+
+      function render() {
+        const mode = selectedMode();
+        updateFitStatus(currentFits.a, elements.statusA, mode === 'shortage');
+        updateFitStatus(currentFits.b, elements.statusB, mode !== 'shortage');
+        renderWarnings();
+        const query = elements.search.value.trim().toLocaleLowerCase('ru');
+        const visible = currentItems.filter(item => {
+          if (elements.hideBought.checked && bought.has(item.key)) return false;
+          return !query || item.name.toLocaleLowerCase('ru').includes(query);
+        });
+
+        elements.resultList.replaceChildren();
+        if (!visible.length) {
+          const empty = document.createElement('div');
+          empty.className = 'empty';
+          const message = document.createElement('div');
+          const heading = document.createElement('strong');
+          const shortage = selectedMode() === 'shortage';
+          const hasTarget = Boolean(elements.fitB.value.trim());
+          const headingKey = currentItems.length ? 'noResults' : shortage && hasTarget ? 'nothingToBuy' : 'emptyList';
+          const hintKey = currentItems.length ? 'noResultsHint' : shortage ? (hasTarget ? 'nothingToBuyHint' : 'shortageEmptyHint') : 'emptyListHint';
+          heading.textContent = t(headingKey);
+          message.append(heading, t(hintKey));
+          empty.append(message);
+          elements.resultList.append(empty);
+        } else {
+          const fragment = document.createDocumentFragment();
+          if (elements.groupItems.checked) {
+            const groups = new Map();
+            visible.forEach(item => {
+              const group = effectiveGroup(item);
+              if (!groups.has(group)) groups.set(group, []);
+              groups.get(group).push(item);
+            });
+            [...groups.entries()]
+              .sort((a, b) => GROUP_ORDER.indexOf(a[0]) - GROUP_ORDER.indexOf(b[0]))
+              .forEach(([group, items]) => {
+                const section = document.createElement('section');
+                section.className = 'item-group';
+                const heading = document.createElement('div');
+                heading.className = 'group-heading';
+                const title = document.createElement('span');
+                title.textContent = t(GROUP_LABELS[group] || 'groupOther');
+                const meta = document.createElement('span');
+                const units = items.reduce((sum, item) => sum + item.quantity, 0);
+                meta.textContent = formatGroupMeta(items.length, units);
+                heading.append(title, meta);
+                section.append(heading, ...items.map(createItemRow));
+                fragment.append(section);
+              });
+          } else {
+            fragment.append(...visible.map(createItemRow));
+          }
+          elements.resultList.append(fragment);
+        }
+
+        const total = currentItems.reduce((sum, item) => sum + item.quantity, 0);
+        const completed = currentItems.filter(item => bought.has(item.key));
+        const completedUnits = completed.reduce((sum, item) => sum + item.quantity, 0);
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        elements.uniqueCount.textContent = currentItems.length;
+        elements.totalCount.textContent = total.toLocaleString(locale);
+        elements.doneCount.textContent = currentItems.length ? `${Math.round(completed.length / currentItems.length * 100)}%` : '0%';
+        elements.donePositions.textContent = t('progressPositions', { done: completed.length, total: currentItems.length });
+        elements.doneUnits.textContent = t('progressUnits', { done: completedUnits.toLocaleString(locale), total: total.toLocaleString(locale) });
+
+        const pricedItems = currentItems.filter(item => Number.isFinite(priceCache.get(item.key)?.price));
+        const estimatedTotal = pricedItems.reduce((sum, item) => sum + priceCache.get(item.key).price * item.quantity, 0);
+        const remainingItems = currentItems.filter(item => !bought.has(item.key));
+        const remainingPricedItems = remainingItems.filter(item => Number.isFinite(priceCache.get(item.key)?.price));
+        const remainingTotal = remainingPricedItems.reduce((sum, item) => sum + priceCache.get(item.key).price * item.quantity, 0);
+        const completedValue = completed
+          .filter(item => Number.isFinite(priceCache.get(item.key)?.price))
+          .reduce((sum, item) => sum + priceCache.get(item.key).price * item.quantity, 0);
+        const allPricesReady = currentItems.length > 0 && pricedItems.length === currentItems.length;
+        elements.doneValue.textContent = t('progressValue', {
+          done: allPricesReady ? formatIskProgress(completedValue) : '—',
+          total: allPricesReady ? formatIskProgress(estimatedTotal) : '—'
+        });
+        elements.priceAction.disabled = priceLoading || !priceTargets().length;
+        elements.priceAction.textContent = t(priceLoading ? 'pricesLoading' : priceError ? 'retryPrices' : priceActive ? 'refreshPrices' : 'loadPrices');
+        elements.hidePrices.hidden = !priceActive;
+        elements.hidePrices.disabled = priceLoading;
+        if (!priceActive) {
+          elements.priceRemaining.textContent = '—';
+          elements.priceTotal.textContent = t('totalCost', { price: '—' });
+          elements.priceStatus.textContent = t('pricesOff');
+        } else if (!currentItems.length) {
+          elements.priceRemaining.textContent = '—';
+          elements.priceTotal.textContent = t('totalCost', { price: '—' });
+          elements.priceStatus.textContent = t('noItemsToPrice');
+        } else {
+          elements.priceRemaining.textContent = allPricesReady ? formatIsk(remainingTotal) : priceLoading ? '…' : '—';
+          elements.priceTotal.textContent = t('totalCost', {
+            price: pricedItems.length ? formatIsk(estimatedTotal) : priceLoading ? '…' : '—'
+          });
+          elements.priceStatus.textContent = priceLoading
+            ? t('pricesLoading')
+            : priceError
+              ? t('pricesError')
+              : allPricesReady
+                ? priceUpdatedAt ? t('pricesReadyAt', { time: formatPriceTime(priceUpdatedAt) }) : t('pricesReady')
+                : t('pricesPartial', { priced: pricedItems.length, total: currentItems.length });
+        }
+      }
+
+      function toggleBought(key, isBought) {
+        isBought ? bought.add(key) : bought.delete(key);
+        render();
+        saveState();
+      }
+
+      function captureState() {
+        return {
+          fitA: elements.fitA.value, fitB: elements.fitB.value,
+          mode: selectedMode(), multiplier: elements.multiplier.value,
+          includeHull: elements.includeHull.checked, includeCharges: elements.includeCharges.checked,
+          hideBought: elements.hideBought.checked, groupItems: elements.groupItems.checked, bought: [...bought]
+        };
+      }
+
+      function applyState(state) {
+        elements.fitA.value = state?.fitA ?? '';
+        elements.fitB.value = state?.fitB ?? '';
+        elements.multiplier.value = state?.multiplier ?? '1';
+        elements.includeHull.checked = state?.includeHull ?? true;
+        elements.includeCharges.checked = state?.includeCharges ?? true;
+        elements.hideBought.checked = state?.hideBought ?? false;
+        elements.groupItems.checked = state?.groupItems ?? true;
+        const mode = ['sum', 'max', 'shortage'].includes(state?.mode) ? state.mode : 'sum';
+        document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
+        bought = new Set(Array.isArray(state?.bought) ? state.bought : []);
+      }
+
+      function saveState() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(captureState())); } catch (_) {}
+      }
+
+      function scheduleStateSave() {
+        clearTimeout(stateSaveTimer);
+        stateSaveTimer = setTimeout(() => {
+          stateSaveTimer = 0;
+          saveState();
+        }, STATE_SAVE_DELAY_MS);
+      }
+
+      function flushStateSave() {
+        if (!stateSaveTimer) return;
+        clearTimeout(stateSaveTimer);
+        stateSaveTimer = 0;
+        saveState();
+      }
+
+      function loadState() {
+        let state;
+        try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (_) {}
+        applyState(state);
+      }
+
+      function suggestedSnapshotName(fitA = parseFit(elements.fitA.value), fitB = parseFit(elements.fitB.value)) {
+        const fullHeaderName = fit => fit.ship ? [fit.ship, fit.fitName].filter(Boolean).join(', ') : '';
+        const a = fullHeaderName(fitA);
+        const b = fullHeaderName(fitB);
+        if (a && b) return `${a} + ${b}`;
+        if (a || b) return a || b;
+        return '';
+      }
+
+      function defaultSnapshotName() {
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        return suggestedSnapshotName() || t('unnamedList', { date: new Date().toLocaleDateString(locale) });
+      }
+
+      function updateSnapshotNameSuggestion(fitA, fitB) {
+        if (activeSnapshotId || snapshotNameEdited) return;
+        elements.snapshotName.value = suggestedSnapshotName(fitA, fitB);
+      }
+
+      function persistSnapshots() {
+        try { localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots)); } catch (_) {}
+      }
+
+      function exportSnapshots() {
+        if (!snapshots.length) return showToast(t('noStatesToExport'));
+        const payload = {
+          format: 'eve-fit-procurement-snapshots',
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          snapshots
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `eve-fit-procurement-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+        showToast(t('statesExported'));
+      }
+
+      function validImportedSnapshot(item) {
+        return item && typeof item.id === 'string' && item.id && typeof item.name === 'string' && item.name.trim() && item.state && typeof item.state === 'object';
+      }
+
+      async function importSnapshotsFile(file) {
+        try {
+          const parsed = JSON.parse(await file.text());
+          const incoming = (Array.isArray(parsed) ? parsed : parsed?.snapshots || []).filter(validImportedSnapshot);
+          if (!incoming.length) throw new Error('empty');
+          const merged = new Map(snapshots.map(item => [item.id, item]));
+          incoming.forEach(item => {
+            const previous = merged.get(item.id);
+            if (!previous || String(item.updatedAt || '') >= String(previous.updatedAt || '')) {
+              merged.set(item.id, { ...item, name: item.name.trim() });
+            }
+          });
+          snapshots = [...merged.values()];
+          persistSnapshots();
+          renderSnapshots();
+          showToast(t('statesImported', { count: incoming.length }));
+        } catch (_) {
+          showToast(t('statesImportFailed'));
+        } finally {
+          elements.snapshotFile.value = '';
+        }
+      }
+
+      function loadSnapshots() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || '[]');
+          snapshots = Array.isArray(stored) ? stored.filter(item => item && item.id && item.state) : [];
+        } catch (_) { snapshots = []; }
+        renderSnapshots();
+      }
+
+      function renderSnapshots() {
+        elements.snapshotList.replaceChildren();
+        const ordered = [...snapshots].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+        elements.snapshotCount.textContent = ordered.length;
+        elements.saveSnapshot.textContent = t(activeSnapshotId ? 'update' : 'save');
+
+        if (!ordered.length) {
+          const empty = document.createElement('div');
+          empty.className = 'saved-empty';
+          empty.textContent = t('noSavedStates');
+          elements.snapshotList.append(empty);
+          return;
+        }
+
+        const formatter = new Intl.DateTimeFormat(currentLanguage === 'ru' ? 'ru-RU' : 'en-US', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+        ordered.forEach(snapshot => {
+          const row = document.createElement('div');
+          row.className = `saved-row ${snapshot.id === activeSnapshotId ? 'active' : ''}`;
+
+          const info = document.createElement('div');
+          const name = document.createElement('div');
+          name.className = 'saved-name';
+          name.textContent = snapshot.name;
+          name.title = snapshot.name;
+          const meta = document.createElement('div');
+          meta.className = 'saved-meta';
+          const date = new Date(snapshot.updatedAt);
+          meta.textContent = Number.isNaN(date.getTime()) ? t('savedLocally') : formatter.format(date);
+          info.append(name, meta);
+
+          const open = document.createElement('button');
+          open.className = 'button icon-button';
+          open.type = 'button';
+          open.textContent = t('open');
+          open.setAttribute('aria-label', t('openState', { name: snapshot.name }));
+          open.addEventListener('click', () => openSnapshot(snapshot.id));
+
+          const remove = document.createElement('button');
+          remove.className = 'button danger icon-button';
+          remove.type = 'button';
+          remove.textContent = t('remove');
+          remove.setAttribute('aria-label', t('removeState', { name: snapshot.name }));
+          remove.addEventListener('click', () => deleteSnapshot(snapshot.id));
+          row.append(info, open, remove);
+          elements.snapshotList.append(row);
+        });
+      }
+
+      function saveSnapshot() {
+        const name = elements.snapshotName.value.trim() || defaultSnapshotName();
+        const now = new Date().toISOString();
+        if (activeSnapshotId) {
+          const existing = snapshots.find(item => item.id === activeSnapshotId);
+          if (existing) {
+            existing.name = name;
+            existing.updatedAt = now;
+            existing.state = captureState();
+          } else {
+            activeSnapshotId = null;
+          }
+        }
+        if (!activeSnapshotId) {
+          const id = globalThis.crypto?.randomUUID?.() || `snapshot-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+          snapshots.push({ id, name, updatedAt: now, state: captureState() });
+          activeSnapshotId = id;
+        }
+        elements.snapshotName.value = name;
+        snapshotNameEdited = true;
+        persistSnapshots();
+        renderSnapshots();
+        showToast(t('stateSaved'));
+      }
+
+      function openSnapshot(id) {
+        const snapshot = snapshots.find(item => item.id === id);
+        if (!snapshot) return;
+        activeSnapshotId = id;
+        elements.snapshotName.value = snapshot.name;
+        snapshotNameEdited = true;
+        deactivatePrices();
+        applyState(snapshot.state);
+        elements.search.value = '';
+        calculate();
+        renderSnapshots();
+        showToast(t('stateLoaded'));
+      }
+
+      function deleteSnapshot(id) {
+        const snapshot = snapshots.find(item => item.id === id);
+        if (!snapshot || !window.confirm(t('removeConfirm', { name: snapshot.name }))) return;
+        snapshots = snapshots.filter(item => item.id !== id);
+        if (activeSnapshotId === id) {
+          activeSnapshotId = null;
+          snapshotNameEdited = false;
+          elements.snapshotName.value = suggestedSnapshotName();
+        }
+        persistSnapshots();
+        renderSnapshots();
+        showToast(t('stateDeleted'));
+      }
+
+      function startNewSnapshot() {
+        activeSnapshotId = null;
+        snapshotNameEdited = false;
+        elements.snapshotName.value = suggestedSnapshotName();
+        renderSnapshots();
+        elements.snapshotName.focus();
+      }
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        elements.toast.textContent = message;
+        elements.toast.classList.add('show');
+        toastTimer = setTimeout(() => elements.toast.classList.remove('show'), 1800);
+      }
+
+      function copyText(text) {
+        if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.append(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+        return Promise.resolve();
+      }
+
+      function copyList() {
+        if (!currentItems.length) return showToast(t('listEmpty'));
+        const text = currentItems.map(item => `${item.name} x${item.quantity}`).join('\n');
+        copyText(text).then(() => showToast(t('listCopied'))).catch(() => showToast(t('copyFailed')));
+      }
+
+      function copyMultibuy() {
+        const remaining = currentItems.filter(item => !bought.has(item.key));
+        if (!currentItems.length) return showToast(t('listEmpty'));
+        if (!remaining.length) return showToast(t('allPurchased'));
+        const text = remaining.map(item => `${item.name}\t${item.quantity}`).join('\n');
+        copyText(text).then(() => showToast(t('multibuyCopied'))).catch(() => showToast(t('copyFailed')));
+      }
+
+      async function pasteInto(id) {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (!text) throw new Error('empty');
+          document.getElementById(id).value = normalizeFitText(text);
+          calculate();
+          showToast(t('fitPasted'));
+        } catch (_) {
+          document.getElementById(id).focus();
+          showToast(t('pasteManually'));
+        }
+      }
+
+      function clearAll() {
+        elements.fitA.value = '';
+        elements.fitB.value = '';
+        elements.multiplier.value = '1';
+        elements.search.value = '';
+        bought.clear();
+        calculate();
+      }
+
+      function registerWebMcp() {
+        const context = document.modelContext;
+        if (!context?.registerTool) return;
+        try {
+          void Promise.resolve(context.registerTool({
+            name: 'calculate_eve_shopping_list',
+            title: 'Рассчитать список покупок EVE',
+            description: 'Заполняет один или два EFT-фита и рассчитывает видимый список покупок.',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                fitA: { type: 'string' }, fitB: { type: 'string' },
+                mode: { type: 'string', enum: ['sum', 'max', 'shortage'] },
+                multiplier: { type: 'integer', minimum: 1, maximum: 9999 }
+              },
+              required: ['fitA'], additionalProperties: false
+            },
+            annotations: { readOnlyHint: false, untrustedContentHint: true },
+            execute(input) {
+              if (!input || typeof input.fitA !== 'string') throw new Error('fitA должен быть строкой');
+              elements.fitA.value = input.fitA;
+              elements.fitB.value = typeof input.fitB === 'string' ? input.fitB : '';
+              const mode = ['sum', 'max', 'shortage'].includes(input.mode) ? input.mode : 'sum';
+              document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
+              elements.multiplier.value = String(Math.max(1, Math.min(9999, Math.floor(input.multiplier || 1))));
+              calculate();
+              return { positions: currentItems.length, totalQuantity: currentItems.reduce((sum, item) => sum + item.quantity, 0) };
+            }
+          })).catch(() => {});
+        } catch (_) {}
+      }
+
+      [elements.fitA, elements.fitB].forEach(input => {
+        input.addEventListener('input', scheduleCalculate);
+        input.addEventListener('paste', insertNormalizedPaste);
+        input.addEventListener('blur', () => {
+          const cleaned = normalizeFitText(input.value);
+          if (cleaned !== input.value) {
+            input.value = cleaned;
+            calculate();
+          }
+        });
+      });
+      document.querySelectorAll('input[name="mode"], #includeHull, #includeCharges').forEach(input => input.addEventListener('change', calculate));
+      elements.multiplier.addEventListener('input', scheduleCalculate);
+      elements.multiplier.addEventListener('blur', () => {
+        elements.multiplier.value = String(Math.max(1, Math.floor(Number(elements.multiplier.value) || 1)));
+        calculate();
+      });
+      elements.hideBought.addEventListener('change', () => { render(); saveState(); });
+      elements.groupItems.addEventListener('change', () => { render(); saveState(); });
+      elements.priceAction.addEventListener('click', () => {
+        const force = priceActive;
+        priceActive = true;
+        loadPrices(force);
+      });
+      elements.hidePrices.addEventListener('click', () => {
+        deactivatePrices();
+        render();
+      });
+      elements.search.addEventListener('input', render);
+      $('#copyList').addEventListener('click', copyList);
+      $('#copyMultibuy').addEventListener('click', copyMultibuy);
+      $('#resetChecks').addEventListener('click', () => { bought.clear(); render(); saveState(); showToast(t('checksReset')); });
+      $('#clearAll').addEventListener('click', clearAll);
+      $('#saveSnapshot').addEventListener('click', saveSnapshot);
+      $('#newSnapshot').addEventListener('click', startNewSnapshot);
+      $('#exportSnapshots').addEventListener('click', exportSnapshots);
+      $('#importSnapshots').addEventListener('click', () => elements.snapshotFile.click());
+      elements.snapshotFile.addEventListener('change', () => {
+        const [file] = elements.snapshotFile.files || [];
+        if (file) importSnapshotsFile(file);
+      });
+      elements.snapshotName.addEventListener('keydown', event => {
+        if (event.key === 'Enter') saveSnapshot();
+      });
+      elements.snapshotName.addEventListener('input', () => { snapshotNameEdited = true; });
+      document.querySelectorAll('[data-clear]').forEach(button => button.addEventListener('click', () => {
+        document.getElementById(button.dataset.clear).value = '';
+        calculate();
+      }));
+      document.querySelectorAll('[data-paste]').forEach(button => button.addEventListener('click', () => pasteInto(button.dataset.paste)));
+      document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
+      document.querySelectorAll('[data-theme-option]').forEach(button => button.addEventListener('click', () => setTheme(button.dataset.themeOption)));
+      window.addEventListener('pagehide', flushStateSave);
+
+      loadPriceCache();
+      applyTheme();
+      applyLanguage();
+      loadState();
+      loadSnapshots();
+      calculate();
+      registerWebMcp();
+    })();
+  </script>
+</body>
+</html>
