@@ -1,0 +1,2711 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Локальный калькулятор списка покупок по одному, двум или трём фитам EVE Online.">
+  <title>EVE Fit Procurement</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23070d12'/%3E%3Cpath d='M12 16h40L40 27H22l-4 5 4 5h18l12 11H12l-5-16z' fill='%236ed8e8'/%3E%3C/svg%3E">
+  <script>
+    (() => {
+      const themes = ['amarr', 'caldari', 'gallente', 'minmatar'];
+      let theme = 'caldari';
+      try {
+        const saved = localStorage.getItem('eve-fit-procurement-theme-v1');
+        if (themes.includes(saved)) theme = saved;
+      } catch (_) {}
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --accent: #55a8d4;
+      --accent-2: #9bd8f2;
+      --accent-dark: #28516c;
+      --accent-rgb: 85, 168, 212;
+      --accent-dark-rgb: 40, 81, 108;
+      --bg: #05090d;
+      --panel: rgba(10, 20, 28, .88);
+      --panel-2: rgba(14, 28, 37, .82);
+      --line: rgba(var(--accent-rgb), .2);
+      --line-strong: rgba(var(--accent-rgb), .48);
+      --text: #e7f1f4;
+      --muted: #8fa4ad;
+      --cyan: var(--accent);
+      --cyan-2: var(--accent-2);
+      --amber: #e5b86a;
+      --green: #70d7a1;
+      --danger: #e27b76;
+      --fit-a: #6ed8e8;
+    --fit-b: #d6a56c;
+    --fit-c: #bd89e9;
+      --radius: 6px;
+      --shadow: 0 18px 70px rgba(0, 0, 0, .38);
+    }
+
+    :root[data-theme="amarr"] {
+      --accent: #d8a93d; --accent-2: #f4d780; --accent-dark: #6d4e1e;
+      --accent-rgb: 216, 169, 61; --accent-dark-rgb: 109, 78, 30;
+    }
+    :root[data-theme="gallente"] {
+      --accent: #55b978; --accent-2: #9cdfb0; --accent-dark: #285d3e;
+      --accent-rgb: 85, 185, 120; --accent-dark-rgb: 40, 93, 62;
+    }
+    :root[data-theme="minmatar"] {
+      --accent: #d66542; --accent-2: #f29a72; --accent-dark: #6d3023;
+      --accent-rgb: 214, 101, 66; --accent-dark-rgb: 109, 48, 35;
+    }
+
+    * { box-sizing: border-box; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    html { min-height: 100%; background: var(--bg); }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font: 16px/1.48 Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(rgba(var(--accent-rgb), .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), .025) 1px, transparent 1px),
+        radial-gradient(circle at 18% 0%, rgba(var(--accent-dark-rgb), .3), transparent 31rem),
+        radial-gradient(circle at 92% 42%, rgba(var(--accent-rgb), .08), transparent 34rem),
+        var(--bg);
+      background-size: 48px 48px, 48px 48px, auto, auto, auto;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+
+    .shell { width: min(1800px, calc(100% - 32px)); margin: 0 auto; padding: 26px 0 48px; }
+
+    .topbar {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 2px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: linear-gradient(145deg, rgba(var(--accent-rgb),.14), rgba(var(--accent-rgb),.02));
+      color: var(--cyan);
+      clip-path: polygon(0 0, 82% 0, 100% 18%, 100% 100%, 18% 100%, 0 82%);
+      font-weight: 800;
+      letter-spacing: -.08em;
+    }
+
+    .eyebrow { margin: 0 0 3px; color: var(--cyan); font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(1.35rem, 2.5vw, 2rem); line-height: 1.08; letter-spacing: .04em; font-weight: 560; }
+    .top-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 9px 14px; }
+    .local-note { color: var(--muted); font-size: .82rem; text-align: right; }
+    .language-toggle, .theme-toggle {
+      display: grid;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, .28);
+    }
+    .language-toggle { grid-template-columns: 1fr 1fr; }
+    .theme-toggle { grid-template-columns: auto repeat(4, 1fr); align-items: center; }
+    .theme-prefix { padding: 0 5px 0 7px; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .1em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
+    .language-toggle button, .theme-toggle button {
+      min-width: 40px;
+      min-height: 30px;
+      padding: 4px 8px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+    .theme-toggle button { min-width: 68px; letter-spacing: .025em; text-transform: uppercase; }
+    .language-toggle button:hover, .theme-toggle button:hover { color: var(--cyan-2); }
+    .language-toggle button.active, .theme-toggle button.active { border-color: rgba(var(--accent-rgb),.28); color: var(--cyan-2); background: rgba(var(--accent-rgb),.14); }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(380px, .85fr); gap: 18px; margin-top: 18px; }
+    .stack { display: grid; gap: 18px; align-content: start; }
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, rgba(16, 32, 42, .93), rgba(7, 15, 21, .93));
+      box-shadow: var(--shadow);
+    }
+    .panel::before { content: ""; position: absolute; inset: 0 auto auto 0; width: 92px; height: 1px; background: var(--cyan); opacity: .65; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 17px; border-bottom: 1px solid var(--line); background: rgba(var(--accent-rgb),.025); }
+    .panel-title { margin: 0; font-size: .83rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 650; }
+    .panel-body { padding: 16px; }
+
+    .fit-panel { container-type: inline-size; }
+    .fit-tabs { display: none; }
+    .fit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .fit-panel.cheaper-mode .fit-grid { grid-template-columns: minmax(0, 1fr); }
+    .fit-panel.cheaper-mode .fit-tabs,
+    .fit-panel.cheaper-mode [data-fit-card="fitB"],
+    .fit-panel.cheaper-mode [data-fit-card="fitC"] { display: none !important; }
+    .fit-card { min-width: 0; }
+    .fit-label { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 1.65rem; margin-bottom: 8px; }
+    .fit-index { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; font-size: .88rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .fit-index::before { content: ""; width: 8px; height: 8px; transform: rotate(45deg); background: var(--fit-a); box-shadow: 0 0 12px color-mix(in srgb, var(--fit-a), transparent 25%); }
+    .fit-card:nth-child(2) .fit-index::before { background: var(--fit-b); box-shadow: 0 0 12px rgba(214,165,108,.5); }
+    .fit-card:nth-child(3) .fit-index::before { background: var(--fit-c); box-shadow: 0 0 12px rgba(189,137,233,.5); }
+    .fit-status { flex: 1 1 auto; min-width: 0; color: var(--muted); font-size: .76rem; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 330px;
+      resize: vertical;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: none;
+      color: #dcebef;
+      background: rgba(1, 6, 9, .72);
+      font: .82rem/1.55 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      caret-color: var(--cyan);
+      transition: border-color .18s, box-shadow .18s;
+    }
+    textarea:focus, input:focus-visible, button:focus-visible { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.1); outline: none; }
+    textarea::placeholder { color: #587079; }
+    .fit-actions { display: flex; gap: 7px; margin-top: 8px; }
+    @container (min-width: 981px) {
+      .fit-panel:not(.cheaper-mode) .fit-actions .button { min-width: 0; padding-inline: 8px; font-size: .72rem; }
+    }
+    .warning-panel { margin: 0 16px 16px; border: 1px solid rgba(229,184,106,.28); background: rgba(229,184,106,.045); }
+    .warning-panel summary { padding: 10px 12px; color: var(--amber); cursor: pointer; font-size: .8rem; letter-spacing: .035em; }
+    .warning-list { display: grid; gap: 6px; margin: 0; padding: 0 12px 12px 30px; color: #c9b995; font-size: .76rem; }
+    .warning-list code { color: #e6d8b9; font-size: .74rem; overflow-wrap: anywhere; }
+
+    .button {
+      min-height: 36px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: rgba(var(--accent-rgb),.055);
+      cursor: pointer;
+      font-size: .8rem;
+      letter-spacing: .035em;
+      transition: .15s ease;
+    }
+    .button:hover { border-color: var(--line-strong); background: rgba(var(--accent-rgb),.11); color: var(--cyan-2); }
+    .button.primary { border-color: rgba(var(--accent-rgb),.6); background: linear-gradient(180deg, rgba(var(--accent-rgb),.25), rgba(var(--accent-dark-rgb),.22)); color: var(--cyan-2); }
+    .button.danger:hover { border-color: rgba(226,123,118,.55); background: rgba(226,123,118,.08); color: #ffc0bc; }
+
+    .controls { display: grid; gap: 16px; }
+    .control-row { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 14px; }
+    .label { display: block; margin-bottom: 7px; color: var(--muted); font-size: .76rem; letter-spacing: .11em; text-transform: uppercase; }
+    .segmented { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: rgba(0,0,0,.22); }
+    .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+    .segmented label { display: grid; place-items: center; min-height: 38px; padding: 6px 9px; border-radius: 2px; cursor: pointer; color: var(--muted); font-size: .82rem; text-align: center; }
+    .segmented input:checked + label { color: var(--cyan-2); background: rgba(var(--accent-rgb),.13); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb),.18); }
+    .number-input, .search-input {
+      width: 100%;
+      min-height: 47px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: 0;
+      background: rgba(0,0,0,.3);
+      color: var(--text);
+      padding: 8px 11px;
+    }
+    .number-input { text-align: center; font-size: 1.05rem; }
+    .toggles { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+    .check { display: inline-flex; align-items: center; gap: 8px; color: #c5d3d8; font-size: .86rem; cursor: pointer; }
+    .check input { accent-color: var(--cyan); width: 16px; height: 16px; }
+    .price-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+    .price-controls .button { min-height: 31px; padding-block: 4px; }
+    .price-controls .button:disabled { opacity: .42; cursor: default; }
+    .price-source { color: var(--muted); font-size: .76rem; }
+    .mode-help { margin: 0; color: var(--muted); font-size: .78rem; }
+    .fitting-budget { display: grid; gap: 9px; padding: 10px; border: 1px solid rgba(var(--accent-rgb),.18); background: rgba(var(--accent-rgb),.035); }
+    .fitting-budget[hidden] { display: none; }
+    .fitting-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .fitting-actions .button { min-height: 30px; padding-block: 4px; }
+    .fitting-state { color: var(--muted); font-size: .7rem; }
+    .fitting-state.warning { color: var(--amber); }
+    .fitting-state.error { color: var(--danger); }
+    .fitting-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .fitting-metric { min-width: 0; padding: 7px 8px; border: 1px solid rgba(var(--accent-rgb),.1); background: rgba(0,0,0,.15); }
+    .fitting-metric span { display: block; color: var(--muted); font-size: .61rem; letter-spacing: .07em; text-transform: uppercase; }
+    .fitting-metric strong { display: block; margin-top: 3px; font: 600 .75rem/1.3 "SFMono-Regular", Consolas, monospace; overflow-wrap: anywhere; }
+    .fitting-metric.good strong { color: var(--green); }
+    .fitting-metric.over strong { color: var(--danger); }
+
+    .snapshot-form { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; }
+    .text-input {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: 0;
+      background: rgba(0,0,0,.3);
+      color: var(--text);
+      padding: 8px 11px;
+    }
+    .saved-list { display: grid; gap: 6px; max-height: 280px; overflow: auto; margin-top: 12px; padding-right: 3px; scrollbar-color: rgba(var(--accent-rgb),.3) transparent; }
+    .saved-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 7px;
+      min-height: 52px;
+      padding: 7px 8px 7px 11px;
+      border: 1px solid rgba(var(--accent-rgb),.11);
+      border-left: 2px solid rgba(var(--accent-rgb),.25);
+      background: rgba(4,11,15,.5);
+    }
+    .saved-row.active { border-left-color: var(--cyan); background: rgba(var(--accent-rgb),.06); }
+    .saved-name { overflow: hidden; color: #dcebee; font-size: .86rem; white-space: nowrap; text-overflow: ellipsis; }
+    .saved-meta { margin-top: 2px; color: var(--muted); font-size: .69rem; }
+    .saved-empty { padding: 18px; border: 1px dashed var(--line); color: var(--muted); font-size: .8rem; text-align: center; }
+    .icon-button { min-width: 38px; padding-inline: 9px; }
+
+    .result-panel { min-height: 520px; }
+    .result-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: flex-end; }
+    .result-panel > .panel-head { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: 11px; }
+    .result-panel > .panel-head .panel-title { white-space: nowrap; }
+    .result-panel > .panel-head .result-tools { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, .9fr); align-items: stretch; width: 100%; }
+    .result-panel > .panel-head .button { width: 100%; min-width: 0; line-height: 1.2; white-space: normal; }
+    .count-badge { min-width: 31px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 99px; color: var(--cyan-2); font-size: .76rem; text-align: center; }
+    .summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 13px; }
+    .metric { min-width: 0; padding: 12px 13px; border: 1px solid rgba(var(--accent-rgb),.11); background: rgba(var(--accent-rgb),.035); }
+    .metric span { display: block; color: var(--muted); font-size: .68rem; letter-spacing: .09em; text-transform: uppercase; }
+    .metric strong { display: block; max-width: 100%; margin-top: 2px; font: 600 1.15rem/1.2 "SFMono-Regular", Consolas, monospace; overflow-wrap: anywhere; }
+    .metric small { display: block; min-height: 1em; max-width: 100%; margin-top: 4px; color: var(--muted); font-size: .68rem; line-height: 1.25; overflow-wrap: anywhere; }
+    .metric .price-total { color: #c5d3d8; font-size: .72rem; }
+    #priceRemaining { font-size: clamp(1.05rem, 2vw, 1.35rem); }
+    .metric .progress-detail { min-height: 0; }
+    .search-input { min-height: 38px; margin-bottom: 10px; font-size: .85rem; }
+    .list { display: grid; gap: 5px; max-height: 620px; overflow: auto; padding-right: 4px; scrollbar-color: rgba(var(--accent-rgb),.3) transparent; }
+    .item-group { display: grid; gap: 5px; }
+    .item-group + .item-group { margin-top: 7px; }
+    .group-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 9px; border-bottom: 1px solid rgba(var(--accent-rgb),.16); color: var(--cyan-2); background: rgba(var(--accent-rgb),.035); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .group-heading span:last-child { color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+    .item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 47px;
+      padding: 7px 10px 7px 9px;
+      border: 1px solid rgba(var(--accent-rgb),.1);
+      border-left-color: transparent;
+      background: rgba(4, 11, 15, .56);
+      transition: opacity .15s, border-color .15s;
+    }
+    .item:hover { border-color: rgba(var(--accent-rgb),.28); border-left-color: transparent; }
+    .item.missing-price { border-color: rgba(224, 96, 96, .42); border-left-color: transparent; background: linear-gradient(90deg, rgba(158, 48, 48, .18), rgba(64, 18, 22, .08) 48%, rgba(4, 11, 15, .56)); }
+    .item.missing-price:hover { border-color: rgba(239, 112, 112, .65); border-left-color: transparent; background: linear-gradient(90deg, rgba(178, 53, 53, .24), rgba(72, 18, 23, .11) 48%, rgba(4, 11, 15, .62)); }
+    .item::before {
+      content: "";
+      position: absolute;
+      inset: -1px auto -1px -1px;
+      width: 6px;
+      pointer-events: none;
+    }
+    .item.only-a::before { background: linear-gradient(90deg, var(--fit-a) 0 2px, transparent 2px 6px); }
+    .item.only-b::before { background: linear-gradient(90deg, var(--fit-b) 0 2px, transparent 2px 6px); }
+    .item.only-c::before { background: linear-gradient(90deg, var(--fit-c) 0 2px, transparent 2px 6px); }
+    .item.ab::before { background: linear-gradient(90deg, var(--fit-a) 0 2px, transparent 2px 4px, var(--fit-b) 4px 6px); }
+    .item.ac::before { background: linear-gradient(90deg, var(--fit-a) 0 2px, transparent 2px 4px, var(--fit-c) 4px 6px); }
+    .item.bc::before { background: linear-gradient(90deg, var(--fit-b) 0 2px, transparent 2px 4px, var(--fit-c) 4px 6px); }
+    .item.abc::before { background: linear-gradient(90deg, var(--fit-a) 0 2px, transparent 2px 3px, var(--fit-b) 3px 5px, transparent 5px 6px, var(--fit-c) 6px 8px); width: 8px; }
+    .item.bought { opacity: .46; }
+    .item.bought .item-name { text-decoration: line-through; }
+    .buy-check { width: 17px; height: 17px; accent-color: var(--green); cursor: pointer; }
+    .item-name { overflow-wrap: anywhere; font-size: .86rem; }
+    .item-name-line { display: flex; align-items: start; gap: 5px; }
+    .copy-icon { flex: 0 0 auto; width: 20px; height: 20px; padding: 0; border: 1px solid transparent; border-radius: 3px; color: var(--muted); background: transparent; font: 700 .92rem/1 sans-serif; cursor: pointer; }
+    .copy-icon:hover, .copy-icon:focus-visible { border-color: rgba(var(--accent-rgb),.32); color: var(--cyan-2); background: rgba(var(--accent-rgb),.08); outline: none; }
+    .item-meta { color: var(--muted); font-size: .69rem; text-transform: uppercase; letter-spacing: .06em; }
+    .item-numbers { min-width: 82px; text-align: right; }
+    .qty { min-width: 47px; color: var(--cyan-2); text-align: right; font: 700 .92rem/1 "SFMono-Regular", Consolas, monospace; }
+    .item-price { margin-top: 5px; color: var(--amber); font: 600 .68rem/1.1 "SFMono-Regular", Consolas, monospace; white-space: nowrap; }
+    .item-price.missing { color: var(--danger); white-space: normal; }
+    .equivalents { display: grid; gap: 4px; margin-top: 8px; padding: 7px 8px; border: 1px solid rgba(var(--accent-rgb),.15); background: rgba(var(--accent-rgb),.045); }
+    .equivalents-title { color: var(--accent-2); font-size: .65rem; font-weight: 700; letter-spacing: .065em; text-transform: uppercase; }
+    .equivalent-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 5px; }
+    .equivalent-name { min-width: 0; overflow-wrap: anywhere; color: #cbd8dc; font-size: .74rem; }
+    .equivalent-price { color: var(--amber); font: 600 .66rem/1 "SFMono-Regular", Consolas, monospace; white-space: nowrap; }
+    .equivalent-price.missing { color: var(--danger); }
+    .equivalent-action { min-height: 22px; padding: 2px 6px; font-size: .64rem; white-space: nowrap; }
+    .cheaper-trigger { min-height: 26px; margin-top: 7px; padding: 3px 8px; font-size: .68rem; }
+    .cheaper-panel { display: grid; gap: 7px; margin-top: 8px; padding: 9px; border: 1px solid rgba(var(--accent-rgb),.2); background: rgba(var(--accent-rgb),.045); }
+    .cheaper-notice { color: #d5b879; font-size: .68rem; line-height: 1.4; }
+    .cheaper-status { color: var(--muted); font-size: .72rem; }
+    .cheaper-status.error { color: var(--danger); }
+    .cheaper-section { display: grid; gap: 4px; }
+    .cheaper-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 7px; padding-top: 5px; border-top: 1px solid rgba(var(--accent-rgb),.1); }
+    .cheaper-details { color: var(--muted); font-size: .65rem; line-height: 1.35; }
+    .cheaper-saving { color: var(--green); font: 600 .66rem/1.2 "SFMono-Regular", Consolas, monospace; white-space: nowrap; }
+    .cheaper-row.over-budget { border-left: 2px solid var(--danger); padding-left: 6px; background: rgba(190,55,55,.055); }
+    .cheaper-row.uses-reserve { border-left: 2px solid var(--amber); padding-left: 6px; }
+    .cheaper-budget { margin-top: 2px; font-size: .64rem; }
+    .cheaper-budget.good { color: var(--green); }
+    .cheaper-budget.reserve { color: var(--amber); }
+    .cheaper-budget.over { color: var(--danger); }
+    .hub-comparison { margin: -3px 0 13px; border: 1px solid rgba(var(--accent-rgb),.13); background: rgba(var(--accent-rgb),.025); }
+    .hub-comparison[hidden] { display: none; }
+    .hub-comparison-title { padding: 8px 10px 6px; color: var(--muted); font-size: .68rem; letter-spacing: .09em; text-transform: uppercase; }
+    .hub-rows { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .hub-row { min-width: 0; padding: 8px 10px; border: 0; border-top: 1px solid rgba(var(--accent-rgb),.1); color: inherit; text-align: left; cursor: pointer; }
+    .hub-row + .hub-row { border-left: 1px solid rgba(var(--accent-rgb),.1); }
+    .hub-row.primary { background: rgba(var(--accent-rgb),.08); }
+    .hub-row:hover { background: rgba(var(--accent-rgb),.065); }
+    .hub-row.primary:hover { background: rgba(var(--accent-rgb),.12); }
+    .hub-row:focus-visible { outline: 2px solid rgba(var(--accent-rgb),.55); outline-offset: -2px; }
+    .hub-name { display: block; color: var(--muted); font-size: .67rem; letter-spacing: .06em; text-transform: uppercase; }
+    .hub-value { display: block; margin-top: 3px; color: #dbe7ea; font: 600 .78rem/1.15 "SFMono-Regular", Consolas, monospace; overflow-wrap: anywhere; }
+    .hub-detail { display: block; min-height: 1em; margin-top: 3px; color: var(--muted); font-size: .65rem; }
+    .hub-row.incomplete .hub-value, .hub-row.incomplete .hub-detail { color: var(--danger); }
+    .hub-copy { position: absolute; top: 6px; right: 6px; }
+    .hub-row { position: relative; padding-right: 31px; }
+    .empty { display: grid; place-items: center; min-height: 250px; padding: 28px; border: 1px dashed var(--line); color: var(--muted); text-align: center; }
+    .empty strong { display: block; margin-bottom: 6px; color: #cbdadf; font-weight: 500; }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; color: var(--muted); font-size: .7rem; }
+    .legend span::before { content: ""; display: inline-block; width: 16px; height: 6px; margin: 0 6px 1px 0; }
+    .legend .a { color: var(--fit-a); }
+    .legend .b { color: var(--fit-b); }
+    .legend .c { color: var(--fit-c); }
+    .legend .shared { color: var(--text); }
+    .legend .a::before { background: linear-gradient(90deg, var(--fit-a) 0 6px, transparent 6px 16px); }
+    .legend .b::before { background: linear-gradient(90deg, var(--fit-b) 0 6px, transparent 6px 16px); }
+    .legend .c::before { background: linear-gradient(90deg, var(--fit-c) 0 6px, transparent 6px 16px); }
+    .legend .shared::before { background: linear-gradient(90deg, var(--fit-a) 0 5px, transparent 5px 6px, var(--fit-b) 6px 11px, transparent 11px 12px, var(--fit-c) 12px 16px); }
+    .toast { position: fixed; left: 50%; bottom: 24px; z-index: 10; transform: translate(-50%, 20px); padding: 10px 15px; border: 1px solid var(--line-strong); background: #0b171d; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .2s; font-size: .84rem; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1350px) {
+      .top-actions { column-gap: 10px; }
+      .theme-toggle button { min-width: 62px; padding-inline: 6px; }
+    }
+    @container (max-width: 980px) {
+      .fit-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 13px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: rgba(0,0,0,.22); }
+      .fit-tab { min-height: 35px; min-width: 0; padding: 6px 8px; border: 0; border-radius: 2px; color: var(--muted); background: transparent; cursor: pointer; font-size: .78rem; font-weight: 700; letter-spacing: .04em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .fit-tab[aria-selected="true"] { color: var(--cyan-2); background: rgba(var(--accent-rgb),.13); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb),.18); }
+      .fit-grid { display: block; }
+      .fit-card { display: none; }
+      .fit-card.active { display: block; }
+    }
+    @media (max-width: 1040px) {
+      .workspace { grid-template-columns: 1fr; }
+      .result-panel { min-height: 0; }
+    }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 20px, 1800px); padding-top: 16px; }
+      .topbar { align-items: flex-start; }
+      .local-note { display: none; }
+      .theme-prefix { display: none; }
+      .theme-toggle { grid-template-columns: repeat(4, 1fr); }
+      .top-actions { flex-direction: column; align-items: flex-end; gap: 8px; }
+      textarea { min-height: 260px; }
+      .control-row { grid-template-columns: 1fr; }
+      .snapshot-form { grid-template-columns: 1fr 1fr; }
+      .snapshot-form .text-input { grid-column: 1 / -1; }
+      .fitting-metrics { grid-template-columns: 1fr; }
+      .panel-head { padding: 13px; }
+      .panel-body { padding: 12px; }
+      .result-tools .button span { display: none; }
+    }
+    @media (max-width: 430px) {
+      .topbar { flex-direction: column; }
+      .top-actions { width: 100%; align-items: stretch; }
+      .theme-toggle button { min-width: 0; padding-inline: 4px; font-size: .66rem; }
+      .segmented { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 1.2rem; }
+      .hub-rows { grid-template-columns: 1fr; }
+      .hub-row + .hub-row { border-left: 0; }
+      .equivalent-row { grid-template-columns: minmax(0, 1fr) auto auto; }
+      .equivalent-price { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">E</div>
+        <div>
+          <p class="eyebrow" data-i18n="procurementConsole">Панель закупок</p>
+          <h1 data-i18n="pageTitle">EVE FIT // СПИСОК ПОКУПОК</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="local-note" data-i18n-html="localNote">Локальная обработка<br>данные не покидают браузер</div>
+        <div class="theme-toggle" role="group" aria-label="Тема интерфейса" data-i18n-aria-label="themeLabel">
+          <span class="theme-prefix" data-i18n="themeIdentity">Я —</span>
+          <button type="button" data-theme-option="amarr" aria-pressed="false">Amarr</button>
+          <button type="button" data-theme-option="caldari" aria-pressed="true">Caldari</button>
+          <button type="button" data-theme-option="gallente" aria-pressed="false">Gallente</button>
+          <button type="button" data-theme-option="minmatar" aria-pressed="false">Minmatar</button>
+        </div>
+        <div class="language-toggle" role="group" aria-label="Язык интерфейса" data-i18n-aria-label="languageLabel">
+          <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <section class="stack" aria-label="Исходные фиты" data-i18n-aria-label="sourceFits">
+        <div class="panel fit-panel">
+          <div class="panel-head">
+            <h2 class="panel-title" data-i18n="sourceFits">Исходные фиты</h2>
+            <button class="button danger" id="clearAll" type="button" data-i18n="clearAllFits">Очистить все фиты</button>
+          </div>
+          <div class="panel-body">
+            <div class="fit-tabs" role="tablist" aria-label="Выбор фита" data-i18n-aria-label="fitTabsLabel">
+              <button class="fit-tab" type="button" role="tab" aria-selected="true" data-fit-tab="fitA" data-i18n="fitA">Фит 1</button>
+              <button class="fit-tab" type="button" role="tab" aria-selected="false" data-fit-tab="fitB" data-i18n="fitB">Фит 2</button>
+              <button class="fit-tab" type="button" role="tab" aria-selected="false" data-fit-tab="fitC" data-i18n="fitC">Фит 3</button>
+            </div>
+            <div class="fit-grid">
+            <article class="fit-card active" data-fit-card="fitA">
+              <div class="fit-label">
+                <div class="fit-index" id="fitLabelA" data-i18n="fitA">Фит 1</div>
+                <div class="fit-status" id="statusA">Ожидает данные</div>
+              </div>
+              <textarea id="fitA" spellcheck="false" aria-label="Фит 1" data-i18n-aria-label="fitA" placeholder="[Tengu, Название фита]&#10;Модуль&#10;Модуль..." data-i18n-placeholder="fitAPlaceholder"></textarea>
+              <div class="fit-actions">
+                <button class="button" type="button" data-paste="fitA" data-i18n="paste">Вставить</button>
+                <button class="button" type="button" data-copy-fit="fitA" data-i18n="copyFit">Копировать фит</button>
+                <button class="button danger" type="button" data-clear="fitA" data-i18n="clear">Очистить</button>
+              </div>
+            </article>
+
+            <article class="fit-card" data-fit-card="fitB">
+              <div class="fit-label">
+                <div class="fit-index" id="fitLabelB" data-i18n="fitB">Фит 2</div>
+                <div class="fit-status" id="statusB">Необязательный</div>
+              </div>
+              <textarea id="fitB" spellcheck="false" aria-label="Фит 2" data-i18n-aria-label="fitB" placeholder="Вставьте второй фит, если он нужен" data-i18n-placeholder="fitBPlaceholder"></textarea>
+              <div class="fit-actions">
+                <button class="button" type="button" data-paste="fitB" data-i18n="paste">Вставить</button>
+                <button class="button" type="button" data-copy-fit="fitB" data-i18n="copyFit">Копировать фит</button>
+                <button class="button danger" type="button" data-clear="fitB" data-i18n="clear">Очистить</button>
+              </div>
+            </article>
+            <article class="fit-card" data-fit-card="fitC">
+              <div class="fit-label">
+                <div class="fit-index" id="fitLabelC" data-i18n="fitC">Фит 3</div>
+                <div class="fit-status" id="statusC">Необязательный</div>
+              </div>
+              <textarea id="fitC" spellcheck="false" aria-label="Фит 3" data-i18n-aria-label="fitC" placeholder="Вставьте третий фит, если он нужен" data-i18n-placeholder="fitCPlaceholder"></textarea>
+              <div class="fit-actions">
+                <button class="button" type="button" data-paste="fitC" data-i18n="paste">Вставить</button>
+                <button class="button" type="button" data-copy-fit="fitC" data-i18n="copyFit">Копировать фит</button>
+                <button class="button danger" type="button" data-clear="fitC" data-i18n="clear">Очистить</button>
+              </div>
+            </article>
+            </div>
+          </div>
+          <details class="warning-panel" id="warningPanel" hidden>
+            <summary><span data-i18n="parseWarnings">Проверка данных</span> · <span id="warningCount">0</span></summary>
+            <ul class="warning-list" id="warningList"></ul>
+          </details>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2 class="panel-title" data-i18n="calculationSettings">Параметры расчёта</h2></div>
+          <div class="panel-body controls">
+            <div class="control-row">
+              <div>
+                <span class="label" data-i18n="mergeMode">Режим объединения</span>
+                <div class="segmented" role="radiogroup" aria-label="Режим объединения" data-i18n-aria-label="mergeMode">
+                  <input type="radio" name="mode" id="sumMode" value="sum" checked>
+                  <label for="sumMode" data-i18n="twoShips">Объединение фитов</label>
+                  <input type="radio" name="mode" id="maxMode" value="max">
+                  <label for="maxMode" data-i18n="refit">Переоснащение</label>
+                  <input type="radio" name="mode" id="shortageMode" value="shortage">
+                  <label for="shortageMode" data-i18n="topUp">Дозакупка</label>
+                  <input type="radio" name="mode" id="cheaperMode" value="cheaper">
+                  <label for="cheaperMode" data-i18n="wantCheaper">Хочу дешевле</label>
+                </div>
+              </div>
+              <div>
+                <label class="label" for="multiplier" data-i18n="multiplier">Множитель</label>
+                <input class="number-input" id="multiplier" type="number" min="1" max="9999" step="1" value="1" inputmode="numeric">
+              </div>
+            </div>
+            <p class="mode-help" id="modeHelp">Количество одинаковых предметов из двух фитов складывается.</p>
+            <section class="fitting-budget" id="fittingBudget" hidden aria-live="polite">
+              <div class="fitting-actions">
+                <button class="button primary" id="captureBaseline" type="button" data-i18n="captureBaseline">Зафиксировать исходный фит</button>
+                <button class="button" id="acceptCurrentBaseline" type="button" hidden data-i18n="acceptCurrentBaseline">Сделать текущий фит исходным</button>
+                <button class="button" id="restoreBaseline" type="button" hidden data-i18n="restoreBaseline">Вернуть исходный фит</button>
+                <span class="fitting-state" id="fittingState"></span>
+              </div>
+              <div class="fitting-metrics" id="fittingMetrics" hidden>
+                <div class="fitting-metric"><span data-i18n="baselineUsage">Исходный</span><strong id="baselineUsage">—</strong></div>
+                <div class="fitting-metric"><span data-i18n="currentUsage">Текущий</span><strong id="currentUsage">—</strong></div>
+                <div class="fitting-metric" id="usageDeltaCard"><span data-i18n="usageDelta">Изменение</span><strong id="usageDelta">—</strong></div>
+              </div>
+            </section>
+            <div class="toggles">
+              <label class="check"><input type="checkbox" id="includeHull" checked> <span data-i18n="includeHulls">Включать корпуса</span></label>
+              <label class="check"><input type="checkbox" id="includeCharges" checked> <span data-i18n="includeCharges">Включать заряды</span></label>
+              <label class="check"><input type="checkbox" id="hideBought"> <span data-i18n="hidePurchased">Скрывать купленное</span></label>
+              <label class="check"><input type="checkbox" id="groupItems" checked> <span data-i18n="groupItems">Группировать список</span></label>
+            </div>
+            <div class="price-controls">
+              <button class="button primary" id="priceAction" type="button" disabled>Загрузить цены</button>
+              <button class="button" id="hidePrices" type="button" hidden data-i18n="hidePrices">Скрыть цены</button>
+              <span class="price-source" data-i18n="fuzzworkSource">Цены — по данным Fuzzwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title" data-i18n="savedStates">Сохранённые состояния</h2>
+            <div class="result-tools">
+              <button class="button" id="exportSnapshots" type="button" data-i18n="exportStates">Экспорт</button>
+              <button class="button" id="importSnapshots" type="button" data-i18n="importStates">Импорт</button>
+              <span class="count-badge" id="snapshotCount">0</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="snapshot-form">
+              <input class="text-input" id="snapshotName" placeholder="Название состояния" data-i18n-placeholder="stateName" aria-label="Название состояния" data-i18n-aria-label="stateName">
+              <button class="button primary" id="saveSnapshot" type="button">Сохранить</button>
+              <button class="button" id="newSnapshot" type="button" data-i18n="newState">Новое</button>
+            </div>
+            <div class="saved-list" id="snapshotList" aria-live="polite"></div>
+            <input id="snapshotFile" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel result-panel" aria-label="Итоговый список" data-i18n-aria-label="resultList">
+        <div class="panel-head">
+          <h2 class="panel-title" data-i18n="resultList">Итоговый список</h2>
+          <div class="result-tools">
+            <button class="button primary" id="copyList" type="button" data-i18n="copyList">Копировать весь список</button>
+            <button class="button" id="copyMultibuy" type="button" data-i18n="copyMultibuy">Копировать остаток для Multibuy</button>
+            <button class="button" id="resetChecks" type="button" data-i18n-html="resetChecks">Сбросить <span>отметки</span></button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="summary">
+            <div class="metric"><span data-i18n="positions">Позиций</span><strong id="uniqueCount">0</strong></div>
+            <div class="metric"><span data-i18n="units">Единиц</span><strong id="totalCount">0</strong></div>
+            <div class="metric"><span data-i18n="purchased">Закуплено</span><strong id="doneCount">0%</strong><small class="progress-detail" id="donePositions">0 / 0 поз.</small><small class="progress-detail" id="doneUnits">0 / 0 ед.</small><small class="progress-detail" id="doneValue">ISK: —</small></div>
+            <div class="metric"><span data-i18n="jitaEstimate">Оценка Jita</span><strong id="priceRemaining">—</strong><small class="price-total" id="priceTotal">Всего: —</small><small id="priceStatus">Цены не загружены</small></div>
+          </div>
+          <section class="hub-comparison" id="hubComparison" hidden aria-live="polite">
+            <div class="hub-comparison-title" data-i18n="hubComparison">Сравнение стоимости по хабам</div>
+            <div class="hub-rows" id="hubRows"></div>
+          </section>
+          <input class="search-input" id="search" type="search" placeholder="Фильтр по названию предмета" data-i18n-placeholder="filterPlaceholder" aria-label="Фильтр списка" data-i18n-aria-label="filterLabel">
+          <div class="list" id="resultList" aria-live="polite"></div>
+          <div class="legend" aria-label="Легенда" data-i18n-aria-label="legend">
+            <span class="a" data-i18n="onlyFitA">только фит 1</span>
+            <span class="b" data-i18n="onlyFitB">только фит 2</span>
+            <span class="c" data-i18n="onlyFitC">только фит 3</span>
+            <span class="shared" data-i18n="sharedFits">несколько фитов</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const STORAGE_KEY = 'eve-fit-procurement-v2';
+      const SNAPSHOTS_KEY = 'eve-fit-procurement-snapshots-v1';
+      const LANGUAGE_KEY = 'eve-fit-procurement-language-v1';
+      const THEME_KEY = 'eve-fit-procurement-theme-v1';
+      const PRICE_CACHE_KEY = 'eve-fit-procurement-jita-prices-v1';
+      const PRICE_HUB_KEY = 'eve-fit-procurement-price-hub-v1';
+      const PRICE_TTL_MS = 5 * 60 * 1000;
+      const MARKET_HUBS = {
+        jita: { station: 60003760, name: 'Jita 4-4', copyName: 'Jita IV - Moon 4 - Caldari Navy Assembly Plant' },
+        amarr: { station: 60008494, name: 'Amarr VIII', copyName: 'Amarr VIII (Oris) - Emperor Family Academy' },
+        dodixie: { station: 60011866, name: 'Dodixie', copyName: 'Dodixie IX - Moon 20 - Federation Navy Assembly Plant' },
+        rens: { station: 60004588, name: 'Rens', copyName: 'Rens VI - Moon 8 - Brutor Tribe Treasury' },
+        hek: { station: 60005686, name: 'Hek', copyName: 'Hek VIII - Moon 12 - Boundless Creation Factory' }
+      };
+      // Generated from the EVE SDE. Kept in-page to preserve offline use; the
+      // readable source is distributed as eve-fit-equivalents-release-1.4.1.json.
+      const EQUIVALENTS_GZIP_BASE64 = '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';
+      let equivalentItemData = null;
+      let equivalentGroupsByTypeId = new Map();
+      const equivalentItemDataReady = (async () => {
+        if (!('DecompressionStream' in window)) return null;
+        const bytes = Uint8Array.from(atob(EQUIVALENTS_GZIP_BASE64), character => character.charCodeAt(0));
+        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+        equivalentItemData = JSON.parse(await new Response(stream).text());
+        return equivalentItemData;
+      })().catch(() => null);
+      window.EVE_FIT_EQUIVALENTS_READY = equivalentItemDataReady;
+      equivalentItemDataReady.then(data => {
+        if (!data?.equivalenceGroups) return;
+        equivalentGroupsByTypeId = new Map();
+        data.equivalenceGroups.forEach(group => group.items.forEach(item => equivalentGroupsByTypeId.set(item.typeId, group)));
+        if (priceActive) schedulePriceLoad();
+        render();
+      });
+      const STATE_SAVE_DELAY_MS = 180;
+      const UI = {
+        ru: {
+          pageTitle: 'EVE FIT // СПИСОК ПОКУПОК',
+          procurementConsole: 'Панель закупок',
+          localNote: 'Фиты обрабатываются локально<br>для цен и анализа передаются названия и ID отдельных предметов',
+          languageLabel: 'Язык интерфейса',
+          themeLabel: 'Тема интерфейса',
+          themeIdentity: 'Я —',
+          sourceFits: 'Исходные фиты', clearAllFits: 'Очистить все фиты', fitA: 'Фит 1', fitB: 'Фит 2', fitC: 'Фит 3', existingFit: 'Имеющийся фит', targetFitB: 'Целевой фит 1', targetFitC: 'Целевой фит 2', fitTabsLabel: 'Выбор фита',
+          waitingForData: 'Ожидает данные', optional: 'Необязательный', checkHeader: 'Проверьте заголовок',
+          fitAPlaceholder: '[Tengu, Название фита]\nМодуль\nМодуль...',
+          fitBPlaceholder: 'Вставьте второй фит, если он нужен',
+          fitCPlaceholder: 'Вставьте третий фит, если он нужен',
+          paste: 'Вставить', copyFit: 'Копировать фит', clear: 'Очистить', calculationSettings: 'Параметры расчёта',
+          mergeMode: 'Режим работы', twoShips: 'Объединение фитов', refit: 'Переоснащение', topUp: 'Дозакупка', wantCheaper: 'Хочу дешевле', multiplier: 'Множитель',
+          sumHelp: 'Количество одинаковых предметов из всех заполненных фитов складывается.',
+          maxHelp: 'Для одинаковых предметов берётся наибольшее количество из всех заполненных фитов.',
+          shortageHelp: 'Фит 1 — имеющийся; фиты 2 и 3 — целевые. Формируется общий набор недостающих предметов, достаточный для любого целевого фита.',
+          cheaperHelp: 'Используется только Фит 1. Сначала зафиксируйте исходное потребление CPU/PG, затем ищите замену для нужной позиции.',
+          captureBaseline: 'Зафиксировать исходный фит', acceptCurrentBaseline: 'Сделать текущий фит исходным', acceptCurrentBaselineHint: 'Пересчитать исходный CPU/PG по текущему составу и начать сравнение заново.', restoreBaseline: 'Вернуть исходный фит', baselineUsage: 'Исходный', currentUsage: 'Текущий', usageDelta: 'Изменение', baselineMissing: 'Сначала зафиксируйте исходный фит.', baselineLoading: 'Рассчитываем исходное потребление CPU и PG…', currentUsageLoading: 'Пересчитываем текущее потребление…', baselineReady: 'Исходный fitting-бюджет зафиксирован.', baselineChanged: 'Текущий фит отличается от исходного; база не изменена.', baselineIncomplete: 'Расчёт неполный: не удалось получить атрибуты всех установленных модулей.', baselineInvalidFit: 'Нужен корректный непустой Фит 1.', baselineCaptured: 'Исходный фит зафиксирован', baselineRestored: 'Исходный фит восстановлен', baselineCleared: 'Исходный fitting-бюджет сброшен', fittingUsage: 'CPU {cpu} tf · PG {pg} MW', fittingDelta: 'CPU {cpu} tf · PG {pg} MW', findCheaperNeedsBaseline: 'Сначала зафиксируйте исходный фит',
+          includeHulls: 'Включать корпуса', includeCharges: 'Включать заряды', hidePurchased: 'Скрывать купленное',
+          groupItems: 'Группировать список', parseWarnings: 'Проверка данных', invalidHeaderWarning: 'Фит {fit}: не найден корректный заголовок в квадратных скобках.',
+          invalidLineWarning: 'Фит {fit}, строка {line}: не удалось разобрать «{text}».', unknownItemWarning: 'Не найдено в ESI: {name}.',
+          loadPrices: 'Загрузить цены', refreshPrices: 'Обновить цены', retryPrices: 'Повторить', hidePrices: 'Скрыть цены', fuzzworkSource: 'Цены — по данным Fuzzwork', jitaEstimate: 'Оценка {hub}', hubComparison: 'Сравнение стоимости по хабам', selectHub: 'Выбрать {hub} как основной хаб',
+          pricesOff: 'Цены не загружены', pricesLoading: 'Загрузка цен…', pricesReady: 'Минимальные цены продажи', pricesReadyAt: 'Мин. sell · {time}',
+          noItemsToPrice: 'Нет позиций для оценки',
+          totalCost: 'Всего: {price}',
+          pricesPartial: 'Найдены цены в {hub}: {priced} из {total}', pricesError: 'Не удалось обновить цены', noPrice: 'Цена недоступна в {hub}', missingPrice: 'Нет цены: {hub}', hubComplete: 'Полная оценка', hubPartial: 'Неполная: {priced}/{total}', equivalentItems: 'Идентичные альтернативы', replaceInFits: 'Заменить в фитах', replaceItemConfirm: 'Заменить «{from}» на «{to}» во всех трёх фитах?', itemReplaced: 'Предмет заменён в фитах',
+          findCheaper: 'Найти дешевле', cheaperLoading: 'Ищем варианты и цены в {hub}…', cheaperNotice: 'Проверяются только цена, CPU и Powergrid. Остальные характеристики могут отличаться и ухудшиться.', cheaperPossible: 'Возможные более дешёвые варианты', cheaperNone: 'Более дешёвых совместимых вариантов в выбранном хабе не найдено.', cheaperError: 'Не удалось выполнить анализ. Повторите запрос позже.', cheaperOriginalNoPrice: 'Не удалось определить цену исходного предмета в {hub}.', cheaperSaving: 'Экономия {price}', cheaperRequirements: 'CPU {cpu} · PG {pg} · {price}', replaceInFitOne: 'Заменить', replaceItemOneConfirm: 'Заменить «{from}» на «{to}» в Фите 1?',
+          cheaperWithinBudget: 'После замены: CPU {cpu} · PG {pg} относительно исходного', cheaperUsesReserve: 'Использует резерв: CPU {cpu} · PG {pg}', cheaperOverBudget: 'Превышение исходного: CPU {cpu} · PG {pg}', cheaperWithinSection: 'В пределах исходного fitting-бюджета', cheaperOverSection: 'С превышением исходного fitting-бюджета',
+          itemPriceTitle: '{price} ISK за единицу',
+          savedStates: 'Сохранённые состояния', stateName: 'Название состояния', save: 'Сохранить', update: 'Обновить', newState: 'Новое', exportStates: 'Экспорт', importStates: 'Импорт',
+          statesExported: 'Резервная копия сохранена', statesImported: 'Импортировано состояний: {count}', statesImportFailed: 'Не удалось импортировать файл', noStatesToExport: 'Нет состояний для экспорта',
+          resultList: 'Итоговый список', copyList: 'Копировать весь список', copyMultibuy: 'Копировать остаток для Multibuy', resetChecks: 'Сбросить <span>отметки</span>',
+          positions: 'Позиций', units: 'Единиц', purchased: 'Закуплено', filterPlaceholder: 'Фильтр по названию предмета',
+          progressPositions: '{done} / {total} поз.', progressUnits: '{done} / {total} ед.', progressValue: 'ISK: {done} / {total}',
+          filterLabel: 'Фильтр списка', legend: 'Легенда', onlyFitA: 'только фит 1', onlyFitB: 'только фит 2', onlyFitC: 'только фит 3', sharedFits: 'несколько фитов',
+          positionsShort: 'поз.', positionOne: 'поз.', positionMany: 'поз.', unitOne: 'ед.', unitMany: 'ед.', onlyAQty: 'только фит 1: {count}', onlyBQty: 'только фит 2: {count}', onlyCQty: 'только фит 3: {count}', multiQty: 'Фит 1: {a} · Фит 2: {b} · Фит 3: {c}', haveNeed: 'Есть: {have} · Цель 1: {needB} · Цель 2: {needC}',
+          noResults: 'Ничего не найдено', noResultsHint: 'Измените фильтр или покажите купленные позиции.',
+          emptyList: 'Список пока пуст', emptyListHint: 'Вставьте фит в первое поле — расчёт появится автоматически.', shortageEmptyHint: 'Вставьте хотя бы один целевой фит в поле 2 или 3.',
+          nothingToBuy: 'Докупать ничего не нужно', nothingToBuyHint: 'Имеющийся фит полностью покрывает целевые.',
+          boughtItem: 'Куплено: {name}', unnamedList: 'Список {date}', noSavedStates: 'Именованных состояний пока нет.',
+          savedLocally: 'Сохранено локально', open: 'Открыть', remove: 'Удалить', openState: 'Открыть состояние {name}',
+          removeState: 'Удалить состояние {name}', removeConfirm: 'Удалить состояние «{name}»?', stateSaved: 'Состояние сохранено',
+          stateLoaded: 'Состояние загружено', stateDeleted: 'Состояние удалено', listEmpty: 'Список пуст',
+          listCopied: 'Список скопирован', fitCopied: 'Фит скопирован', itemCopied: 'Название предмета скопировано', hubCopied: 'Название станции скопировано', copyItem: 'Копировать название {name}', copyHub: 'Копировать название станции {name}', fitEmpty: 'Фит пуст', copyFailed: 'Не удалось скопировать', fitPasted: 'Фит вставлен',
+          pasteManually: 'Нажмите Ctrl/Cmd+V в поле', checksReset: 'Отметки сброшены', multibuyCopied: 'Остаток скопирован для Multibuy', allPurchased: 'Все позиции уже куплены',
+          groupHull: 'Корпуса', groupLow: 'Нижние слоты', groupMid: 'Средние слоты', groupHigh: 'Верхние слоты', groupRigs: 'Риги', groupSubsystems: 'Подсистемы', groupDrones: 'Дроны и файтеры', groupCharges: 'Заряды и скрипты', groupImplants: 'Импланты и бустеры', groupModules: 'Модули', groupCargo: 'Груз и прочее', groupOther: 'Прочее', groupMeta: '{positions} поз. · {units} ед.'
+        },
+        en: {
+          pageTitle: 'EVE FIT // SHOPPING LIST',
+          procurementConsole: 'Procurement console',
+          localNote: 'Fits are processed locally<br>individual item names and IDs are sent for prices and analysis',
+          languageLabel: 'Interface language',
+          themeLabel: 'Interface theme',
+          themeIdentity: 'I’M',
+          sourceFits: 'Source fits', clearAllFits: 'Clear all fits', fitA: 'Fit 1', fitB: 'Fit 2', fitC: 'Fit 3', existingFit: 'Existing fit', targetFitB: 'Target fit 1', targetFitC: 'Target fit 2', fitTabsLabel: 'Fit selection',
+          waitingForData: 'Waiting for data', optional: 'Optional', checkHeader: 'Check fit header',
+          fitAPlaceholder: '[Tengu, Fit name]\nModule\nModule...',
+          fitBPlaceholder: 'Paste a second fit if needed',
+          fitCPlaceholder: 'Paste a third fit if needed',
+          paste: 'Paste', copyFit: 'Copy fit', clear: 'Clear', calculationSettings: 'Calculation settings',
+          mergeMode: 'Mode', twoShips: 'Fit merge', refit: 'Refit', topUp: 'Top-up', wantCheaper: 'Make it cheaper', multiplier: 'Multiplier',
+          sumHelp: 'Quantities of matching items from all populated fits are added together.',
+          maxHelp: 'For matching items, the largest quantity across all populated fits is used.',
+          shortageHelp: 'Fit 1 is what you have; fits 2 and 3 are targets. The list is a shared top-up package sufficient for either target fit.',
+          cheaperHelp: 'Only Fit 1 is used. Capture its original CPU/PG usage, then search for a replacement on the item you want.',
+          captureBaseline: 'Capture original fit', acceptCurrentBaseline: 'Set current fit as baseline', acceptCurrentBaselineHint: 'Recalculate the baseline CPU/PG from the current fit and restart the comparison.', restoreBaseline: 'Restore original fit', baselineUsage: 'Original', currentUsage: 'Current', usageDelta: 'Change', baselineMissing: 'Capture the original fit first.', baselineLoading: 'Calculating original CPU and Powergrid usage…', currentUsageLoading: 'Recalculating current fitting usage…', baselineReady: 'The original fitting budget is captured.', baselineChanged: 'The current fit differs from the original; the baseline is unchanged.', baselineIncomplete: 'Incomplete calculation: attributes for some fitted modules are unavailable.', baselineInvalidFit: 'A valid non-empty Fit 1 is required.', baselineCaptured: 'Original fit captured', baselineRestored: 'Original fit restored', baselineCleared: 'Original fitting budget cleared', fittingUsage: 'CPU {cpu} tf · PG {pg} MW', fittingDelta: 'CPU {cpu} tf · PG {pg} MW', findCheaperNeedsBaseline: 'Capture the original fit first',
+          includeHulls: 'Include hulls', includeCharges: 'Include charges', hidePurchased: 'Hide purchased',
+          groupItems: 'Group shopping list', parseWarnings: 'Data check', invalidHeaderWarning: 'Fit {fit}: no valid bracketed fit header was found.',
+          invalidLineWarning: 'Fit {fit}, line {line}: could not parse “{text}”.', unknownItemWarning: 'Not found in ESI: {name}.',
+          loadPrices: 'Load prices', refreshPrices: 'Refresh prices', retryPrices: 'Retry', hidePrices: 'Hide prices', fuzzworkSource: 'Prices by Fuzzwork', jitaEstimate: '{hub} estimate', hubComparison: 'Cost comparison by hub', selectHub: 'Select {hub} as the primary hub',
+          pricesOff: 'Prices not loaded', pricesLoading: 'Loading prices…', pricesReady: 'Lowest sell prices', pricesReadyAt: 'Lowest sell · {time}',
+          noItemsToPrice: 'No items to price',
+          totalCost: 'Total: {price}',
+          pricesPartial: 'Prices found in {hub}: {priced} of {total}', pricesError: 'Could not update prices', noPrice: 'No price in {hub}', missingPrice: 'No price: {hub}', hubComplete: 'Complete estimate', hubPartial: 'Incomplete: {priced}/{total}', equivalentItems: 'Identical alternatives', replaceInFits: 'Replace in fits', replaceItemConfirm: 'Replace “{from}” with “{to}” in all three fits?', itemReplaced: 'Item replaced in fits',
+          findCheaper: 'Find cheaper', cheaperLoading: 'Finding alternatives and {hub} prices…', cheaperNotice: 'Only price, CPU and Powergrid are checked. Other attributes may differ and may be worse.', cheaperPossible: 'Possible cheaper alternatives', cheaperNone: 'No cheaper compatible alternatives are available in the selected hub.', cheaperError: 'The analysis failed. Please try again later.', cheaperOriginalNoPrice: 'The source item price is unavailable in {hub}.', cheaperSaving: 'Save {price}', cheaperRequirements: 'CPU {cpu} · PG {pg} · {price}', replaceInFitOne: 'Replace', replaceItemOneConfirm: 'Replace “{from}” with “{to}” in Fit 1?',
+          cheaperWithinBudget: 'After replacement: CPU {cpu} · PG {pg} vs original', cheaperUsesReserve: 'Uses reserve: CPU {cpu} · PG {pg}', cheaperOverBudget: 'Above original: CPU {cpu} · PG {pg}', cheaperWithinSection: 'Within original fitting budget', cheaperOverSection: 'Above original fitting budget',
+          itemPriceTitle: '{price} ISK per unit',
+          savedStates: 'Saved states', stateName: 'State name', save: 'Save', update: 'Update', newState: 'New', exportStates: 'Export', importStates: 'Import',
+          statesExported: 'Backup downloaded', statesImported: 'States imported: {count}', statesImportFailed: 'Could not import file', noStatesToExport: 'No states to export',
+          resultList: 'Shopping list', copyList: 'Copy full list', copyMultibuy: 'Copy remaining for Multibuy', resetChecks: 'Reset <span>checks</span>',
+          positions: 'Items', units: 'Units', purchased: 'Purchased', filterPlaceholder: 'Filter by item name',
+          progressPositions: '{done} / {total} items', progressUnits: '{done} / {total} units', progressValue: 'ISK: {done} / {total}',
+          filterLabel: 'Filter list', legend: 'Legend', onlyFitA: 'fit 1 only', onlyFitB: 'fit 2 only', onlyFitC: 'fit 3 only', sharedFits: 'multiple fits',
+          positionsShort: 'items', positionOne: 'item', positionMany: 'items', unitOne: 'unit', unitMany: 'units', onlyAQty: 'fit 1 only: {count}', onlyBQty: 'fit 2 only: {count}', onlyCQty: 'fit 3 only: {count}', multiQty: 'Fit 1: {a} · Fit 2: {b} · Fit 3: {c}', haveNeed: 'Have: {have} · Target 1: {needB} · Target 2: {needC}',
+          noResults: 'No results', noResultsHint: 'Change the filter or show purchased items.',
+          emptyList: 'The list is empty', emptyListHint: 'Paste a fit into the first field — the list will update automatically.', shortageEmptyHint: 'Paste at least one target fit into field 2 or 3.',
+          nothingToBuy: 'Nothing to buy', nothingToBuyHint: 'The existing fit fully covers the target fits.',
+          boughtItem: 'Purchased: {name}', unnamedList: 'List {date}', noSavedStates: 'No saved states yet.',
+          savedLocally: 'Saved locally', open: 'Open', remove: 'Delete', openState: 'Open state {name}',
+          removeState: 'Delete state {name}', removeConfirm: 'Delete state “{name}”?', stateSaved: 'State saved',
+          stateLoaded: 'State loaded', stateDeleted: 'State deleted', listEmpty: 'The list is empty',
+          listCopied: 'List copied', fitCopied: 'Fit copied', itemCopied: 'Item name copied', hubCopied: 'Station name copied', copyItem: 'Copy {name}', copyHub: 'Copy station name {name}', fitEmpty: 'Fit is empty', copyFailed: 'Could not copy', fitPasted: 'Fit pasted',
+          pasteManually: 'Press Ctrl/Cmd+V in the field', checksReset: 'Checks reset', multibuyCopied: 'Remaining items copied for Multibuy', allPurchased: 'All items are already purchased',
+          groupHull: 'Hulls', groupLow: 'Low slots', groupMid: 'Mid slots', groupHigh: 'High slots', groupRigs: 'Rigs', groupSubsystems: 'Subsystems', groupDrones: 'Drones and fighters', groupCharges: 'Charges and scripts', groupImplants: 'Implants and boosters', groupModules: 'Modules', groupCargo: 'Cargo and other', groupOther: 'Other', groupMeta: '{positions} items · {units} units'
+        }
+      };
+      const GROUP_ORDER = ['hull', 'high', 'mid', 'low', 'rigs', 'subsystems', 'drones', 'charges', 'implants', 'modules', 'cargo', 'other'];
+      const GROUP_LABELS = {
+        hull: 'groupHull', low: 'groupLow', mid: 'groupMid', high: 'groupHigh', rigs: 'groupRigs',
+        subsystems: 'groupSubsystems', drones: 'groupDrones', charges: 'groupCharges', implants: 'groupImplants',
+        modules: 'groupModules', cargo: 'groupCargo', other: 'groupOther'
+      };
+      const DOGMA_ATTRIBUTE = Object.freeze({ POWERGRID: 30, CPU: 50, MASS_ADDITION: 796 });
+      const DOGMA_EFFECT = Object.freeze({ LOW_SLOT: 11, HIGH_SLOT: 12, MID_SLOT: 13, RIG_SLOT: 2663, SUBSYSTEM_SLOT: 3772 });
+      const $ = (selector) => document.querySelector(selector);
+      const elements = {
+        fitA: $('#fitA'), fitB: $('#fitB'), fitC: $('#fitC'), statusA: $('#statusA'), statusB: $('#statusB'), statusC: $('#statusC'),
+        multiplier: $('#multiplier'), includeHull: $('#includeHull'), includeCharges: $('#includeCharges'),
+        hideBought: $('#hideBought'), groupItems: $('#groupItems'), search: $('#search'), resultList: $('#resultList'),
+        uniqueCount: $('#uniqueCount'), totalCount: $('#totalCount'),
+        doneCount: $('#doneCount'), donePositions: $('#donePositions'), doneUnits: $('#doneUnits'), doneValue: $('#doneValue'), modeHelp: $('#modeHelp'), toast: $('#toast'),
+        snapshotName: $('#snapshotName'), snapshotList: $('#snapshotList'),
+        snapshotCount: $('#snapshotCount'), saveSnapshot: $('#saveSnapshot'),
+        fitLabelA: $('#fitLabelA'), fitLabelB: $('#fitLabelB'), fitLabelC: $('#fitLabelC'),
+        priceAction: $('#priceAction'), hidePrices: $('#hidePrices'), priceTotal: $('#priceTotal'), priceRemaining: $('#priceRemaining'), priceStatus: $('#priceStatus'), hubComparison: $('#hubComparison'), hubRows: $('#hubRows'),
+        warningPanel: $('#warningPanel'), warningCount: $('#warningCount'), warningList: $('#warningList'), snapshotFile: $('#snapshotFile'),
+        fittingBudget: $('#fittingBudget'), fittingState: $('#fittingState'), fittingMetrics: $('#fittingMetrics'), baselineUsage: $('#baselineUsage'), currentUsage: $('#currentUsage'), usageDelta: $('#usageDelta'), usageDeltaCard: $('#usageDeltaCard'), captureBaseline: $('#captureBaseline'), acceptCurrentBaseline: $('#acceptCurrentBaseline'), restoreBaseline: $('#restoreBaseline')
+      };
+
+      let bought = new Set();
+      let currentItems = [];
+      let currentFits = { a: null, b: null, c: null };
+      let snapshots = [];
+      let activeSnapshotId = null;
+      let snapshotNameEdited = false;
+      let toastTimer;
+      let priceTimer;
+      let fittingUsageTimer;
+      let stateSaveTimer;
+      let calculateFrame;
+      let priceRequestToken = 0;
+      let priceActive = false;
+      let priceLoading = false;
+      let priceError = false;
+      let priceUpdatedAt = null;
+      let priceCache = new Map();
+      const typeDetailsCache = new Map();
+      const groupDetailsCache = new Map();
+      const categoryDetailsCache = new Map();
+      const marketGroupDetailsCache = new Map();
+      const cheaperSearchState = new Map();
+      let cheaperRequestSequence = 0;
+      let optimizationBaseline = null;
+      let currentUsageState = null;
+      let fittingUsageRequestSequence = 0;
+      let selectedPriceHub = 'jita';
+      let currentLanguage = 'ru';
+      let currentTheme = document.documentElement.dataset.theme || 'caldari';
+      try { currentLanguage = localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'ru'; } catch (_) {}
+      try { selectedPriceHub = MARKET_HUBS[localStorage.getItem(PRICE_HUB_KEY)] ? localStorage.getItem(PRICE_HUB_KEY) : 'jita'; } catch (_) {}
+
+      function t(key, values = {}) {
+        const value = UI[currentLanguage][key] ?? UI.ru[key] ?? key;
+        return String(value).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+      }
+
+      function applyLanguage() {
+        document.documentElement.lang = currentLanguage;
+        document.querySelectorAll('[data-i18n]').forEach(node => { node.textContent = t(node.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-html]').forEach(node => { node.innerHTML = t(node.dataset.i18nHtml); });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(node => { node.placeholder = t(node.dataset.i18nPlaceholder); });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach(node => { node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel)); });
+        document.querySelectorAll('[data-lang]').forEach(button => {
+          const active = button.dataset.lang === currentLanguage;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      }
+
+      function setLanguage(language) {
+        if (!UI[language]) return;
+        currentLanguage = language;
+        try { localStorage.setItem(LANGUAGE_KEY, language); } catch (_) {}
+        applyLanguage();
+        calculate();
+        renderSnapshots();
+      }
+
+      function applyTheme() {
+        document.documentElement.dataset.theme = currentTheme;
+        document.querySelectorAll('[data-theme-option]').forEach(button => {
+          const active = button.dataset.themeOption === currentTheme;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      }
+
+      function setTheme(theme) {
+        if (!['amarr', 'caldari', 'gallente', 'minmatar'].includes(theme)) return;
+        currentTheme = theme;
+        try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
+        applyTheme();
+      }
+
+      function loadPriceCache() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(PRICE_CACHE_KEY) || '{}');
+          priceCache = new Map(Object.entries(stored).filter(([, value]) => value && typeof value === 'object'));
+        } catch (_) { priceCache = new Map(); }
+      }
+
+      function persistPriceCache() {
+        try { localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify(Object.fromEntries(priceCache))); } catch (_) {}
+      }
+
+      function hubName(hub = selectedPriceHub) {
+        return MARKET_HUBS[hub]?.name || MARKET_HUBS.jita.name;
+      }
+
+      function priceFor(key, hub = selectedPriceHub) {
+        const cached = priceCache.get(key);
+        const value = cached?.prices?.[hub]?.price;
+        if (Number.isFinite(value)) return value;
+        return hub === 'jita' && Number.isFinite(cached?.price) ? cached.price : null;
+      }
+
+      function priceFetchedAt(key, hub = selectedPriceHub) {
+        const cached = priceCache.get(key);
+        return cached?.prices?.[hub]?.fetchedAt || (hub === 'jita' ? cached?.fetchedAt : 0) || 0;
+      }
+
+      function setPriceHub(hub) {
+        if (!MARKET_HUBS[hub]) return;
+        selectedPriceHub = hub;
+        cheaperSearchState.clear();
+        try { localStorage.setItem(PRICE_HUB_KEY, selectedPriceHub); } catch (_) {}
+        render();
+        saveState();
+      }
+
+      function formatIsk(value, compact = true) {
+        if (!Number.isFinite(value)) return '—';
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        if (!compact) return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value)} ISK`;
+        const scales = currentLanguage === 'ru'
+          ? [[1e9, 'млрд'], [1e6, 'млн'], [1e3, 'тыс.']]
+          : [[1e9, 'B'], [1e6, 'M'], [1e3, 'K']];
+        const scale = scales.find(([threshold]) => Math.abs(value) >= threshold);
+        if (!scale) return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value)} ISK`;
+        const [divisor, suffix] = scale;
+        const scaled = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value / divisor);
+        return `${scaled} ${suffix} ISK`;
+      }
+
+      function formatPriceTime(timestamp) {
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        return new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(timestamp);
+      }
+
+      function formatIskProgress(value) {
+        return formatIsk(value).replace(/ ISK$/, '');
+      }
+
+      function formatGroupMeta(positions, units) {
+        return `${positions} ${t(positions === 1 ? 'positionOne' : 'positionMany')} · ${units} ${t(units === 1 ? 'unitOne' : 'unitMany')}`;
+      }
+
+      function chunks(values, size) {
+        const result = [];
+        for (let index = 0; index < values.length; index += size) result.push(values.slice(index, index + size));
+        return result;
+      }
+
+      function priceTargets() {
+        const targets = new Map(currentItems.map(item => [item.key, { key: item.key, name: item.name, group: item.group }]));
+        const fits = selectedMode() === 'cheaper' ? [currentFits.a] : [currentFits.a, currentFits.b, currentFits.c];
+        fits.forEach(fit => {
+          fit?.items?.forEach((item, key) => {
+            if ((!elements.includeHull.checked && item.kind === 'hull') ||
+                (!elements.includeCharges.checked && item.kind === 'charge')) return;
+            const existing = targets.get(key);
+            targets.set(key, { key, name: item.name, group: existing?.group || item.group });
+          });
+        });
+        return [...targets.values()];
+      }
+
+      function equivalentPriceTargets() {
+        const targets = new Map();
+        currentItems.forEach(item => {
+          const typeId = priceCache.get(item.key)?.typeId;
+          const group = equivalentGroupsByTypeId.get(typeId);
+          group?.items.forEach(alternative => {
+            if (alternative.typeId === typeId) return;
+            const key = canonicalKey(alternative.name);
+            targets.set(key, { key, name: alternative.name, group: item.group, typeId: alternative.typeId });
+          });
+        });
+        targets.forEach(item => {
+          const cached = priceCache.get(item.key) || {};
+          priceCache.set(item.key, { ...cached, typeId: item.typeId, prices: cached.prices || {}, resolvedAt: cached.resolvedAt || Date.now() });
+        });
+        return [...targets.values()];
+      }
+
+      function classifyMetadata(categoryName = '', groupName = '', hint = 'modules') {
+        const category = categoryName.toLocaleLowerCase('en-US');
+        const group = groupName.toLocaleLowerCase('en-US');
+        if (category.includes('ship')) return 'hull';
+        if (category.includes('drone') || category.includes('fighter')) return 'drones';
+        if (category.includes('charge')) return 'charges';
+        if (category.includes('implant')) return 'implants';
+        if (category.includes('subsystem') || group.includes('subsystem')) return 'subsystems';
+        if (group.includes('rig')) return 'rigs';
+        if (category.includes('module')) return ['low', 'mid', 'high'].includes(hint) ? hint : 'modules';
+        return hint && GROUP_LABELS[hint] ? hint : 'other';
+      }
+
+      function fittingGroupFromType(type) {
+        const effects = new Set((type?.dogma_effects || []).map(effect => effect.effect_id));
+        if (effects.has(DOGMA_EFFECT.LOW_SLOT)) return 'low';
+        if (effects.has(DOGMA_EFFECT.MID_SLOT)) return 'mid';
+        if (effects.has(DOGMA_EFFECT.HIGH_SLOT)) return 'high';
+        if (effects.has(DOGMA_EFFECT.RIG_SLOT)) return 'rigs';
+        if (effects.has(DOGMA_EFFECT.SUBSYSTEM_SLOT)) return 'subsystems';
+        return '';
+      }
+
+      function effectiveGroup(item) {
+        const cached = priceCache.get(item.key);
+        if (cached?.fittingGroup) return cached.fittingGroup;
+        if (cached?.categoryName || cached?.groupName) {
+          return classifyMetadata(cached.categoryName, cached.groupName, item.group);
+        }
+        return cached?.classification || item.group || 'other';
+      }
+
+      function groupRank(group) {
+        const index = GROUP_ORDER.indexOf(group);
+        return index < 0 ? GROUP_ORDER.length : index;
+      }
+
+      function compareItemsByGroup(a, b) {
+        return groupRank(effectiveGroup(a)) - groupRank(effectiveGroup(b)) || a.name.localeCompare(b.name, 'en');
+      }
+
+      async function fetchEsi(path) {
+        const separator = path.includes('?') ? '&' : '?';
+        const response = await fetch(`https://esi.evetech.net/latest${path}${separator}datasource=tranquility&compatibility_date=2026-09-16`);
+        if (!response.ok) throw new Error(`ESI ${response.status}`);
+        return response.json();
+      }
+
+      function dogmaValue(type, attributeId) {
+        const value = Number(type?.dogma_attributes?.find(attribute => attribute.attribute_id === attributeId)?.value);
+        return Number.isFinite(value) ? value : 0;
+      }
+
+      async function resolveTypeId(item) {
+        const cached = priceCache.get(item.key);
+        if (cached?.typeId) return cached.typeId;
+        const response = await fetch('https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&compatibility_date=2026-09-16', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify([item.name])
+        });
+        if (!response.ok) throw new Error(`ESI ${response.status}`);
+        const data = await response.json();
+        const match = (data.inventory_types || []).find(candidate => canonicalKey(candidate.name) === item.key);
+        if (!match) throw new Error('Type not found');
+        priceCache.set(item.key, { ...(cached || {}), typeId: match.id, resolvedAt: Date.now(), prices: cached?.prices || {} });
+        return match.id;
+      }
+
+      async function getTypeDetails(typeId) {
+        if (!typeDetailsCache.has(typeId)) {
+          const request = fetchEsi(`/universe/types/${typeId}/`).catch(error => {
+            typeDetailsCache.delete(typeId);
+            throw error;
+          });
+          typeDetailsCache.set(typeId, request);
+        }
+        return typeDetailsCache.get(typeId);
+      }
+
+      async function getGroupDetails(groupId) {
+        if (!groupDetailsCache.has(groupId)) {
+          const request = fetchEsi(`/universe/groups/${groupId}/`).catch(error => {
+            groupDetailsCache.delete(groupId);
+            throw error;
+          });
+          groupDetailsCache.set(groupId, request);
+        }
+        return groupDetailsCache.get(groupId);
+      }
+
+      async function getCategoryDetails(categoryId) {
+        if (!categoryDetailsCache.has(categoryId)) {
+          const request = fetchEsi(`/universe/categories/${categoryId}/`).catch(error => {
+            categoryDetailsCache.delete(categoryId);
+            throw error;
+          });
+          categoryDetailsCache.set(categoryId, request);
+        }
+        return categoryDetailsCache.get(categoryId);
+      }
+
+      async function getMarketGroupDetails(marketGroupId) {
+        if (!marketGroupDetailsCache.has(marketGroupId)) {
+          const request = fetchEsi(`/markets/groups/${marketGroupId}/`).catch(error => {
+            marketGroupDetailsCache.delete(marketGroupId);
+            throw error;
+          });
+          marketGroupDetailsCache.set(marketGroupId, request);
+        }
+        return marketGroupDetailsCache.get(marketGroupId);
+      }
+
+      async function resolveFitTypeIds(fit) {
+        const items = [...(fit?.items || new Map()).entries()]
+          .filter(([, item]) => item.kind !== 'hull' && item.kind !== 'charge' && (item.fittedQuantity ?? item.quantity) > 0)
+          .map(([key, item]) => ({ key, ...item }));
+        const unresolved = items.filter(item => !priceCache.get(item.key)?.typeId);
+        for (const batch of chunks(unresolved, 500)) {
+          if (!batch.length) continue;
+          const response = await fetch('https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&compatibility_date=2026-09-16', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(batch.map(item => item.name))
+          });
+          if (!response.ok) throw new Error(`ESI ${response.status}`);
+          const data = await response.json();
+          const resolved = new Map((data.inventory_types || []).map(type => [canonicalKey(type.name), type.id]));
+          batch.forEach(item => {
+            const cached = priceCache.get(item.key) || {};
+            priceCache.set(item.key, { ...cached, typeId: resolved.get(item.key) || null, resolvedAt: Date.now(), prices: cached.prices || {} });
+          });
+        }
+        return items;
+      }
+
+      async function computeFitUsage(fit) {
+        const items = await resolveFitTypeIds(fit);
+        const entries = [];
+        const missing = [];
+        for (const batch of chunks(items, 8)) {
+          const settled = await Promise.allSettled(batch.map(async item => {
+            const typeId = priceCache.get(item.key)?.typeId;
+            if (!typeId) throw new Error('Type not found');
+            return { item, typeId, type: await getTypeDetails(typeId) };
+          }));
+          settled.forEach((result, index) => {
+            const fallback = batch[index];
+            if (result.status !== 'fulfilled') {
+              if (['low', 'mid', 'high', 'modules'].includes(fallback.group)) missing.push(fallback.name);
+              return;
+            }
+            const { item, typeId, type } = result.value;
+            const fittingGroup = fittingGroupFromType(type);
+            const cached = priceCache.get(item.key) || {};
+            priceCache.set(item.key, { ...cached, typeId, fittingGroup: fittingGroup || cached.fittingGroup || '' });
+            if (!['low', 'mid', 'high'].includes(fittingGroup)) {
+              if (['low', 'mid', 'high'].includes(item.group)) missing.push(item.name);
+              return;
+            }
+            entries.push({ key: item.key, name: item.name, typeId, quantity: item.fittedQuantity ?? item.quantity, cpu: dogmaValue(type, DOGMA_ATTRIBUTE.CPU), pg: dogmaValue(type, DOGMA_ATTRIBUTE.POWERGRID), fittingGroup });
+          });
+        }
+        const cpu = entries.reduce((sum, entry) => sum + entry.cpu * entry.quantity, 0);
+        const pg = entries.reduce((sum, entry) => sum + entry.pg * entry.quantity, 0);
+        persistPriceCache();
+        return { cpu, pg, entries, missing, complete: missing.length === 0 };
+      }
+
+      function normalizedFitOne() {
+        return normalizeFitText(elements.fitA.value);
+      }
+
+      async function captureOptimizationBaseline() {
+        const fitText = normalizedFitOne();
+        const fit = parseFit(fitText);
+        if (!fitText || !fit.valid) return showToast(t('baselineInvalidFit'));
+        const requestId = ++fittingUsageRequestSequence;
+        optimizationBaseline = { loading: true, fitText, capturedAt: Date.now() };
+        currentUsageState = null;
+        cheaperSearchState.clear();
+        renderFittingBudget();
+        try {
+          const usage = await computeFitUsage(fit);
+          if (requestId !== fittingUsageRequestSequence) return;
+          optimizationBaseline = { fitText, capturedAt: Date.now(), usage };
+          currentUsageState = normalizedFitOne() === fitText ? { ...usage, fitText, loading: false } : null;
+          saveState();
+          showToast(t('baselineCaptured'));
+          if (!currentUsageState) scheduleCurrentFitUsage();
+        } catch (_) {
+          if (requestId !== fittingUsageRequestSequence) return;
+          optimizationBaseline = null;
+          currentUsageState = { error: true };
+          saveState();
+        }
+        render();
+      }
+
+      async function refreshCurrentFitUsage() {
+        if (!optimizationBaseline?.usage || selectedMode() !== 'cheaper') return;
+        const fitText = normalizedFitOne();
+        const fit = parseFit(fitText);
+        const requestId = ++fittingUsageRequestSequence;
+        if (!fitText || !fit.valid) {
+          currentUsageState = { error: true, fitText };
+          render();
+          return;
+        }
+        currentUsageState = { loading: true, fitText };
+        renderFittingBudget();
+        try {
+          const usage = await computeFitUsage(fit);
+          if (requestId !== fittingUsageRequestSequence) return;
+          currentUsageState = { ...usage, fitText, loading: false };
+        } catch (_) {
+          if (requestId === fittingUsageRequestSequence) currentUsageState = { error: true, fitText };
+        }
+        render();
+      }
+
+      function scheduleCurrentFitUsage() {
+        clearTimeout(fittingUsageTimer);
+        fittingUsageTimer = setTimeout(() => {
+          fittingUsageTimer = 0;
+          void refreshCurrentFitUsage();
+        }, 280);
+      }
+
+      function clearOptimizationBaseline(showMessage = false) {
+        clearTimeout(fittingUsageTimer);
+        fittingUsageRequestSequence += 1;
+        optimizationBaseline = null;
+        currentUsageState = null;
+        cheaperSearchState.clear();
+        if (showMessage) showToast(t('baselineCleared'));
+      }
+
+      function restoreOptimizationBaseline() {
+        if (!optimizationBaseline?.fitText) return;
+        elements.fitA.value = optimizationBaseline.fitText;
+        calculate();
+        showToast(t('baselineRestored'));
+      }
+
+      async function fetchSelectedHubPrices(typeIds, hub) {
+        const prices = new Map();
+        for (const idBatch of chunks([...new Set(typeIds)], 100)) {
+          if (!idBatch.length) continue;
+          const response = await fetch(`https://market.fuzzwork.co.uk/aggregates/?station=${MARKET_HUBS[hub].station}&types=${idBatch.join(',')}`);
+          if (!response.ok) throw new Error(`Fuzzwork ${response.status}`);
+          const data = await response.json();
+          idBatch.forEach(typeId => {
+            const value = Number(data[String(typeId)]?.sell?.min);
+            prices.set(typeId, Number.isFinite(value) && value > 0 ? value : null);
+          });
+        }
+        return prices;
+      }
+
+      async function analyzeCheaperAlternatives(item) {
+        if (!item.fittedQa || !optimizationBaseline?.usage?.complete || !currentUsageState?.complete || currentUsageState.loading || currentUsageState.fitText !== normalizedFitOne()) return;
+        const requestId = ++cheaperRequestSequence;
+        const hub = selectedPriceHub;
+        cheaperSearchState.set(item.key, { loading: true, requestId, hub });
+        render();
+        try {
+          const originalTypeId = await resolveTypeId(item);
+          const originalType = await getTypeDetails(originalTypeId);
+          const originalCached = priceCache.get(item.key) || {};
+          priceCache.set(item.key, { ...originalCached, fittingGroup: fittingGroupFromType(originalType) || originalCached.fittingGroup || '' });
+          if (!originalType.market_group_id) throw new Error('No market group');
+          const marketGroup = await getMarketGroupDetails(originalType.market_group_id);
+          const candidateTypes = [];
+          for (const batch of chunks((marketGroup.types || []).filter(typeId => typeId !== originalTypeId), 8)) {
+            const settled = await Promise.allSettled(batch.map(async typeId => ({ typeId, data: await getTypeDetails(typeId) })));
+            settled.forEach(result => { if (result.status === 'fulfilled') candidateTypes.push(result.value); });
+          }
+          if (cheaperSearchState.get(item.key)?.requestId !== requestId) return;
+
+          const originalCpu = dogmaValue(originalType, DOGMA_ATTRIBUTE.CPU);
+          const originalPg = dogmaValue(originalType, DOGMA_ATTRIBUTE.POWERGRID);
+          const originalSize = dogmaValue(originalType, DOGMA_ATTRIBUTE.MASS_ADDITION);
+          const fittingCandidates = candidateTypes.filter(candidate =>
+            candidate.data.published !== false &&
+            candidate.data.group_id === originalType.group_id &&
+            candidate.data.market_group_id === originalType.market_group_id &&
+            (!originalSize || dogmaValue(candidate.data, DOGMA_ATTRIBUTE.MASS_ADDITION) === originalSize)
+          );
+          const hubPrices = await fetchSelectedHubPrices([originalTypeId, ...fittingCandidates.map(candidate => candidate.typeId)], hub);
+          if (cheaperSearchState.get(item.key)?.requestId !== requestId) return;
+          const originalPrice = hubPrices.get(originalTypeId);
+          if (!Number.isFinite(originalPrice)) {
+            cheaperSearchState.set(item.key, { loaded: true, noOriginalPrice: true, hub, requestId });
+            render();
+            return;
+          }
+
+          await equivalentItemDataReady;
+          if (cheaperSearchState.get(item.key)?.requestId !== requestId) return;
+          const exactIds = new Set((equivalentGroupsByTypeId.get(originalTypeId)?.items || []).map(candidate => candidate.typeId));
+          const candidates = fittingCandidates
+            .map(candidate => ({
+              typeId: candidate.typeId,
+              name: candidate.data.name,
+              cpu: dogmaValue(candidate.data, DOGMA_ATTRIBUTE.CPU),
+              pg: dogmaValue(candidate.data, DOGMA_ATTRIBUTE.POWERGRID),
+              price: hubPrices.get(candidate.typeId),
+              exact: exactIds.has(candidate.typeId)
+            }))
+            .filter(candidate => Number.isFinite(candidate.price) && candidate.price < originalPrice)
+            .sort((a, b) => Number(b.exact) - Number(a.exact) || b.price - a.price || a.name.localeCompare(b.name, 'en'));
+
+          const now = Date.now();
+          [{ typeId: originalTypeId, name: item.name, price: originalPrice }, ...candidates].forEach(candidate => {
+            const key = canonicalKey(candidate.name);
+            const cached = priceCache.get(key) || {};
+            priceCache.set(key, {
+              ...cached,
+              typeId: candidate.typeId,
+              prices: { ...(cached.prices || {}), [hub]: { price: candidate.price, fetchedAt: now } },
+              resolvedAt: cached.resolvedAt || now
+            });
+          });
+          persistPriceCache();
+          cheaperSearchState.set(item.key, { loaded: true, candidates, originalPrice, originalCpu, originalPg, hub, requestId });
+        } catch (_) {
+          if (cheaperSearchState.get(item.key)?.requestId === requestId) {
+            cheaperSearchState.set(item.key, { error: true, hub, requestId });
+          }
+        }
+        render();
+      }
+
+      async function hydrateClassifications(items, token) {
+        const targets = items.filter(item => {
+          const cached = priceCache.get(item.key);
+          const isModule = String(cached?.categoryName || '').toLocaleLowerCase('en-US').includes('module');
+          return cached?.typeId && (!cached.classification || (isModule && !cached.fittingGroup));
+        });
+        if (!targets.length) return;
+
+        const typeResults = [];
+        for (const batch of chunks(targets, 8)) {
+          const settled = await Promise.allSettled(batch.map(async item => ({
+            item,
+            data: await getTypeDetails(priceCache.get(item.key).typeId)
+          })));
+          if (token !== priceRequestToken) return;
+          settled.forEach(result => { if (result.status === 'fulfilled') typeResults.push(result.value); });
+        }
+
+        const groupIds = [...new Set(typeResults.map(result => result.data.group_id).filter(Number.isFinite))];
+        const groupData = new Map();
+        for (const batch of chunks(groupIds, 8)) {
+          const settled = await Promise.allSettled(batch.map(async id => ({ id, data: await getGroupDetails(id) })));
+          if (token !== priceRequestToken) return;
+          settled.forEach(result => { if (result.status === 'fulfilled') groupData.set(result.value.id, result.value.data); });
+        }
+
+        const categoryIds = [...new Set([...groupData.values()].map(group => group.category_id).filter(Number.isFinite))];
+        const categoryData = new Map();
+        for (const batch of chunks(categoryIds, 8)) {
+          const settled = await Promise.allSettled(batch.map(async id => ({ id, data: await getCategoryDetails(id) })));
+          if (token !== priceRequestToken) return;
+          settled.forEach(result => { if (result.status === 'fulfilled') categoryData.set(result.value.id, result.value.data); });
+        }
+
+        typeResults.forEach(({ item, data }) => {
+          const previous = priceCache.get(item.key) || {};
+          const group = groupData.get(data.group_id);
+          const category = group ? categoryData.get(group.category_id) : null;
+          const fittingGroup = fittingGroupFromType(data);
+          priceCache.set(item.key, {
+            ...previous,
+            groupId: data.group_id || null,
+            marketGroupId: data.market_group_id || null,
+            groupName: group?.name || '',
+            categoryId: group?.category_id || null,
+            categoryName: category?.name || '',
+            fittingGroup,
+            classification: fittingGroup || classifyMetadata(category?.name, group?.name, item.group)
+          });
+        });
+      }
+
+      function schedulePriceLoad() {
+        clearTimeout(priceTimer);
+        if (!priceActive || !priceTargets().length) return;
+        priceTimer = setTimeout(() => loadPrices(false), 300);
+      }
+
+      async function loadPrices(force = false) {
+        if (!priceActive) return;
+        const items = priceTargets();
+        const token = ++priceRequestToken;
+        priceLoading = true;
+        priceError = false;
+        render();
+
+        try {
+          const now = Date.now();
+          const namesToResolve = items.filter(item => {
+            const cached = priceCache.get(item.key);
+            return !cached?.typeId && (force || !cached?.fetchedAt || now - cached.fetchedAt >= PRICE_TTL_MS);
+          });
+
+          for (const batch of chunks(namesToResolve, 500)) {
+            if (!batch.length) continue;
+            const response = await fetch('https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&compatibility_date=2026-09-16', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(batch.map(item => item.name))
+            });
+            if (!response.ok) throw new Error(`ESI ${response.status}`);
+            const data = await response.json();
+            if (token !== priceRequestToken) return;
+            const resolved = new Map((data.inventory_types || []).map(item => [canonicalKey(item.name), item.id]));
+            batch.forEach(item => {
+              const previous = priceCache.get(item.key) || {};
+              const typeId = resolved.get(item.key) || null;
+              priceCache.set(item.key, {
+                ...previous,
+                typeId,
+                price: typeId ? previous.price ?? null : null,
+                prices: typeId ? previous.prices || {} : {},
+                fetchedAt: typeId ? previous.fetchedAt || 0 : now,
+                resolvedAt: now
+              });
+            });
+          }
+
+          const marketItems = [...items, ...equivalentPriceTargets()];
+          const dueItems = marketItems.filter(item => {
+            const cached = priceCache.get(item.key);
+            return cached?.typeId && (force || Object.keys(MARKET_HUBS).some(hub => !priceFetchedAt(item.key, hub) || now - priceFetchedAt(item.key, hub) >= PRICE_TTL_MS));
+          });
+          const typeIds = [...new Set(dueItems.map(item => priceCache.get(item.key).typeId))];
+
+          for (const idBatch of chunks(typeIds, 100)) {
+            if (!idBatch.length) continue;
+            const results = await Promise.allSettled(Object.entries(MARKET_HUBS).map(async ([hub, definition]) => {
+              const response = await fetch(`https://market.fuzzwork.co.uk/aggregates/?station=${definition.station}&types=${idBatch.join(',')}`);
+              if (!response.ok) throw new Error(`Fuzzwork ${response.status}`);
+              return { hub, data: await response.json() };
+            }));
+            if (token !== priceRequestToken) return;
+            const successfulHubs = results.filter(result => result.status === 'fulfilled').map(result => result.value);
+            if (!successfulHubs.length) throw new Error('Fuzzwork unavailable');
+            dueItems.filter(item => idBatch.includes(priceCache.get(item.key).typeId)).forEach(item => {
+              const cached = priceCache.get(item.key);
+              const prices = { ...(cached.prices || {}) };
+              successfulHubs.forEach(({ hub, data }) => {
+                const value = Number(data[String(cached.typeId)]?.sell?.min);
+                prices[hub] = { price: Number.isFinite(value) && value > 0 ? value : null, fetchedAt: now };
+              });
+              priceCache.set(item.key, { ...cached, prices, price: prices.jita?.price ?? cached.price ?? null, fetchedAt: prices.jita?.fetchedAt || cached.fetchedAt || now });
+            });
+          }
+
+          await hydrateClassifications(items, token);
+          if (token !== priceRequestToken) return;
+
+          persistPriceCache();
+          const timestamps = items
+            .map(item => priceFetchedAt(item.key))
+            .filter(timestamp => Number.isFinite(timestamp) && timestamp > 0);
+          priceUpdatedAt = timestamps.length ? Math.max(...timestamps) : Date.now();
+        } catch (_) {
+          if (token === priceRequestToken) priceError = true;
+        } finally {
+          if (token === priceRequestToken) {
+            priceLoading = false;
+            render();
+          }
+        }
+      }
+
+      function deactivatePrices() {
+        clearTimeout(priceTimer);
+        priceRequestToken += 1;
+        priceActive = false;
+        priceLoading = false;
+        priceError = false;
+        priceUpdatedAt = null;
+      }
+
+      function normalizeName(value) {
+        return value.trim().replace(/\s+/g, ' ');
+      }
+
+      function canonicalKey(value) {
+        return normalizeName(value).normalize('NFKC').toLocaleLowerCase('en-US');
+      }
+
+      function normalizeFitText(value) {
+        const lines = String(value)
+          .replace(/\r\n?/g, '\n')
+          .split('\n')
+          .map(line => line.replace(/\t+/g, ' ').trim());
+        const cleaned = [];
+        lines.forEach(line => {
+          if (line) cleaned.push(line);
+          else if (cleaned.length && cleaned.at(-1) !== '') cleaned.push('');
+        });
+        while (cleaned.at(-1) === '') cleaned.pop();
+        return cleaned.join('\n');
+      }
+
+      function insertNormalizedPaste(event) {
+        const pasted = event.clipboardData?.getData('text');
+        if (typeof pasted !== 'string') return;
+        event.preventDefault();
+        const input = event.currentTarget;
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? start;
+        const cleaned = normalizeFitText(pasted);
+        input.value = input.value.slice(0, start) + cleaned + input.value.slice(end);
+        const caret = start + cleaned.length;
+        input.setSelectionRange(caret, caret);
+        calculate();
+      }
+
+      function splitQuantity(line) {
+        const match = line.match(/^(.*?)(?:\s+x(\d+))$/i);
+        if (!match) return { name: normalizeName(line), quantity: 1, valid: !/\s+x\s*\S*$/i.test(line) };
+        const quantity = Number(match[2]);
+        return { name: normalizeName(match[1]), quantity: Math.max(1, quantity || 1), valid: quantity > 0 };
+      }
+
+      function sectionGroup(section, useSections, hasSubsystemSection = false) {
+        if (!useSections) return 'modules';
+        const groups = hasSubsystemSection
+          ? ['low', 'mid', 'high', 'rigs', 'subsystems', 'drones', 'cargo']
+          : ['low', 'mid', 'high', 'rigs', 'drones', 'cargo'];
+        return groups[section] || 'cargo';
+      }
+
+      function parseFit(text) {
+        const raw = text.trim();
+        if (!raw) return { valid: false, empty: true, ship: '', fitName: '', items: new Map(), warnings: [] };
+
+        const lines = raw.replace(/\r/g, '').split('\n');
+        const headerIndex = lines.findIndex(line => line.trim());
+        const header = (lines[headerIndex] || '').trim();
+        const headerMatch = header.match(/^\[([^,\]]+),\s*([^\]]*)\]$/);
+        const items = new Map();
+        const warnings = [];
+
+        const add = (name, quantity, kind, group = 'modules') => {
+          if (!name || name === '[Empty Low slot]' || name.startsWith('[Empty ')) return;
+          const key = canonicalKey(name);
+          const prev = items.get(key) || { name, quantity: 0, fittedQuantity: 0, kind, group };
+          prev.quantity += quantity;
+          if (kind === 'module' && ['low', 'mid', 'high', 'modules'].includes(group)) prev.fittedQuantity += quantity;
+          if (prev.kind !== kind && kind === 'charge') {
+            prev.kind = 'charge';
+            prev.group = 'charges';
+          }
+          items.set(key, prev);
+        };
+
+        if (headerMatch) add(normalizeName(headerMatch[1]), 1, 'hull', 'hull');
+        else warnings.push({ type: 'header' });
+
+        const itemStartIndex = headerMatch ? headerIndex + 1 : headerIndex;
+        const useSections = lines.slice(itemStartIndex).filter(line => !line.trim()).length >= 2;
+        const hasSubsystemSection = Boolean(headerMatch && /^(Tengu|Loki|Proteus|Legion)$/i.test(normalizeName(headerMatch[1])));
+        let section = 0;
+        let previousBlank = false;
+        let hasContent = false;
+        for (let i = itemStartIndex; i < lines.length; i += 1) {
+          const line = lines[i].trim();
+          if (!line) {
+            if (hasContent && !previousBlank) section += 1;
+            previousBlank = true;
+            continue;
+          }
+          if (line.startsWith(';') || line.startsWith('#')) continue;
+          previousBlank = false;
+          hasContent = true;
+
+          const comma = line.indexOf(',');
+          if (comma >= 0) {
+            const modulePart = line.slice(0, comma).trim();
+            const chargePart = line.slice(comma + 1).trim();
+            const module = splitQuantity(modulePart);
+            if (!module.name || !module.valid) {
+              warnings.push({ type: 'line', line: i + 1, text: line });
+              continue;
+            }
+            add(module.name, module.quantity, 'module', sectionGroup(section, useSections, hasSubsystemSection));
+            if (chargePart) {
+              const charge = splitQuantity(chargePart);
+              if (charge.name && charge.valid) add(charge.name, charge.quantity * module.quantity, 'charge', 'charges');
+              else warnings.push({ type: 'line', line: i + 1, text: line });
+            }
+          } else {
+            const item = splitQuantity(line);
+            if (!item.name || !item.valid || (/^\[/.test(line) && !/^\[Empty /i.test(line))) {
+              warnings.push({ type: 'line', line: i + 1, text: line });
+              continue;
+            }
+            add(item.name, item.quantity, 'module', sectionGroup(section, useSections, hasSubsystemSection));
+          }
+        }
+
+        return {
+          valid: Boolean(headerMatch), empty: false,
+          ship: headerMatch ? normalizeName(headerMatch[1]) : '',
+          fitName: headerMatch ? normalizeName(headerMatch[2]) : '',
+          items, warnings
+        };
+      }
+
+      function selectedMode() {
+        return document.querySelector('input[name="mode"]:checked').value;
+      }
+
+      function updateFitRoles(mode) {
+        const labelA = mode === 'shortage' ? 'existingFit' : 'fitA';
+        const labelB = mode === 'shortage' ? 'targetFitB' : 'fitB';
+        const labelC = mode === 'shortage' ? 'targetFitC' : 'fitC';
+        document.querySelector('.fit-panel').classList.toggle('cheaper-mode', mode === 'cheaper');
+        if (mode === 'cheaper') activateFitTab('fitA');
+        [[elements.fitLabelA, elements.fitA, 'fitA', labelA], [elements.fitLabelB, elements.fitB, 'fitB', labelB], [elements.fitLabelC, elements.fitC, 'fitC', labelC]].forEach(([label, input, id, key]) => {
+          label.dataset.i18n = key;
+          label.textContent = t(key);
+          input.setAttribute('aria-label', t(key));
+          const tab = document.querySelector(`[data-fit-tab="${id}"]`);
+          tab.dataset.i18n = key;
+          tab.textContent = t(key);
+        });
+      }
+
+      function calculate() {
+        if (calculateFrame) {
+          cancelAnimationFrame(calculateFrame);
+          calculateFrame = 0;
+        }
+        const fitA = parseFit(elements.fitA.value);
+        const fitB = parseFit(elements.fitB.value);
+        const fitC = parseFit(elements.fitC.value);
+        currentFits = { a: fitA, b: fitB, c: fitC };
+        const mode = selectedMode();
+        updateFitRoles(mode);
+        updateSnapshotNameSuggestion(fitA, fitB, fitC);
+
+        const multiplier = Math.max(1, Math.min(9999, Math.floor(Number(elements.multiplier.value) || 1)));
+        const allKeys = new Set(mode === 'cheaper' ? [...fitA.items.keys()] : [...fitA.items.keys(), ...fitB.items.keys(), ...fitC.items.keys()]);
+        const merged = [];
+
+        allKeys.forEach(key => {
+          const a = fitA.items.get(key);
+          const b = fitB.items.get(key);
+          const c = fitC.items.get(key);
+          if (mode === 'shortage' && !b && !c) return;
+          const base = mode === 'shortage' ? b || c : mode === 'cheaper' ? a : a || b || c;
+          if ((!elements.includeHull.checked && base.kind === 'hull') ||
+              (!elements.includeCharges.checked && base.kind === 'charge')) return;
+          const qa = a?.quantity || 0;
+          const qb = b?.quantity || 0;
+          const qc = c?.quantity || 0;
+          const quantity = (mode === 'sum' ? qa + qb + qc : mode === 'max' ? Math.max(qa, qb, qc) : mode === 'cheaper' ? qa : Math.max(qb - qa, qc - qa, 0)) * multiplier;
+          if (!quantity) return;
+          merged.push({
+            key,
+            name: base.name,
+            kind: base.kind,
+            group: base.group || (base.kind === 'hull' ? 'hull' : base.kind === 'charge' ? 'charges' : 'modules'),
+            quantity,
+            fittedQuantity: mode === 'cheaper' ? (a?.fittedQuantity || 0) * multiplier : 0,
+            fittedQa: a?.fittedQuantity || 0,
+            source: `${a ? 'a' : ''}${b ? 'b' : ''}${c ? 'c' : ''}`,
+            qa, qb, qc
+          });
+        });
+
+        currentItems = merged.sort(compareItemsByGroup);
+
+        if (mode !== 'cheaper') cheaperSearchState.clear();
+        elements.modeHelp.textContent = t(mode === 'sum' ? 'sumHelp' : mode === 'max' ? 'maxHelp' : mode === 'cheaper' ? 'cheaperHelp' : 'shortageHelp');
+        if (mode === 'cheaper' && optimizationBaseline?.usage && currentUsageState?.fitText !== normalizedFitOne()) {
+          fittingUsageRequestSequence += 1;
+          currentUsageState = { loading: true, fitText: normalizedFitOne() };
+          scheduleCurrentFitUsage();
+        }
+        render();
+        scheduleStateSave();
+        schedulePriceLoad();
+      }
+
+      function scheduleCalculate() {
+        if (calculateFrame) return;
+        calculateFrame = requestAnimationFrame(() => {
+          calculateFrame = 0;
+          calculate();
+        });
+      }
+
+      function updateFitStatus(fit, target, optional) {
+        if (fit.empty) {
+          target.textContent = t(optional ? 'optional' : 'waitingForData');
+          target.removeAttribute('title');
+          target.style.color = '';
+          return;
+        }
+        if (!fit.valid) {
+          target.textContent = t('checkHeader');
+          target.removeAttribute('title');
+          target.style.color = 'var(--danger)';
+          return;
+        }
+        const parts = [`${fit.ship} · ${fit.items.size} ${t(fit.items.size === 1 ? 'positionOne' : 'positionMany')}`];
+        if (priceActive) {
+          const included = [...fit.items.entries()].filter(([, item]) =>
+            (elements.includeHull.checked || item.kind !== 'hull') &&
+            (elements.includeCharges.checked || item.kind !== 'charge')
+          );
+          const priced = included.filter(([key]) => Number.isFinite(priceFor(key)));
+          if (priced.length === included.length && included.length) {
+            const total = priced.reduce((sum, [key, item]) => sum + priceFor(key) * item.quantity, 0);
+            parts.push(formatIsk(total));
+          } else if (priceLoading) {
+            parts.push('…');
+          }
+        }
+        target.textContent = parts.join(' · ');
+        target.title = `${fit.fitName || fit.ship}${parts.length > 1 ? ` · ${parts.at(-1)}` : ''}`;
+        target.style.color = 'var(--green)';
+      }
+
+      function sourceLabel(item) {
+        if (selectedMode() === 'shortage') return t('haveNeed', { have: item.qa, needB: item.qb, needC: item.qc });
+        if (selectedMode() === 'cheaper') return '';
+        if (item.source.length > 1) return t('multiQty', { a: item.qa, b: item.qb, c: item.qc });
+        return item.source === 'a' ? t('onlyAQty', { count: item.qa }) : item.source === 'b' ? t('onlyBQty', { count: item.qb }) : t('onlyCQty', { count: item.qc });
+      }
+
+      function renderWarnings() {
+        const warnings = [];
+        const fits = selectedMode() === 'cheaper' ? [['1', currentFits.a]] : [['1', currentFits.a], ['2', currentFits.b], ['3', currentFits.c]];
+        fits.forEach(([fitLabel, fit]) => {
+          fit?.warnings?.forEach(warning => {
+            warnings.push(warning.type === 'header'
+              ? t('invalidHeaderWarning', { fit: fitLabel })
+              : t('invalidLineWarning', { fit: fitLabel, line: warning.line, text: warning.text }));
+          });
+        });
+        const unknown = new Map();
+        if (priceActive && !priceLoading) {
+          (selectedMode() === 'cheaper' ? [currentFits.a] : [currentFits.a, currentFits.b, currentFits.c]).forEach(fit => fit?.items?.forEach((item, key) => {
+            const cached = priceCache.get(key);
+            if (cached?.resolvedAt && !cached.typeId) unknown.set(key, item.name);
+          }));
+        }
+        unknown.forEach(name => warnings.push(t('unknownItemWarning', { name })));
+        elements.warningPanel.hidden = !warnings.length;
+        elements.warningCount.textContent = warnings.length;
+        elements.warningList.replaceChildren(...warnings.map(message => {
+          const row = document.createElement('li');
+          row.textContent = message;
+          return row;
+        }));
+      }
+
+      function replaceItemInFits(from, to) {
+        if (!window.confirm(t('replaceItemConfirm', { from, to }))) return;
+        [elements.fitA, elements.fitB, elements.fitC].forEach(input => {
+          input.value = replaceItemEverywhereInText(input.value, from, to);
+        });
+        calculate();
+        if (priceActive) schedulePriceLoad();
+        showToast(t('itemReplaced'));
+      }
+
+      function replaceItemEverywhereInText(text, from, to) {
+        const fromKey = canonicalKey(from);
+        const replacePart = part => {
+          const leading = part.match(/^\s*/)?.[0] || '';
+          const trailing = part.match(/\s*$/)?.[0] || '';
+          const value = part.trim();
+          const parsed = splitQuantity(value);
+          if (!parsed.valid || canonicalKey(parsed.name) !== fromKey) return part;
+          const quantitySuffix = value.match(/\s+x\d+$/i)?.[0] || '';
+          return `${leading}${to}${quantitySuffix}${trailing}`;
+        };
+        return String(text).replace(/\r\n?/g, '\n').split('\n').map(rawLine => {
+          const line = rawLine.trim();
+          if (!line || line.startsWith('[') || line.startsWith(';') || line.startsWith('#')) return rawLine;
+          const comma = rawLine.indexOf(',');
+          if (comma < 0) return replacePart(rawLine);
+          return `${replacePart(rawLine.slice(0, comma))},${replacePart(rawLine.slice(comma + 1))}`;
+        }).join('\n');
+      }
+
+      function replaceItemInFitOne(from, to) {
+        if (!window.confirm(t('replaceItemOneConfirm', { from, to }))) return;
+        elements.fitA.value = replaceFittedItemInText(elements.fitA.value, from, to);
+        calculate();
+        if (priceActive) schedulePriceLoad();
+        showToast(t('itemReplaced'));
+      }
+
+      function replaceFittedItemInText(text, from, to) {
+        const lines = normalizeFitText(text).split('\n');
+        const headerIndex = lines.findIndex(line => line.trim());
+        const headerMatch = (lines[headerIndex] || '').trim().match(/^\[([^,\]]+),/);
+        const itemStartIndex = headerMatch ? headerIndex + 1 : headerIndex;
+        const useSections = lines.slice(itemStartIndex).filter(line => !line.trim()).length >= 2;
+        const hasSubsystemSection = Boolean(headerMatch && /^(Tengu|Loki|Proteus|Legion)$/i.test(normalizeName(headerMatch[1])));
+        const fromKey = canonicalKey(from);
+        let section = 0;
+        let previousBlank = false;
+        let hasContent = false;
+        return lines.map((rawLine, index) => {
+          if (index < itemStartIndex) return rawLine;
+          const line = rawLine.trim();
+          if (!line) {
+            if (hasContent && !previousBlank) section += 1;
+            previousBlank = true;
+            return rawLine;
+          }
+          if (line.startsWith(';') || line.startsWith('#')) return rawLine;
+          previousBlank = false;
+          hasContent = true;
+          const group = sectionGroup(section, useSections, hasSubsystemSection);
+          if (!['low', 'mid', 'high', 'modules'].includes(group)) return rawLine;
+          const comma = rawLine.indexOf(',');
+          const modulePart = (comma >= 0 ? rawLine.slice(0, comma) : rawLine).trim();
+          const parsed = splitQuantity(modulePart);
+          if (canonicalKey(parsed.name) !== fromKey) return rawLine;
+          const quantitySuffix = modulePart.match(/\s+x\d+$/i)?.[0] || '';
+          return `${to}${quantitySuffix}${comma >= 0 ? rawLine.slice(comma) : ''}`;
+        }).join('\n');
+      }
+
+      function createEquivalentPanel(item) {
+        if (selectedMode() === 'cheaper') return null;
+        const typeId = priceCache.get(item.key)?.typeId;
+        const group = equivalentGroupsByTypeId.get(typeId);
+        if (!group || !priceActive) return null;
+        const alternatives = group.items.filter(candidate => candidate.typeId !== typeId);
+        if (!alternatives.length) return null;
+
+        const panel = document.createElement('div');
+        panel.className = 'equivalents';
+        const title = document.createElement('div');
+        title.className = 'equivalents-title';
+        title.textContent = t('equivalentItems');
+        panel.append(title);
+        alternatives.forEach(alternative => {
+          const row = document.createElement('div');
+          row.className = 'equivalent-row';
+          const name = document.createElement('div');
+          name.className = 'equivalent-name';
+          name.textContent = alternative.name;
+          const price = document.createElement('div');
+          price.className = 'equivalent-price';
+          const unitPrice = priceFor(canonicalKey(alternative.name));
+          if (Number.isFinite(unitPrice)) {
+            price.textContent = formatIsk(unitPrice * item.quantity);
+          } else {
+            price.classList.add('missing');
+            price.textContent = priceLoading ? '…' : t('missingPrice', { hub: hubName() });
+          }
+          const copy = document.createElement('button');
+          copy.type = 'button';
+          copy.className = 'copy-icon';
+          copy.textContent = '⧉';
+          copy.title = t('copyItem', { name: alternative.name });
+          copy.setAttribute('aria-label', t('copyItem', { name: alternative.name }));
+          copy.addEventListener('click', () => copyText(alternative.name).then(() => showToast(t('itemCopied'))).catch(() => showToast(t('copyFailed'))));
+          const replace = document.createElement('button');
+          replace.type = 'button';
+          replace.className = 'button equivalent-action';
+          replace.textContent = t('replaceInFits');
+          replace.addEventListener('click', () => replaceItemInFits(item.name, alternative.name));
+          row.append(name, price, copy, replace);
+          panel.append(row);
+        });
+        return panel;
+      }
+
+      function createCheaperPanel(item) {
+        const state = cheaperSearchState.get(item.key);
+        if (!state) return null;
+        const panel = document.createElement('div');
+        panel.className = 'cheaper-panel';
+        const notice = document.createElement('div');
+        notice.className = 'cheaper-notice';
+        notice.textContent = t('cheaperNotice');
+        panel.append(notice);
+
+        if (state.loading || state.error || state.noOriginalPrice || !state.candidates?.length) {
+          const status = document.createElement('div');
+          status.className = `cheaper-status ${state.error ? 'error' : ''}`;
+          status.textContent = state.loading
+            ? t('cheaperLoading', { hub: hubName(state.hub) })
+            : state.error
+              ? t('cheaperError')
+              : state.noOriginalPrice
+                ? t('cheaperOriginalNoPrice', { hub: hubName(state.hub) })
+                : t('cheaperNone');
+          panel.append(status);
+          return panel;
+        }
+
+        const fittingReady = Boolean(
+          optimizationBaseline?.usage?.complete &&
+          currentUsageState?.complete &&
+          !currentUsageState.loading &&
+          !currentUsageState.error &&
+          currentUsageState.fitText === normalizedFitOne()
+        );
+        if (!fittingReady) {
+          const status = document.createElement('div');
+          status.className = `cheaper-status ${currentUsageState?.error || currentUsageState?.complete === false ? 'error' : ''}`;
+          status.textContent = currentUsageState?.loading ? t('currentUsageLoading') : t('baselineIncomplete');
+          panel.append(status);
+          return panel;
+        }
+
+        const fittingProjection = candidate => {
+          const quantity = item.fittedQa || 1;
+          const relativeCpu = currentUsageState.cpu + (candidate.cpu - state.originalCpu) * quantity - optimizationBaseline.usage.cpu;
+          const relativePg = currentUsageState.pg + (candidate.pg - state.originalPg) * quantity - optimizationBaseline.usage.pg;
+          const within = relativeCpu <= 0.0001 && relativePg <= 0.0001;
+          const usesReserve = within && (candidate.cpu > state.originalCpu || candidate.pg > state.originalPg);
+          return { relativeCpu, relativePg, within, usesReserve };
+        };
+        const appendSection = (titleKey, candidates) => {
+          if (!candidates.length) return;
+          const section = document.createElement('div');
+          section.className = 'cheaper-section';
+          const title = document.createElement('div');
+          title.className = 'equivalents-title';
+          title.textContent = t(titleKey);
+          section.append(title);
+          candidates.forEach(candidate => {
+            const projection = fittingProjection(candidate);
+            const row = document.createElement('div');
+            row.className = 'cheaper-row';
+            if (projection?.usesReserve) row.classList.add('uses-reserve');
+            if (projection && !projection.within) row.classList.add('over-budget');
+            const description = document.createElement('div');
+            const name = document.createElement('div');
+            name.className = 'equivalent-name';
+            name.textContent = candidate.name;
+            const details = document.createElement('div');
+            details.className = 'cheaper-details';
+            details.textContent = t('cheaperRequirements', {
+              cpu: candidate.cpu,
+              pg: candidate.pg,
+              price: formatIsk(candidate.price)
+            });
+            description.append(name, details);
+            if (projection) {
+              const budget = document.createElement('div');
+              budget.className = `cheaper-budget ${projection.within ? projection.usesReserve ? 'reserve' : 'good' : 'over'}`;
+              budget.textContent = t(projection.within ? projection.usesReserve ? 'cheaperUsesReserve' : 'cheaperWithinBudget' : 'cheaperOverBudget', {
+                cpu: formatFittingNumber(projection.relativeCpu, true),
+                pg: formatFittingNumber(projection.relativePg, true)
+              });
+              description.append(budget);
+            }
+            const saving = document.createElement('div');
+            saving.className = 'cheaper-saving';
+            saving.textContent = t('cheaperSaving', { price: formatIsk((state.originalPrice - candidate.price) * (item.fittedQuantity || item.quantity)) });
+            const replace = document.createElement('button');
+            replace.type = 'button';
+            replace.className = 'button equivalent-action';
+            replace.textContent = t('replaceInFitOne');
+            replace.addEventListener('click', () => replaceItemInFitOne(item.name, candidate.name));
+            const copy = document.createElement('button');
+            copy.type = 'button';
+            copy.className = 'copy-icon';
+            copy.textContent = '⧉';
+            copy.title = t('copyItem', { name: candidate.name });
+            copy.setAttribute('aria-label', t('copyItem', { name: candidate.name }));
+            copy.addEventListener('click', () => copyText(candidate.name).then(() => showToast(t('itemCopied'))).catch(() => showToast(t('copyFailed'))));
+            row.append(description, saving, copy, replace);
+            section.append(row);
+          });
+          panel.append(section);
+        };
+
+        const exact = state.candidates.filter(candidate => candidate.exact);
+        const possible = state.candidates.filter(candidate => !candidate.exact);
+        appendSection('equivalentItems', exact);
+        appendSection('cheaperWithinSection', possible.filter(candidate => fittingProjection(candidate)?.within));
+        appendSection('cheaperOverSection', possible.filter(candidate => !fittingProjection(candidate)?.within));
+        return panel;
+      }
+
+      function formatFittingNumber(value, signed = false) {
+        if (!Number.isFinite(value)) return '—';
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        const formatted = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(Math.abs(value));
+        if (!signed || value === 0) return value < 0 ? `−${formatted}` : formatted;
+        return `${value > 0 ? '+' : '−'}${formatted}`;
+      }
+
+      function usageText(usage) {
+        return t('fittingUsage', { cpu: formatFittingNumber(usage?.cpu), pg: formatFittingNumber(usage?.pg) });
+      }
+
+      function renderFittingBudget() {
+        const active = selectedMode() === 'cheaper';
+        elements.fittingBudget.hidden = !active;
+        if (!active) return;
+        const hasBaseline = Boolean(optimizationBaseline);
+        const ready = Boolean(optimizationBaseline?.usage);
+        const differs = ready && normalizedFitOne() !== optimizationBaseline.fitText;
+        elements.captureBaseline.hidden = hasBaseline;
+        elements.acceptCurrentBaseline.hidden = !ready || (!differs && optimizationBaseline.usage.complete);
+        elements.acceptCurrentBaseline.title = t('acceptCurrentBaselineHint');
+        elements.acceptCurrentBaseline.setAttribute('aria-label', `${t('acceptCurrentBaseline')}. ${t('acceptCurrentBaselineHint')}`);
+        elements.restoreBaseline.hidden = !differs;
+        elements.fittingMetrics.hidden = !ready;
+        elements.fittingState.className = 'fitting-state';
+        elements.usageDeltaCard.className = 'fitting-metric';
+
+        if (!hasBaseline) {
+          elements.fittingState.textContent = currentUsageState?.error ? t('baselineIncomplete') : t('baselineMissing');
+          if (currentUsageState?.error) elements.fittingState.classList.add('error');
+          return;
+        }
+        if (optimizationBaseline.loading) {
+          elements.fittingState.textContent = t('baselineLoading');
+          return;
+        }
+        elements.baselineUsage.textContent = usageText(optimizationBaseline.usage);
+        if (!optimizationBaseline.usage.complete) {
+          elements.fittingState.textContent = t('baselineIncomplete');
+          elements.fittingState.classList.add('error');
+          elements.currentUsage.textContent = currentUsageState?.complete ? usageText(currentUsageState) : '—';
+          elements.usageDelta.textContent = '—';
+        } else if (currentUsageState?.loading) {
+          elements.fittingState.textContent = t('currentUsageLoading');
+          elements.currentUsage.textContent = '…';
+          elements.usageDelta.textContent = '…';
+        } else if (currentUsageState?.error || !currentUsageState || !currentUsageState.complete) {
+          elements.fittingState.textContent = t('baselineIncomplete');
+          elements.fittingState.classList.add('error');
+          elements.currentUsage.textContent = currentUsageState && Number.isFinite(currentUsageState.cpu) ? usageText(currentUsageState) : '—';
+          elements.usageDelta.textContent = '—';
+        } else {
+          const deltaCpu = currentUsageState.cpu - optimizationBaseline.usage.cpu;
+          const deltaPg = currentUsageState.pg - optimizationBaseline.usage.pg;
+          elements.currentUsage.textContent = usageText(currentUsageState);
+          elements.usageDelta.textContent = t('fittingDelta', { cpu: formatFittingNumber(deltaCpu, true), pg: formatFittingNumber(deltaPg, true) });
+          const over = deltaCpu > 0.0001 || deltaPg > 0.0001;
+          const improved = deltaCpu < -0.0001 || deltaPg < -0.0001;
+          elements.usageDeltaCard.classList.toggle('over', over);
+          elements.usageDeltaCard.classList.toggle('good', !over && improved);
+          elements.fittingState.textContent = differs ? t('baselineChanged') : t('baselineReady');
+          if (differs) elements.fittingState.classList.add('warning');
+        }
+      }
+
+      function createItemRow(item) {
+        const row = document.createElement('div');
+        const noPrice = priceActive && !priceLoading && !Number.isFinite(priceFor(item.key));
+        row.className = `item ${item.source.length === 1 ? `only-${item.source}` : item.source} ${bought.has(item.key) ? 'bought' : ''} ${noPrice ? 'missing-price' : ''}`;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'buy-check';
+        checkbox.checked = bought.has(item.key);
+        checkbox.setAttribute('aria-label', t('boughtItem', { name: item.name }));
+        checkbox.addEventListener('change', () => toggleBought(item.key, checkbox.checked));
+
+        const content = document.createElement('div');
+        const nameLine = document.createElement('div');
+        nameLine.className = 'item-name-line';
+        const name = document.createElement('div');
+        name.className = 'item-name';
+        name.textContent = item.name;
+        const copyButton = document.createElement('button');
+        copyButton.type = 'button';
+        copyButton.className = 'copy-icon';
+        copyButton.textContent = '⧉';
+        copyButton.title = t('copyItem', { name: item.name });
+        copyButton.setAttribute('aria-label', t('copyItem', { name: item.name }));
+        copyButton.addEventListener('click', event => {
+          event.stopPropagation();
+          copyText(item.name).then(() => showToast(t('itemCopied'))).catch(() => showToast(t('copyFailed')));
+        });
+        nameLine.append(name, copyButton);
+        const meta = document.createElement('div');
+        meta.className = 'item-meta';
+        meta.textContent = sourceLabel(item);
+        content.append(nameLine);
+        if (meta.textContent) content.append(meta);
+        if (selectedMode() === 'cheaper' && item.fittedQa > 0 && ['low', 'mid', 'high', 'modules'].includes(effectiveGroup(item))) {
+          const findCheaper = document.createElement('button');
+          findCheaper.type = 'button';
+          findCheaper.className = 'button cheaper-trigger';
+          const searchLoading = Boolean(cheaperSearchState.get(item.key)?.loading);
+          const fittingReady = Boolean(optimizationBaseline?.usage?.complete && currentUsageState?.complete && !currentUsageState.loading && currentUsageState.fitText === normalizedFitOne());
+          findCheaper.textContent = t(searchLoading ? 'cheaperLoading' : fittingReady ? 'findCheaper' : 'findCheaperNeedsBaseline', { hub: hubName() });
+          findCheaper.disabled = searchLoading || !fittingReady;
+          findCheaper.addEventListener('click', () => analyzeCheaperAlternatives(item));
+          content.append(findCheaper);
+          const cheaperPanel = createCheaperPanel(item);
+          if (cheaperPanel) content.append(cheaperPanel);
+        }
+        const equivalentPanel = createEquivalentPanel(item);
+        if (equivalentPanel) content.append(equivalentPanel);
+
+        const numbers = document.createElement('div');
+        numbers.className = 'item-numbers';
+        const quantity = document.createElement('div');
+        quantity.className = 'qty';
+        quantity.textContent = `× ${item.quantity}`;
+        numbers.append(quantity);
+        if (priceActive) {
+          const itemPrice = document.createElement('div');
+          itemPrice.className = 'item-price';
+          const unitPrice = priceFor(item.key);
+          if (Number.isFinite(unitPrice)) {
+            itemPrice.textContent = formatIsk(unitPrice * item.quantity);
+            itemPrice.title = t('itemPriceTitle', { price: formatIsk(unitPrice, false).replace(/ ISK$/, '') });
+          } else {
+            itemPrice.classList.add('missing');
+            itemPrice.textContent = priceLoading ? '…' : t('missingPrice', { hub: hubName() });
+            itemPrice.title = t('noPrice', { hub: hubName() });
+          }
+          numbers.append(itemPrice);
+        }
+        row.append(checkbox, content, numbers);
+        return row;
+      }
+
+      function renderHubComparison() {
+        elements.hubComparison.hidden = !priceActive || !currentItems.length;
+        elements.hubRows.replaceChildren();
+        if (!priceActive || !currentItems.length) return;
+        const fragment = document.createDocumentFragment();
+        Object.keys(MARKET_HUBS).forEach(hub => {
+          const priced = currentItems.filter(item => Number.isFinite(priceFor(item.key, hub)));
+          const total = priced.reduce((sum, item) => sum + priceFor(item.key, hub) * item.quantity, 0);
+          const complete = priced.length === currentItems.length;
+          const row = document.createElement('div');
+          row.setAttribute('role', 'button');
+          row.tabIndex = 0;
+          row.className = `hub-row${hub === selectedPriceHub ? ' primary' : ''}${complete ? '' : ' incomplete'}`;
+          row.setAttribute('aria-pressed', String(hub === selectedPriceHub));
+          row.title = t('selectHub', { hub: hubName(hub) });
+          row.addEventListener('click', () => setPriceHub(hub));
+          row.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              setPriceHub(hub);
+            }
+          });
+          const name = document.createElement('span');
+          name.className = 'hub-name';
+          name.textContent = hubName(hub);
+          const value = document.createElement('strong');
+          value.className = 'hub-value';
+          value.textContent = priceLoading && !priced.length ? '…' : priced.length ? formatIsk(total) : '—';
+          const detail = document.createElement('small');
+          detail.className = 'hub-detail';
+          detail.textContent = complete ? t('hubComplete') : t('hubPartial', { priced: priced.length, total: currentItems.length });
+          const copyButton = document.createElement('button');
+          copyButton.type = 'button';
+          copyButton.className = 'copy-icon hub-copy';
+          copyButton.textContent = '⧉';
+          copyButton.title = t('copyHub', { name: MARKET_HUBS[hub].copyName });
+          copyButton.setAttribute('aria-label', t('copyHub', { name: MARKET_HUBS[hub].copyName }));
+          copyButton.addEventListener('click', event => {
+            event.stopPropagation();
+            copyText(MARKET_HUBS[hub].copyName).then(() => showToast(t('hubCopied'))).catch(() => showToast(t('copyFailed')));
+          });
+          copyButton.addEventListener('keydown', event => event.stopPropagation());
+          row.append(name, value, detail, copyButton);
+          fragment.append(row);
+        });
+        elements.hubRows.append(fragment);
+      }
+
+      function render() {
+        const mode = selectedMode();
+        currentItems.sort(compareItemsByGroup);
+        renderFittingBudget();
+        updateFitStatus(currentFits.a, elements.statusA, false);
+        updateFitStatus(currentFits.b, elements.statusB, true);
+        updateFitStatus(currentFits.c, elements.statusC, true);
+        renderWarnings();
+        const query = elements.search.value.trim().toLocaleLowerCase('ru');
+        const visible = currentItems.filter(item => {
+          if (elements.hideBought.checked && bought.has(item.key)) return false;
+          return !query || item.name.toLocaleLowerCase('ru').includes(query);
+        });
+
+        elements.resultList.replaceChildren();
+        if (!visible.length) {
+          const empty = document.createElement('div');
+          empty.className = 'empty';
+          const message = document.createElement('div');
+          const heading = document.createElement('strong');
+          const shortage = selectedMode() === 'shortage';
+          const hasTarget = Boolean(elements.fitB.value.trim() || elements.fitC.value.trim());
+          const headingKey = currentItems.length ? 'noResults' : shortage && hasTarget ? 'nothingToBuy' : 'emptyList';
+          const hintKey = currentItems.length ? 'noResultsHint' : shortage ? (hasTarget ? 'nothingToBuyHint' : 'shortageEmptyHint') : 'emptyListHint';
+          heading.textContent = t(headingKey);
+          message.append(heading, t(hintKey));
+          empty.append(message);
+          elements.resultList.append(empty);
+        } else {
+          const fragment = document.createDocumentFragment();
+          if (elements.groupItems.checked) {
+            const groups = new Map();
+            visible.forEach(item => {
+              const group = effectiveGroup(item);
+              if (!groups.has(group)) groups.set(group, []);
+              groups.get(group).push(item);
+            });
+            [...groups.entries()]
+              .sort((a, b) => groupRank(a[0]) - groupRank(b[0]))
+              .forEach(([group, items]) => {
+                const section = document.createElement('section');
+                section.className = 'item-group';
+                const heading = document.createElement('div');
+                heading.className = 'group-heading';
+                const title = document.createElement('span');
+                title.textContent = t(GROUP_LABELS[group] || 'groupOther');
+                const meta = document.createElement('span');
+                const units = items.reduce((sum, item) => sum + item.quantity, 0);
+                meta.textContent = formatGroupMeta(items.length, units);
+                heading.append(title, meta);
+                section.append(heading, ...items.map(createItemRow));
+                fragment.append(section);
+              });
+          } else {
+            fragment.append(...visible.map(createItemRow));
+          }
+          elements.resultList.append(fragment);
+        }
+
+        const total = currentItems.reduce((sum, item) => sum + item.quantity, 0);
+        const completed = currentItems.filter(item => bought.has(item.key));
+        const completedUnits = completed.reduce((sum, item) => sum + item.quantity, 0);
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        elements.uniqueCount.textContent = currentItems.length;
+        elements.totalCount.textContent = total.toLocaleString(locale);
+        elements.doneCount.textContent = currentItems.length ? `${Math.round(completed.length / currentItems.length * 100)}%` : '0%';
+        elements.donePositions.textContent = t('progressPositions', { done: completed.length, total: currentItems.length });
+        elements.doneUnits.textContent = t('progressUnits', { done: completedUnits.toLocaleString(locale), total: total.toLocaleString(locale) });
+
+        const pricedItems = currentItems.filter(item => Number.isFinite(priceFor(item.key)));
+        const estimatedTotal = pricedItems.reduce((sum, item) => sum + priceFor(item.key) * item.quantity, 0);
+        const remainingItems = currentItems.filter(item => !bought.has(item.key));
+        const remainingPricedItems = remainingItems.filter(item => Number.isFinite(priceFor(item.key)));
+        const remainingTotal = remainingPricedItems.reduce((sum, item) => sum + priceFor(item.key) * item.quantity, 0);
+        const completedValue = completed
+          .filter(item => Number.isFinite(priceFor(item.key)))
+          .reduce((sum, item) => sum + priceFor(item.key) * item.quantity, 0);
+        const allPricesReady = currentItems.length > 0 && pricedItems.length === currentItems.length;
+        elements.doneValue.textContent = t('progressValue', {
+          done: allPricesReady ? formatIskProgress(completedValue) : '—',
+          total: allPricesReady ? formatIskProgress(estimatedTotal) : '—'
+        });
+        elements.priceAction.disabled = priceLoading || !priceTargets().length;
+        elements.priceAction.textContent = t(priceLoading ? 'pricesLoading' : priceError ? 'retryPrices' : priceActive ? 'refreshPrices' : 'loadPrices');
+        elements.hidePrices.hidden = !priceActive;
+        elements.hidePrices.disabled = priceLoading;
+        if (!priceActive) {
+          elements.priceRemaining.textContent = '—';
+          elements.priceTotal.textContent = t('totalCost', { price: '—' });
+          elements.priceStatus.textContent = t('pricesOff');
+        } else if (!currentItems.length) {
+          elements.priceRemaining.textContent = '—';
+          elements.priceTotal.textContent = t('totalCost', { price: '—' });
+          elements.priceStatus.textContent = t('noItemsToPrice');
+        } else {
+          elements.priceRemaining.textContent = remainingPricedItems.length ? formatIsk(remainingTotal) : priceLoading ? '…' : '—';
+          elements.priceTotal.textContent = t('totalCost', {
+            price: pricedItems.length ? formatIsk(estimatedTotal) : priceLoading ? '…' : '—'
+          });
+          elements.priceStatus.textContent = priceLoading
+            ? t('pricesLoading')
+            : priceError
+              ? t('pricesError')
+              : allPricesReady
+                ? priceUpdatedAt ? t('pricesReadyAt', { time: formatPriceTime(priceUpdatedAt) }) : t('pricesReady')
+                : t('pricesPartial', { hub: hubName(), priced: pricedItems.length, total: currentItems.length });
+        }
+        document.querySelector('[data-i18n="jitaEstimate"]').textContent = t('jitaEstimate', { hub: hubName() });
+        renderHubComparison();
+      }
+
+      function toggleBought(key, isBought) {
+        isBought ? bought.add(key) : bought.delete(key);
+        render();
+        saveState();
+      }
+
+      function captureState() {
+        return {
+          fitA: elements.fitA.value, fitB: elements.fitB.value, fitC: elements.fitC.value,
+          mode: selectedMode(), multiplier: elements.multiplier.value,
+          priceHub: selectedPriceHub,
+          includeHull: elements.includeHull.checked, includeCharges: elements.includeCharges.checked,
+          hideBought: elements.hideBought.checked, groupItems: elements.groupItems.checked, bought: [...bought],
+          optimizationBaseline: optimizationBaseline?.usage ? optimizationBaseline : null
+        };
+      }
+
+      function sanitizeOptimizationBaseline(value) {
+        const usage = value?.usage;
+        const fitText = typeof value?.fitText === 'string' ? normalizeFitText(value.fitText) : '';
+        if (!fitText || !parseFit(fitText).valid || !Number.isFinite(usage?.cpu) || !Number.isFinite(usage?.pg) || !Array.isArray(usage?.entries)) return null;
+        const entries = usage.entries.filter(entry =>
+          entry && typeof entry.key === 'string' && typeof entry.name === 'string' &&
+          Number.isInteger(entry.typeId) && entry.typeId > 0 && Number.isInteger(entry.quantity) && entry.quantity > 0 &&
+          Number.isFinite(entry.cpu) && entry.cpu >= 0 && Number.isFinite(entry.pg) && entry.pg >= 0 && ['low', 'mid', 'high'].includes(entry.fittingGroup)
+        ).map(entry => ({
+          key: entry.key, name: entry.name, typeId: entry.typeId, quantity: entry.quantity,
+          cpu: entry.cpu, pg: entry.pg, fittingGroup: entry.fittingGroup
+        }));
+        if (entries.length !== usage.entries.length) return null;
+        const cpu = entries.reduce((sum, entry) => sum + entry.cpu * entry.quantity, 0);
+        const pg = entries.reduce((sum, entry) => sum + entry.pg * entry.quantity, 0);
+        const missing = Array.isArray(usage.missing) ? usage.missing.filter(name => typeof name === 'string') : [];
+        return {
+          fitText,
+          capturedAt: Number.isFinite(value.capturedAt) ? value.capturedAt : Date.now(),
+          usage: {
+            cpu,
+            pg,
+            entries,
+            missing,
+            complete: usage.complete === true && missing.length === 0
+          }
+        };
+      }
+
+      function applyState(state) {
+        clearTimeout(fittingUsageTimer);
+        fittingUsageRequestSequence += 1;
+        elements.fitA.value = typeof state?.fitA === 'string' ? state.fitA : '';
+        elements.fitB.value = typeof state?.fitB === 'string' ? state.fitB : '';
+        elements.fitC.value = typeof state?.fitC === 'string' ? state.fitC : '';
+        if (MARKET_HUBS[state?.priceHub]) selectedPriceHub = state.priceHub;
+        elements.multiplier.value = String(Math.max(1, Math.min(9999, Math.floor(Number(state?.multiplier) || 1))));
+        elements.includeHull.checked = typeof state?.includeHull === 'boolean' ? state.includeHull : true;
+        elements.includeCharges.checked = typeof state?.includeCharges === 'boolean' ? state.includeCharges : true;
+        elements.hideBought.checked = typeof state?.hideBought === 'boolean' ? state.hideBought : false;
+        elements.groupItems.checked = typeof state?.groupItems === 'boolean' ? state.groupItems : true;
+        const mode = ['sum', 'max', 'shortage', 'cheaper'].includes(state?.mode) ? state.mode : 'sum';
+        document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
+        bought = new Set(Array.isArray(state?.bought) ? state.bought.filter(key => typeof key === 'string') : []);
+        optimizationBaseline = sanitizeOptimizationBaseline(state?.optimizationBaseline);
+        currentUsageState = null;
+        cheaperSearchState.clear();
+      }
+
+      function saveState() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(captureState())); } catch (_) {}
+      }
+
+      function scheduleStateSave() {
+        clearTimeout(stateSaveTimer);
+        stateSaveTimer = setTimeout(() => {
+          stateSaveTimer = 0;
+          saveState();
+        }, STATE_SAVE_DELAY_MS);
+      }
+
+      function flushStateSave() {
+        if (!stateSaveTimer) return;
+        clearTimeout(stateSaveTimer);
+        stateSaveTimer = 0;
+        saveState();
+      }
+
+      function loadState() {
+        let state;
+        try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (_) {}
+        applyState(state);
+      }
+
+      function suggestedSnapshotName(fitA = parseFit(elements.fitA.value), fitB = parseFit(elements.fitB.value), fitC = parseFit(elements.fitC.value)) {
+        const fullHeaderName = fit => fit.ship ? [fit.ship, fit.fitName].filter(Boolean).join(', ') : '';
+        const fits = selectedMode() === 'cheaper' ? [fitA] : [fitA, fitB, fitC];
+        return fits.map(fullHeaderName).filter(Boolean).join(' + ');
+      }
+
+      function defaultSnapshotName() {
+        const locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+        return suggestedSnapshotName() || t('unnamedList', { date: new Date().toLocaleDateString(locale) });
+      }
+
+      function updateSnapshotNameSuggestion(fitA, fitB, fitC) {
+        if (activeSnapshotId || snapshotNameEdited) return;
+        elements.snapshotName.value = suggestedSnapshotName(fitA, fitB, fitC);
+      }
+
+      function persistSnapshots() {
+        try { localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots)); } catch (_) {}
+      }
+
+      function exportSnapshots() {
+        if (!snapshots.length) return showToast(t('noStatesToExport'));
+        const payload = {
+          format: 'eve-fit-procurement-snapshots',
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          snapshots
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `eve-fit-procurement-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+        showToast(t('statesExported'));
+      }
+
+      function validImportedSnapshot(item) {
+        return item && typeof item.id === 'string' && item.id && typeof item.name === 'string' && item.name.trim() &&
+          item.state && typeof item.state === 'object' && !Array.isArray(item.state);
+      }
+
+      async function importSnapshotsFile(file) {
+        try {
+          const parsed = JSON.parse(await file.text());
+          const incoming = (Array.isArray(parsed) ? parsed : parsed?.snapshots || []).filter(validImportedSnapshot);
+          if (!incoming.length) throw new Error('empty');
+          const merged = new Map(snapshots.map(item => [item.id, item]));
+          incoming.forEach(item => {
+            const previous = merged.get(item.id);
+            if (!previous || String(item.updatedAt || '') >= String(previous.updatedAt || '')) {
+              merged.set(item.id, { ...item, name: item.name.trim() });
+            }
+          });
+          snapshots = [...merged.values()];
+          persistSnapshots();
+          renderSnapshots();
+          showToast(t('statesImported', { count: incoming.length }));
+        } catch (_) {
+          showToast(t('statesImportFailed'));
+        } finally {
+          elements.snapshotFile.value = '';
+        }
+      }
+
+      function loadSnapshots() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || '[]');
+          snapshots = Array.isArray(stored) ? stored.filter(validImportedSnapshot) : [];
+        } catch (_) { snapshots = []; }
+        renderSnapshots();
+      }
+
+      function renderSnapshots() {
+        elements.snapshotList.replaceChildren();
+        const ordered = [...snapshots].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+        elements.snapshotCount.textContent = ordered.length;
+        elements.saveSnapshot.textContent = t(activeSnapshotId ? 'update' : 'save');
+
+        if (!ordered.length) {
+          const empty = document.createElement('div');
+          empty.className = 'saved-empty';
+          empty.textContent = t('noSavedStates');
+          elements.snapshotList.append(empty);
+          return;
+        }
+
+        const formatter = new Intl.DateTimeFormat(currentLanguage === 'ru' ? 'ru-RU' : 'en-US', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+        ordered.forEach(snapshot => {
+          const row = document.createElement('div');
+          row.className = `saved-row ${snapshot.id === activeSnapshotId ? 'active' : ''}`;
+
+          const info = document.createElement('div');
+          const name = document.createElement('div');
+          name.className = 'saved-name';
+          name.textContent = snapshot.name;
+          name.title = snapshot.name;
+          const meta = document.createElement('div');
+          meta.className = 'saved-meta';
+          const date = new Date(snapshot.updatedAt);
+          meta.textContent = Number.isNaN(date.getTime()) ? t('savedLocally') : formatter.format(date);
+          info.append(name, meta);
+
+          const open = document.createElement('button');
+          open.className = 'button icon-button';
+          open.type = 'button';
+          open.textContent = t('open');
+          open.setAttribute('aria-label', t('openState', { name: snapshot.name }));
+          open.addEventListener('click', () => openSnapshot(snapshot.id));
+
+          const remove = document.createElement('button');
+          remove.className = 'button danger icon-button';
+          remove.type = 'button';
+          remove.textContent = t('remove');
+          remove.setAttribute('aria-label', t('removeState', { name: snapshot.name }));
+          remove.addEventListener('click', () => deleteSnapshot(snapshot.id));
+          row.append(info, open, remove);
+          elements.snapshotList.append(row);
+        });
+      }
+
+      function saveSnapshot() {
+        const name = elements.snapshotName.value.trim() || defaultSnapshotName();
+        const now = new Date().toISOString();
+        if (activeSnapshotId) {
+          const existing = snapshots.find(item => item.id === activeSnapshotId);
+          if (existing) {
+            existing.name = name;
+            existing.updatedAt = now;
+            existing.state = captureState();
+          } else {
+            activeSnapshotId = null;
+          }
+        }
+        if (!activeSnapshotId) {
+          const id = globalThis.crypto?.randomUUID?.() || `snapshot-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+          snapshots.push({ id, name, updatedAt: now, state: captureState() });
+          activeSnapshotId = id;
+        }
+        elements.snapshotName.value = name;
+        snapshotNameEdited = true;
+        persistSnapshots();
+        renderSnapshots();
+        showToast(t('stateSaved'));
+      }
+
+      function openSnapshot(id) {
+        const snapshot = snapshots.find(item => item.id === id);
+        if (!snapshot) return;
+        activeSnapshotId = id;
+        elements.snapshotName.value = snapshot.name;
+        snapshotNameEdited = true;
+        deactivatePrices();
+        applyState(snapshot.state);
+        elements.search.value = '';
+        calculate();
+        renderSnapshots();
+        showToast(t('stateLoaded'));
+      }
+
+      function deleteSnapshot(id) {
+        const snapshot = snapshots.find(item => item.id === id);
+        if (!snapshot || !window.confirm(t('removeConfirm', { name: snapshot.name }))) return;
+        snapshots = snapshots.filter(item => item.id !== id);
+        if (activeSnapshotId === id) {
+          activeSnapshotId = null;
+          snapshotNameEdited = false;
+          elements.snapshotName.value = suggestedSnapshotName();
+        }
+        persistSnapshots();
+        renderSnapshots();
+        showToast(t('stateDeleted'));
+      }
+
+      function startNewSnapshot() {
+        activeSnapshotId = null;
+        snapshotNameEdited = false;
+        elements.snapshotName.value = suggestedSnapshotName();
+        renderSnapshots();
+        elements.snapshotName.focus();
+      }
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        elements.toast.textContent = message;
+        elements.toast.classList.add('show');
+        toastTimer = setTimeout(() => elements.toast.classList.remove('show'), 1800);
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return;
+          } catch (_) {}
+        }
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.append(area);
+        area.select();
+        try {
+          if (!document.execCommand('copy')) throw new Error('Clipboard copy failed');
+        } finally {
+          area.remove();
+        }
+      }
+
+      function copyList() {
+        if (!currentItems.length) return showToast(t('listEmpty'));
+        const text = currentItems.map(item => `${item.name} x${item.quantity}`).join('\n');
+        copyText(text).then(() => showToast(t('listCopied'))).catch(() => showToast(t('copyFailed')));
+      }
+
+      function copyMultibuy() {
+        const remaining = currentItems.filter(item => !bought.has(item.key));
+        if (!currentItems.length) return showToast(t('listEmpty'));
+        if (!remaining.length) return showToast(t('allPurchased'));
+        const text = remaining.map(item => `${item.name}\t${item.quantity}`).join('\n');
+        copyText(text).then(() => showToast(t('multibuyCopied'))).catch(() => showToast(t('copyFailed')));
+      }
+
+      function copyFit(id) {
+        const text = document.getElementById(id).value;
+        if (!text.trim()) return showToast(t('fitEmpty'));
+        copyText(text).then(() => showToast(t('fitCopied'))).catch(() => showToast(t('copyFailed')));
+      }
+
+      async function pasteInto(id) {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (!text) throw new Error('empty');
+          document.getElementById(id).value = normalizeFitText(text);
+          calculate();
+          showToast(t('fitPasted'));
+        } catch (_) {
+          document.getElementById(id).focus();
+          showToast(t('pasteManually'));
+        }
+      }
+
+      function clearAll() {
+        elements.fitA.value = '';
+        elements.fitB.value = '';
+        elements.fitC.value = '';
+        bought.clear();
+        clearOptimizationBaseline();
+        calculate();
+      }
+
+      function activateFitTab(id) {
+        document.querySelectorAll('[data-fit-card]').forEach(card => card.classList.toggle('active', card.dataset.fitCard === id));
+        document.querySelectorAll('[data-fit-tab]').forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.fitTab === id)));
+      }
+
+      function registerWebMcp() {
+        const context = document.modelContext;
+        if (!context?.registerTool) return;
+        try {
+          void Promise.resolve(context.registerTool({
+            name: 'calculate_eve_shopping_list',
+            title: 'Рассчитать список покупок EVE',
+            description: 'Заполняет от одного до трёх EFT-фитов и рассчитывает видимый список покупок.',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                fitA: { type: 'string' }, fitB: { type: 'string' }, fitC: { type: 'string' },
+                mode: { type: 'string', enum: ['sum', 'max', 'shortage', 'cheaper'] },
+                multiplier: { type: 'integer', minimum: 1, maximum: 9999 }
+              },
+              required: ['fitA'], additionalProperties: false
+            },
+            annotations: { readOnlyHint: false, untrustedContentHint: true },
+            execute(input) {
+              if (!input || typeof input.fitA !== 'string') throw new Error('fitA должен быть строкой');
+              elements.fitA.value = input.fitA;
+              elements.fitB.value = typeof input.fitB === 'string' ? input.fitB : '';
+              elements.fitC.value = typeof input.fitC === 'string' ? input.fitC : '';
+              const mode = ['sum', 'max', 'shortage', 'cheaper'].includes(input.mode) ? input.mode : 'sum';
+              document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
+              elements.multiplier.value = String(Math.max(1, Math.min(9999, Math.floor(input.multiplier || 1))));
+              calculate();
+              return { positions: currentItems.length, totalQuantity: currentItems.reduce((sum, item) => sum + item.quantity, 0) };
+            }
+          })).catch(() => {});
+        } catch (_) {}
+      }
+
+      [elements.fitA, elements.fitB, elements.fitC].forEach(input => {
+        input.addEventListener('input', scheduleCalculate);
+        input.addEventListener('paste', insertNormalizedPaste);
+        input.addEventListener('blur', () => {
+          const cleaned = normalizeFitText(input.value);
+          if (cleaned !== input.value) {
+            input.value = cleaned;
+            calculate();
+          }
+        });
+      });
+      document.querySelectorAll('input[name="mode"], #includeHull, #includeCharges').forEach(input => input.addEventListener('change', calculate));
+      elements.multiplier.addEventListener('input', scheduleCalculate);
+      elements.multiplier.addEventListener('blur', () => {
+        elements.multiplier.value = String(Math.max(1, Math.min(9999, Math.floor(Number(elements.multiplier.value) || 1))));
+        calculate();
+      });
+      elements.hideBought.addEventListener('change', () => { render(); saveState(); });
+      elements.groupItems.addEventListener('change', () => { render(); saveState(); });
+      elements.priceAction.addEventListener('click', () => {
+        const force = priceActive;
+        priceActive = true;
+        loadPrices(force);
+      });
+      elements.hidePrices.addEventListener('click', () => {
+        deactivatePrices();
+        render();
+      });
+      elements.search.addEventListener('input', render);
+      $('#copyList').addEventListener('click', copyList);
+      $('#copyMultibuy').addEventListener('click', copyMultibuy);
+      $('#resetChecks').addEventListener('click', () => { bought.clear(); render(); saveState(); showToast(t('checksReset')); });
+      $('#clearAll').addEventListener('click', clearAll);
+      elements.captureBaseline.addEventListener('click', captureOptimizationBaseline);
+      elements.acceptCurrentBaseline.addEventListener('click', captureOptimizationBaseline);
+      elements.restoreBaseline.addEventListener('click', restoreOptimizationBaseline);
+      $('#saveSnapshot').addEventListener('click', saveSnapshot);
+      $('#newSnapshot').addEventListener('click', startNewSnapshot);
+      $('#exportSnapshots').addEventListener('click', exportSnapshots);
+      $('#importSnapshots').addEventListener('click', () => elements.snapshotFile.click());
+      elements.snapshotFile.addEventListener('change', () => {
+        const [file] = elements.snapshotFile.files || [];
+        if (file) importSnapshotsFile(file);
+      });
+      elements.snapshotName.addEventListener('keydown', event => {
+        if (event.key === 'Enter') saveSnapshot();
+      });
+      elements.snapshotName.addEventListener('input', () => { snapshotNameEdited = true; });
+      document.querySelectorAll('[data-clear]').forEach(button => button.addEventListener('click', () => {
+        document.getElementById(button.dataset.clear).value = '';
+        if (button.dataset.clear === 'fitA') clearOptimizationBaseline();
+        calculate();
+      }));
+      document.querySelectorAll('[data-paste]').forEach(button => button.addEventListener('click', () => pasteInto(button.dataset.paste)));
+      document.querySelectorAll('[data-copy-fit]').forEach(button => button.addEventListener('click', () => copyFit(button.dataset.copyFit)));
+      document.querySelectorAll('[data-fit-tab]').forEach(button => button.addEventListener('click', () => activateFitTab(button.dataset.fitTab)));
+      document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
+      document.querySelectorAll('[data-theme-option]').forEach(button => button.addEventListener('click', () => setTheme(button.dataset.themeOption)));
+      window.addEventListener('pagehide', flushStateSave);
+
+      loadPriceCache();
+      applyTheme();
+      applyLanguage();
+      loadState();
+      loadSnapshots();
+      calculate();
+      registerWebMcp();
+    })();
+  </script>
+</body>
+</html>

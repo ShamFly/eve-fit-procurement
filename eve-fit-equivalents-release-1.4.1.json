@@ -1,0 +1,8301 @@
+{
+  "schemaVersion": 1,
+  "status": "generated",
+  "scope": "Published marketable modules, charges, and ships only. Blueprints, SKINs, apparel, commodities, and other non-fitting items are excluded.",
+  "source": {
+    "name": "Fuzzwork SDE conversion of CCP Static Data Export",
+    "build": "3503375",
+    "publishedAt": "2026-09-10T13:30:02Z",
+    "tables": [
+      "invTypes",
+      "invGroups",
+      "dgmTypeAttributes",
+      "dgmTypeEffects"
+    ]
+  },
+  "comparison": {
+    "requiresExactMatch": [
+      "groupID",
+      "mass",
+      "volume",
+      "capacity",
+      "portionSize",
+      "packagedVolume",
+      "all dogma attributes",
+      "all dogma effects"
+    ]
+  },
+  "equivalenceGroups": [
+    {
+      "category": "Charge",
+      "groupId": 500,
+      "group": "Festival Charges",
+      "items": [
+        {
+          "typeId": 32993,
+          "name": "Sodium Firework CXIV"
+        },
+        {
+          "typeId": 32994,
+          "name": "Barium Firework CXIV"
+        },
+        {
+          "typeId": 32995,
+          "name": "Copper Firework CXIV"
+        },
+        {
+          "typeId": 33571,
+          "name": "Sodium Firework"
+        },
+        {
+          "typeId": 33572,
+          "name": "Barium Firework"
+        },
+        {
+          "typeId": 33573,
+          "name": "Copper Firework"
+        },
+        {
+          "typeId": 44110,
+          "name": "Yoiul Festival Firework"
+        },
+        {
+          "typeId": 44260,
+          "name": "Crown Imperial Firework"
+        },
+        {
+          "typeId": 44261,
+          "name": "Angels Arisen Firework"
+        },
+        {
+          "typeId": 44262,
+          "name": "Blood Dagger Firework"
+        },
+        {
+          "typeId": 44263,
+          "name": "Wheel of Prosperity Firework"
+        },
+        {
+          "typeId": 44264,
+          "name": "Pulsar Flare Firework"
+        },
+        {
+          "typeId": 44265,
+          "name": "Wings of Victory Firework"
+        },
+        {
+          "typeId": 44266,
+          "name": "Spacetime Singularity Firework"
+        },
+        {
+          "typeId": 44267,
+          "name": "Crimson Scythes Firework"
+        },
+        {
+          "typeId": 44268,
+          "name": "Four Freedoms Firework"
+        },
+        {
+          "typeId": 44269,
+          "name": "Naughty People Firework"
+        },
+        {
+          "typeId": 44270,
+          "name": "Flames of the Rebellion Firework"
+        },
+        {
+          "typeId": 44271,
+          "name": "Nation Uplifts Firework"
+        },
+        {
+          "typeId": 44272,
+          "name": "Fangs of the Serpent Firework"
+        },
+        {
+          "typeId": 47264,
+          "name": "Eros Blossom Firework"
+        },
+        {
+          "typeId": 50138,
+          "name": "Ace of Podhunters Firework"
+        },
+        {
+          "typeId": 52219,
+          "name": "Halloween Horrors Firework"
+        },
+        {
+          "typeId": 53461,
+          "name": "Yoiul Festival Starburst Firework"
+        },
+        {
+          "typeId": 54564,
+          "name": "Capsule Cascade Firework"
+        },
+        {
+          "typeId": 56745,
+          "name": "Forever 4-4 Firework"
+        },
+        {
+          "typeId": 56944,
+          "name": "Zakura Bazei Firework"
+        },
+        {
+          "typeId": 57149,
+          "name": "Snowstar Crystalburst Firework"
+        },
+        {
+          "typeId": 57150,
+          "name": "Rimefrost Starburst Firework"
+        },
+        {
+          "typeId": 60905,
+          "name": "Yoiul Spiral Firework"
+        },
+        {
+          "typeId": 60939,
+          "name": "Paradoxical Nebula Firework"
+        },
+        {
+          "typeId": 63165,
+          "name": "Capsuleer Starburst Firework"
+        },
+        {
+          "typeId": 71755,
+          "name": "Union of Eight Paths Firework"
+        },
+        {
+          "typeId": 73408,
+          "name": "Scarlet Embrace Firework"
+        },
+        {
+          "typeId": 74386,
+          "name": "Yoiul's Ascent Firework"
+        },
+        {
+          "typeId": 76963,
+          "name": "Infinite Celebrations Firework"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 500,
+      "group": "Festival Charges",
+      "items": [
+        {
+          "typeId": 47302,
+          "name": "Yoiul Blizzard Firework"
+        },
+        {
+          "typeId": 49992,
+          "name": "Cherubic Heartburst Firework"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 19978,
+          "name": "Sanshas Radio S"
+        },
+        {
+          "typeId": 21194,
+          "name": "Blood Radio S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 19980,
+          "name": "Sanshas Microwave S"
+        },
+        {
+          "typeId": 21196,
+          "name": "Blood Microwave S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 19982,
+          "name": "Sanshas Infrared S"
+        },
+        {
+          "typeId": 21198,
+          "name": "Blood Infrared S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 19984,
+          "name": "Sanshas Standard S"
+        },
+        {
+          "typeId": 21200,
+          "name": "Blood Standard S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20010,
+          "name": "Sanshas Radio M"
+        },
+        {
+          "typeId": 21450,
+          "name": "Blood Radio M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20012,
+          "name": "Sanshas Microwave M"
+        },
+        {
+          "typeId": 21210,
+          "name": "Blood Microwave M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20014,
+          "name": "Sanshas Infrared M"
+        },
+        {
+          "typeId": 21212,
+          "name": "Blood Infrared M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20016,
+          "name": "Sanshas Standard M"
+        },
+        {
+          "typeId": 21214,
+          "name": "Blood Standard M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20018,
+          "name": "Sanshas Radio L"
+        },
+        {
+          "typeId": 21224,
+          "name": "Blood Radio L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20020,
+          "name": "Sanshas Microwave L"
+        },
+        {
+          "typeId": 21226,
+          "name": "Blood Microwave L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20022,
+          "name": "Sanshas Infrared L"
+        },
+        {
+          "typeId": 21228,
+          "name": "Blood Infrared L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20024,
+          "name": "Sanshas Standard L"
+        },
+        {
+          "typeId": 21230,
+          "name": "Blood Standard L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20026,
+          "name": "Sanshas Radio XL"
+        },
+        {
+          "typeId": 21240,
+          "name": "Blood Radio XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20028,
+          "name": "Sanshas Microwave XL"
+        },
+        {
+          "typeId": 21242,
+          "name": "Blood Microwave XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20030,
+          "name": "Sanshas Infrared XL"
+        },
+        {
+          "typeId": 21244,
+          "name": "Blood Infrared XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20032,
+          "name": "Sanshas Standard XL"
+        },
+        {
+          "typeId": 21246,
+          "name": "Blood Standard XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20817,
+          "name": "Sanshas Ultraviolet S"
+        },
+        {
+          "typeId": 21202,
+          "name": "Blood Ultraviolet S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20819,
+          "name": "Sanshas Xray S"
+        },
+        {
+          "typeId": 21204,
+          "name": "Blood Xray S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20821,
+          "name": "Sanshas Gamma S"
+        },
+        {
+          "typeId": 21206,
+          "name": "Blood Gamma S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20823,
+          "name": "Sanshas Multifrequency S"
+        },
+        {
+          "typeId": 21208,
+          "name": "Blood Multifrequency S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20825,
+          "name": "Sanshas Ultraviolet M"
+        },
+        {
+          "typeId": 21216,
+          "name": "Blood Ultraviolet M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20827,
+          "name": "Sanshas Xray M"
+        },
+        {
+          "typeId": 21218,
+          "name": "Blood Xray M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20829,
+          "name": "Sanshas Gamma M"
+        },
+        {
+          "typeId": 21220,
+          "name": "Blood Gamma M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20831,
+          "name": "Sanshas Multifrequency M"
+        },
+        {
+          "typeId": 21222,
+          "name": "Blood Multifrequency M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20833,
+          "name": "Sanshas Ultraviolet L"
+        },
+        {
+          "typeId": 21232,
+          "name": "Blood Ultraviolet L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20835,
+          "name": "Sanshas Xray L"
+        },
+        {
+          "typeId": 21234,
+          "name": "Blood Xray L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20837,
+          "name": "Sanshas Gamma L"
+        },
+        {
+          "typeId": 21236,
+          "name": "Blood Gamma L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20839,
+          "name": "Sanshas Multifrequency L"
+        },
+        {
+          "typeId": 21238,
+          "name": "Blood Multifrequency L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20841,
+          "name": "Sanshas Ultraviolet XL"
+        },
+        {
+          "typeId": 21248,
+          "name": "Blood Ultraviolet XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20843,
+          "name": "Sanshas Xray XL"
+        },
+        {
+          "typeId": 21250,
+          "name": "Blood Xray XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20845,
+          "name": "Sanshas Gamma XL"
+        },
+        {
+          "typeId": 21252,
+          "name": "Blood Gamma XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20847,
+          "name": "Sanshas Multifrequency XL"
+        },
+        {
+          "typeId": 21254,
+          "name": "Blood Multifrequency XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20849,
+          "name": "True Sanshas Radio S"
+        },
+        {
+          "typeId": 21256,
+          "name": "Dark Blood Radio S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20851,
+          "name": "True Sanshas Microwave S"
+        },
+        {
+          "typeId": 21258,
+          "name": "Dark Blood Microwave S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20853,
+          "name": "True Sanshas Infrared S"
+        },
+        {
+          "typeId": 21260,
+          "name": "Dark Blood Infrared S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20855,
+          "name": "True Sanshas Standard S"
+        },
+        {
+          "typeId": 21262,
+          "name": "Dark Blood Standard S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20857,
+          "name": "True Sanshas Ultraviolet S"
+        },
+        {
+          "typeId": 21264,
+          "name": "Dark Blood Ultraviolet S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20859,
+          "name": "True Sanshas Xray S"
+        },
+        {
+          "typeId": 21266,
+          "name": "Dark Blood Xray S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20861,
+          "name": "True Sanshas Gamma S"
+        },
+        {
+          "typeId": 21268,
+          "name": "Dark Blood Gamma S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20863,
+          "name": "True Sanshas Multifrequency S"
+        },
+        {
+          "typeId": 21270,
+          "name": "Dark Blood Multifrequency S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20865,
+          "name": "True Sanshas Radio M"
+        },
+        {
+          "typeId": 21272,
+          "name": "Dark Blood Radio M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20867,
+          "name": "True Sanshas Microwave M"
+        },
+        {
+          "typeId": 21274,
+          "name": "Dark Blood Microwave M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20869,
+          "name": "True Sanshas Infrared M"
+        },
+        {
+          "typeId": 21276,
+          "name": "Dark Blood Infrared M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20871,
+          "name": "True Sanshas Standard M"
+        },
+        {
+          "typeId": 21278,
+          "name": "Dark Blood Standard M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20873,
+          "name": "True Sanshas Ultraviolet M"
+        },
+        {
+          "typeId": 21280,
+          "name": "Dark Blood Ultraviolet M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20875,
+          "name": "True Sanshas Xray M"
+        },
+        {
+          "typeId": 21282,
+          "name": "Dark Blood Xray M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20877,
+          "name": "True Sanshas Gamma M"
+        },
+        {
+          "typeId": 21284,
+          "name": "Dark Blood Gamma M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20879,
+          "name": "True Sanshas Multifrequency M"
+        },
+        {
+          "typeId": 21286,
+          "name": "Dark Blood Multifrequency M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20881,
+          "name": "True Sanshas Radio L"
+        },
+        {
+          "typeId": 21288,
+          "name": "Dark Blood Radio L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20883,
+          "name": "True Sanshas Microwave L"
+        },
+        {
+          "typeId": 21290,
+          "name": "Dark Blood Microwave L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20885,
+          "name": "True Sanshas Infrared L"
+        },
+        {
+          "typeId": 21292,
+          "name": "Dark Blood Infrared L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20887,
+          "name": "True Sanshas Standard L"
+        },
+        {
+          "typeId": 21294,
+          "name": "Dark Blood Standard L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20889,
+          "name": "True Sanshas Ultraviolet L"
+        },
+        {
+          "typeId": 21296,
+          "name": "Dark Blood Ultraviolet L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20891,
+          "name": "True Sanshas Xray L"
+        },
+        {
+          "typeId": 21298,
+          "name": "Dark Blood Xray L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20893,
+          "name": "True Sanshas Gamma L"
+        },
+        {
+          "typeId": 21300,
+          "name": "Dark Blood Gamma L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20895,
+          "name": "True Sanshas Multifrequency L"
+        },
+        {
+          "typeId": 21302,
+          "name": "Dark Blood Multifrequency L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20897,
+          "name": "True Sanshas Radio XL"
+        },
+        {
+          "typeId": 21304,
+          "name": "Dark Blood Radio XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20899,
+          "name": "True Sanshas Microwave XL"
+        },
+        {
+          "typeId": 21306,
+          "name": "Dark Blood Microwave XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20901,
+          "name": "True Sanshas Infrared XL"
+        },
+        {
+          "typeId": 21308,
+          "name": "Dark Blood Infrared XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20903,
+          "name": "True Sanshas Standard XL"
+        },
+        {
+          "typeId": 21310,
+          "name": "Dark Blood Standard XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20905,
+          "name": "True Sanshas Ultraviolet XL"
+        },
+        {
+          "typeId": 21312,
+          "name": "Dark Blood Ultraviolet XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20907,
+          "name": "True Sanshas Xray XL"
+        },
+        {
+          "typeId": 21314,
+          "name": "Dark Blood Xray XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20909,
+          "name": "True Sanshas Gamma XL"
+        },
+        {
+          "typeId": 21316,
+          "name": "Dark Blood Gamma XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 86,
+      "group": "Frequency Crystal",
+      "items": [
+        {
+          "typeId": 20911,
+          "name": "True Sanshas Multifrequency XL"
+        },
+        {
+          "typeId": 21318,
+          "name": "Dark Blood Multifrequency XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 19962,
+          "name": "Shadow Iron Charge S"
+        },
+        {
+          "typeId": 21320,
+          "name": "Guristas Iron Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 19964,
+          "name": "Shadow Tungsten Charge S"
+        },
+        {
+          "typeId": 21322,
+          "name": "Guristas Tungsten Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 19966,
+          "name": "Shadow Iridium Charge S"
+        },
+        {
+          "typeId": 21324,
+          "name": "Guristas Iridium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 19968,
+          "name": "Shadow Lead Charge S"
+        },
+        {
+          "typeId": 21326,
+          "name": "Guristas Lead Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20034,
+          "name": "Shadow Thorium Charge S"
+        },
+        {
+          "typeId": 21328,
+          "name": "Guristas Thorium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20036,
+          "name": "Shadow Uranium Charge S"
+        },
+        {
+          "typeId": 21330,
+          "name": "Guristas Uranium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20038,
+          "name": "Shadow Plutonium Charge S"
+        },
+        {
+          "typeId": 21332,
+          "name": "Guristas Plutonium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20040,
+          "name": "Shadow Antimatter Charge S"
+        },
+        {
+          "typeId": 21334,
+          "name": "Guristas Antimatter Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20043,
+          "name": "Shadow Iron Charge M"
+        },
+        {
+          "typeId": 21336,
+          "name": "Guristas Iron Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20045,
+          "name": "Shadow Tungsten Charge M"
+        },
+        {
+          "typeId": 21338,
+          "name": "Guristas Tungsten Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20047,
+          "name": "Shadow Iridium Charge M"
+        },
+        {
+          "typeId": 21340,
+          "name": "Guristas Iridium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20049,
+          "name": "Shadow Lead Charge M"
+        },
+        {
+          "typeId": 21342,
+          "name": "Guristas Lead Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20051,
+          "name": "Shadow Thorium Charge M"
+        },
+        {
+          "typeId": 21344,
+          "name": "Guristas Thorium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20053,
+          "name": "Shadow Uranium Charge M"
+        },
+        {
+          "typeId": 21346,
+          "name": "Guristas Uranium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20055,
+          "name": "Shadow Plutonium Charge M"
+        },
+        {
+          "typeId": 21348,
+          "name": "Guristas Plutonium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20057,
+          "name": "Shadow Antimatter Charge M"
+        },
+        {
+          "typeId": 21350,
+          "name": "Guristas Antimatter Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20913,
+          "name": "Shadow Iron Charge L"
+        },
+        {
+          "typeId": 21352,
+          "name": "Guristas Iron Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20915,
+          "name": "Shadow Tungsten Charge L"
+        },
+        {
+          "typeId": 21354,
+          "name": "Guristas Tungsten Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20917,
+          "name": "Shadow Iridium Charge L"
+        },
+        {
+          "typeId": 21356,
+          "name": "Guristas Iridium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20919,
+          "name": "Shadow Lead Charge L"
+        },
+        {
+          "typeId": 21358,
+          "name": "Guristas Lead Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20921,
+          "name": "Shadow Thorium Charge L"
+        },
+        {
+          "typeId": 21360,
+          "name": "Guristas Thorium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20923,
+          "name": "Shadow Uranium Charge L"
+        },
+        {
+          "typeId": 21362,
+          "name": "Guristas Uranium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20925,
+          "name": "Shadow Plutonium Charge L"
+        },
+        {
+          "typeId": 21364,
+          "name": "Guristas Plutonium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20927,
+          "name": "Shadow Antimatter Charge L"
+        },
+        {
+          "typeId": 21366,
+          "name": "Guristas Antimatter Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20929,
+          "name": "Shadow Antimatter Charge XL"
+        },
+        {
+          "typeId": 21368,
+          "name": "Guristas Antimatter Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20931,
+          "name": "Shadow Iridium Charge XL"
+        },
+        {
+          "typeId": 21370,
+          "name": "Guristas Iridium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20933,
+          "name": "Shadow Iron Charge XL"
+        },
+        {
+          "typeId": 21372,
+          "name": "Guristas Iron Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20935,
+          "name": "Shadow Lead Charge XL"
+        },
+        {
+          "typeId": 21374,
+          "name": "Guristas Lead Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20937,
+          "name": "Shadow Plutonium Charge XL"
+        },
+        {
+          "typeId": 21376,
+          "name": "Guristas Plutonium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20939,
+          "name": "Shadow Thorium Charge XL"
+        },
+        {
+          "typeId": 21378,
+          "name": "Guristas Thorium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20941,
+          "name": "Shadow Tungsten Charge XL"
+        },
+        {
+          "typeId": 21380,
+          "name": "Guristas Tungsten Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20943,
+          "name": "Shadow Uranium Charge XL"
+        },
+        {
+          "typeId": 21382,
+          "name": "Guristas Uranium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20945,
+          "name": "Guardian Iron Charge S"
+        },
+        {
+          "typeId": 21384,
+          "name": "Dread Guristas Iron Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20947,
+          "name": "Guardian Tungsten Charge S"
+        },
+        {
+          "typeId": 21386,
+          "name": "Dread Guristas Tungsten Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20949,
+          "name": "Guardian Iridium Charge S"
+        },
+        {
+          "typeId": 21388,
+          "name": "Dread Guristas Iridium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20951,
+          "name": "Guardian Lead Charge S"
+        },
+        {
+          "typeId": 21390,
+          "name": "Dread Guristas Lead Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20953,
+          "name": "Guardian Thorium Charge S"
+        },
+        {
+          "typeId": 21392,
+          "name": "Dread Guristas Thorium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20955,
+          "name": "Guardian Uranium Charge S"
+        },
+        {
+          "typeId": 21394,
+          "name": "Dread Guristas Uranium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20957,
+          "name": "Guardian Plutonium Charge S"
+        },
+        {
+          "typeId": 21396,
+          "name": "Dread Guristas Plutonium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20959,
+          "name": "Guardian Antimatter Charge S"
+        },
+        {
+          "typeId": 21398,
+          "name": "Dread Guristas Antimatter Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20961,
+          "name": "Guardian Iron Charge M"
+        },
+        {
+          "typeId": 21400,
+          "name": "Dread Guristas Iron Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20963,
+          "name": "Guardian Tungsten Charge M"
+        },
+        {
+          "typeId": 21402,
+          "name": "Dread Guristas Tungsten Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20965,
+          "name": "Guardian Iridium Charge M"
+        },
+        {
+          "typeId": 21404,
+          "name": "Dread Guristas Iridium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20967,
+          "name": "Guardian Lead Charge M"
+        },
+        {
+          "typeId": 21406,
+          "name": "Dread Guristas Lead Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20969,
+          "name": "Guardian Thorium Charge M"
+        },
+        {
+          "typeId": 21408,
+          "name": "Dread Guristas Thorium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20971,
+          "name": "Guardian Uranium Charge M"
+        },
+        {
+          "typeId": 21410,
+          "name": "Dread Guristas Uranium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20973,
+          "name": "Guardian Plutonium Charge M"
+        },
+        {
+          "typeId": 21412,
+          "name": "Dread Guristas Plutonium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20975,
+          "name": "Guardian Antimatter Charge M"
+        },
+        {
+          "typeId": 21414,
+          "name": "Dread Guristas Antimatter Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20977,
+          "name": "Guardian Iron Charge L"
+        },
+        {
+          "typeId": 21416,
+          "name": "Dread Guristas Iron Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20979,
+          "name": "Guardian Tungsten Charge L"
+        },
+        {
+          "typeId": 21418,
+          "name": "Dread Guristas Tungsten Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20981,
+          "name": "Guardian Iridium Charge L"
+        },
+        {
+          "typeId": 21420,
+          "name": "Dread Guristas Iridium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20983,
+          "name": "Guardian Lead Charge L"
+        },
+        {
+          "typeId": 21422,
+          "name": "Dread Guristas Lead Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20985,
+          "name": "Guardian Thorium Charge L"
+        },
+        {
+          "typeId": 21424,
+          "name": "Dread Guristas Thorium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20987,
+          "name": "Guardian Uranium Charge L"
+        },
+        {
+          "typeId": 21426,
+          "name": "Dread Guristas Uranium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20989,
+          "name": "Guardian Plutonium Charge L"
+        },
+        {
+          "typeId": 21428,
+          "name": "Dread Guristas Plutonium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20991,
+          "name": "Guardian Antimatter Charge L"
+        },
+        {
+          "typeId": 21430,
+          "name": "Dread Guristas Antimatter Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20993,
+          "name": "Guardian Antimatter Charge XL"
+        },
+        {
+          "typeId": 21432,
+          "name": "Dread Guristas Antimatter Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20995,
+          "name": "Guardian Iridium Charge XL"
+        },
+        {
+          "typeId": 21434,
+          "name": "Dread Guristas Iridium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20997,
+          "name": "Guardian Iron Charge XL"
+        },
+        {
+          "typeId": 21436,
+          "name": "Dread Guristas Iron Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 20999,
+          "name": "Guardian Lead Charge XL"
+        },
+        {
+          "typeId": 21438,
+          "name": "Dread Guristas Lead Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 21001,
+          "name": "Guardian Plutonium Charge XL"
+        },
+        {
+          "typeId": 21440,
+          "name": "Dread Guristas Plutonium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 21003,
+          "name": "Guardian Thorium Charge XL"
+        },
+        {
+          "typeId": 21442,
+          "name": "Dread Guristas Thorium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 21005,
+          "name": "Guardian Tungsten Charge XL"
+        },
+        {
+          "typeId": 21444,
+          "name": "Dread Guristas Tungsten Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 21007,
+          "name": "Guardian Uranium Charge XL"
+        },
+        {
+          "typeId": 21446,
+          "name": "Dread Guristas Uranium Charge XL"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 21740,
+          "name": "Caldari Navy Antimatter Charge L"
+        },
+        {
+          "typeId": 22993,
+          "name": "Federation Navy Antimatter Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22961,
+          "name": "Federation Navy Antimatter Charge S"
+        },
+        {
+          "typeId": 23009,
+          "name": "Caldari Navy Antimatter Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22963,
+          "name": "Federation Navy Plutonium Charge S"
+        },
+        {
+          "typeId": 23011,
+          "name": "Caldari Navy Plutonium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22965,
+          "name": "Federation Navy Uranium Charge S"
+        },
+        {
+          "typeId": 23013,
+          "name": "Caldari Navy Uranium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22967,
+          "name": "Federation Navy Thorium Charge S"
+        },
+        {
+          "typeId": 23015,
+          "name": "Caldari Navy Thorium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22969,
+          "name": "Federation Navy Lead Charge S"
+        },
+        {
+          "typeId": 23017,
+          "name": "Caldari Navy Lead Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22971,
+          "name": "Federation Navy Iridium Charge S"
+        },
+        {
+          "typeId": 23019,
+          "name": "Caldari Navy Iridium Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22973,
+          "name": "Federation Navy Tungsten Charge S"
+        },
+        {
+          "typeId": 23021,
+          "name": "Caldari Navy Tungsten Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22975,
+          "name": "Federation Navy Iron Charge S"
+        },
+        {
+          "typeId": 23023,
+          "name": "Caldari Navy Iron Charge S"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22977,
+          "name": "Federation Navy Antimatter Charge M"
+        },
+        {
+          "typeId": 23025,
+          "name": "Caldari Navy Antimatter Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22979,
+          "name": "Federation Navy Plutonium Charge M"
+        },
+        {
+          "typeId": 23027,
+          "name": "Caldari Navy Plutonium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22981,
+          "name": "Federation Navy Uranium Charge M"
+        },
+        {
+          "typeId": 23029,
+          "name": "Caldari Navy Uranium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22983,
+          "name": "Federation Navy Thorium Charge M"
+        },
+        {
+          "typeId": 23031,
+          "name": "Caldari Navy Thorium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22985,
+          "name": "Federation Navy Lead Charge M"
+        },
+        {
+          "typeId": 23033,
+          "name": "Caldari Navy Lead Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22987,
+          "name": "Federation Navy Iridium Charge M"
+        },
+        {
+          "typeId": 23035,
+          "name": "Caldari Navy Iridium Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22989,
+          "name": "Federation Navy Tungsten Charge M"
+        },
+        {
+          "typeId": 23037,
+          "name": "Caldari Navy Tungsten Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22991,
+          "name": "Federation Navy Iron Charge M"
+        },
+        {
+          "typeId": 23039,
+          "name": "Caldari Navy Iron Charge M"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22995,
+          "name": "Federation Navy Plutonium Charge L"
+        },
+        {
+          "typeId": 23041,
+          "name": "Caldari Navy Plutonium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22997,
+          "name": "Federation Navy Uranium Charge L"
+        },
+        {
+          "typeId": 23043,
+          "name": "Caldari Navy Uranium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 22999,
+          "name": "Federation Navy Thorium Charge L"
+        },
+        {
+          "typeId": 23045,
+          "name": "Caldari Navy Thorium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 23001,
+          "name": "Federation Navy Lead Charge L"
+        },
+        {
+          "typeId": 23047,
+          "name": "Caldari Navy Lead Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 23003,
+          "name": "Federation Navy Iridium Charge L"
+        },
+        {
+          "typeId": 23049,
+          "name": "Caldari Navy Iridium Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 23005,
+          "name": "Federation Navy Tungsten Charge L"
+        },
+        {
+          "typeId": 23051,
+          "name": "Caldari Navy Tungsten Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 85,
+      "group": "Hybrid Charge",
+      "items": [
+        {
+          "typeId": 23007,
+          "name": "Federation Navy Iron Charge L"
+        },
+        {
+          "typeId": 23053,
+          "name": "Caldari Navy Iron Charge L"
+        }
+      ]
+    },
+    {
+      "category": "Charge",
+      "groupId": 1976,
+      "group": "Structure Festival Charges",
+      "items": [
+        {
+          "typeId": 47300,
+          "name": "Capsuleer Dawn Firework (Large)"
+        },
+        {
+          "typeId": 47301,
+          "name": "Crimson Helix Firework (Large)"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 13999,
+          "name": "Domination Multispectrum Coating"
+        },
+        {
+          "typeId": 14001,
+          "name": "True Sansha Multispectrum Coating"
+        },
+        {
+          "typeId": 14003,
+          "name": "Dark Blood Multispectrum Coating"
+        },
+        {
+          "typeId": 14049,
+          "name": "Shadow Serpentis Multispectrum Coating"
+        },
+        {
+          "typeId": 15693,
+          "name": "Imperial Navy Multispectrum Coating"
+        },
+        {
+          "typeId": 15703,
+          "name": "Republic Fleet Multispectrum Coating"
+        },
+        {
+          "typeId": 17514,
+          "name": "Ammatar Navy Multispectrum Coating"
+        },
+        {
+          "typeId": 17549,
+          "name": "Federation Navy Multispectrum Coating"
+        },
+        {
+          "typeId": 28520,
+          "name": "Khanid Navy Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14005,
+          "name": "Domination Kinetic Coating"
+        },
+        {
+          "typeId": 14007,
+          "name": "True Sansha Kinetic Coating"
+        },
+        {
+          "typeId": 14009,
+          "name": "Dark Blood Kinetic Coating"
+        },
+        {
+          "typeId": 14051,
+          "name": "Shadow Serpentis Kinetic Coating"
+        },
+        {
+          "typeId": 15691,
+          "name": "Imperial Navy Kinetic Coating"
+        },
+        {
+          "typeId": 15701,
+          "name": "Republic Fleet Kinetic Coating"
+        },
+        {
+          "typeId": 17512,
+          "name": "Ammatar Navy Kinetic Coating"
+        },
+        {
+          "typeId": 17551,
+          "name": "Federation Navy Kinetic Coating"
+        },
+        {
+          "typeId": 28547,
+          "name": "Khanid Navy Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14011,
+          "name": "Domination Explosive Coating"
+        },
+        {
+          "typeId": 14013,
+          "name": "True Sansha Explosive Coating"
+        },
+        {
+          "typeId": 14015,
+          "name": "Dark Blood Explosive Coating"
+        },
+        {
+          "typeId": 14053,
+          "name": "Shadow Serpentis Explosive Coating"
+        },
+        {
+          "typeId": 15689,
+          "name": "Imperial Navy Explosive Coating"
+        },
+        {
+          "typeId": 15699,
+          "name": "Republic Fleet Explosive Coating"
+        },
+        {
+          "typeId": 17516,
+          "name": "Ammatar Navy Explosive Coating"
+        },
+        {
+          "typeId": 17553,
+          "name": "Federation Navy Explosive Coating"
+        },
+        {
+          "typeId": 28552,
+          "name": "Khanid Navy Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14017,
+          "name": "Domination EM Coating"
+        },
+        {
+          "typeId": 14019,
+          "name": "True Sansha EM Coating"
+        },
+        {
+          "typeId": 14021,
+          "name": "Dark Blood EM Coating"
+        },
+        {
+          "typeId": 14055,
+          "name": "Shadow Serpentis EM Coating"
+        },
+        {
+          "typeId": 15687,
+          "name": "Imperial Navy EM Coating"
+        },
+        {
+          "typeId": 15697,
+          "name": "Republic Fleet EM Coating"
+        },
+        {
+          "typeId": 17518,
+          "name": "Ammatar Navy EM Coating"
+        },
+        {
+          "typeId": 17555,
+          "name": "Federation Navy EM Coating"
+        },
+        {
+          "typeId": 28554,
+          "name": "Khanid Navy EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14023,
+          "name": "Domination Thermal Coating"
+        },
+        {
+          "typeId": 14025,
+          "name": "True Sansha Thermal Coating"
+        },
+        {
+          "typeId": 14027,
+          "name": "Dark Blood Thermal Coating"
+        },
+        {
+          "typeId": 14057,
+          "name": "Shadow Serpentis Thermal Coating"
+        },
+        {
+          "typeId": 15685,
+          "name": "Imperial Navy Thermal Coating"
+        },
+        {
+          "typeId": 15695,
+          "name": "Republic Fleet Thermal Coating"
+        },
+        {
+          "typeId": 17557,
+          "name": "Federation Navy Thermal Coating"
+        },
+        {
+          "typeId": 28559,
+          "name": "Khanid Navy Thermal Coating"
+        },
+        {
+          "typeId": 32809,
+          "name": "Ammatar Navy Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14556,
+          "name": "Mizuro's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 14856,
+          "name": "Brokara's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 14858,
+          "name": "Tairei's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 15164,
+          "name": "Brynn's Modified Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14560,
+          "name": "Gotan's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 14864,
+          "name": "Vizan's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 14866,
+          "name": "Ahremen's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 15168,
+          "name": "Setele's Modified Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14564,
+          "name": "Mizuro's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 14872,
+          "name": "Brokara's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 14874,
+          "name": "Tairei's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 15196,
+          "name": "Brynn's Modified Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14568,
+          "name": "Gotan's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 14880,
+          "name": "Vizan's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 14882,
+          "name": "Ahremen's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 15200,
+          "name": "Setele's Modified Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14572,
+          "name": "Mizuro's Modified Explosive Coating"
+        },
+        {
+          "typeId": 14888,
+          "name": "Brokara's Modified Explosive Coating"
+        },
+        {
+          "typeId": 14890,
+          "name": "Tairei's Modified Explosive Coating"
+        },
+        {
+          "typeId": 15188,
+          "name": "Brynn's Modified Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14576,
+          "name": "Gotan's Modified Explosive Coating"
+        },
+        {
+          "typeId": 14896,
+          "name": "Vizan's Modified Explosive Coating"
+        },
+        {
+          "typeId": 14898,
+          "name": "Ahremen's Modified Explosive Coating"
+        },
+        {
+          "typeId": 15192,
+          "name": "Setele's Modified Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14580,
+          "name": "Mizuro's Modified EM Coating"
+        },
+        {
+          "typeId": 14904,
+          "name": "Brokara's Modified EM Coating"
+        },
+        {
+          "typeId": 14906,
+          "name": "Tairei's Modified EM Coating"
+        },
+        {
+          "typeId": 15180,
+          "name": "Brynn's Modified EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14584,
+          "name": "Gotan's Modified EM Coating"
+        },
+        {
+          "typeId": 14912,
+          "name": "Vizan's Modified EM Coating"
+        },
+        {
+          "typeId": 14914,
+          "name": "Ahremen's Modified EM Coating"
+        },
+        {
+          "typeId": 15184,
+          "name": "Setele's Modified EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14588,
+          "name": "Mizuro's Modified Thermal Coating"
+        },
+        {
+          "typeId": 14920,
+          "name": "Brokara's Modified Thermal Coating"
+        },
+        {
+          "typeId": 14922,
+          "name": "Tairei's Modified Thermal Coating"
+        },
+        {
+          "typeId": 15172,
+          "name": "Brynn's Modified Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14592,
+          "name": "Gotan's Modified Thermal Coating"
+        },
+        {
+          "typeId": 14928,
+          "name": "Vizan's Modified Thermal Coating"
+        },
+        {
+          "typeId": 14930,
+          "name": "Ahremen's Modified Thermal Coating"
+        },
+        {
+          "typeId": 15176,
+          "name": "Setele's Modified Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14860,
+          "name": "Selynne's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 14862,
+          "name": "Raysere's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 15166,
+          "name": "Tuvan's Modified Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14868,
+          "name": "Chelm's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 14870,
+          "name": "Draclira's Modified Multispectrum Coating"
+        },
+        {
+          "typeId": 15170,
+          "name": "Cormack's Modified Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14876,
+          "name": "Selynne's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 14878,
+          "name": "Raysere's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 15198,
+          "name": "Tuvan's Modified Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14884,
+          "name": "Chelm's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 14886,
+          "name": "Draclira's Modified Kinetic Coating"
+        },
+        {
+          "typeId": 15202,
+          "name": "Cormack's Modified Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14892,
+          "name": "Selynne's Modified Explosive Coating"
+        },
+        {
+          "typeId": 14894,
+          "name": "Raysere's Modified Explosive Coating"
+        },
+        {
+          "typeId": 15190,
+          "name": "Tuvan's Modified Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14900,
+          "name": "Chelm's Modified Explosive Coating"
+        },
+        {
+          "typeId": 14902,
+          "name": "Draclira's Modified Explosive Coating"
+        },
+        {
+          "typeId": 15194,
+          "name": "Cormack's Modified Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14908,
+          "name": "Selynne's Modified EM Coating"
+        },
+        {
+          "typeId": 14910,
+          "name": "Raysere's Modified EM Coating"
+        },
+        {
+          "typeId": 15182,
+          "name": "Tuvan's Modified EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14916,
+          "name": "Chelm's Modified EM Coating"
+        },
+        {
+          "typeId": 14918,
+          "name": "Draclira's Modified EM Coating"
+        },
+        {
+          "typeId": 15186,
+          "name": "Cormack's Modified EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14924,
+          "name": "Selynne's Modified Thermal Coating"
+        },
+        {
+          "typeId": 14926,
+          "name": "Raysere's Modified Thermal Coating"
+        },
+        {
+          "typeId": 15174,
+          "name": "Tuvan's Modified Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 14932,
+          "name": "Chelm's Modified Thermal Coating"
+        },
+        {
+          "typeId": 14934,
+          "name": "Draclira's Modified Thermal Coating"
+        },
+        {
+          "typeId": 15178,
+          "name": "Cormack's Modified Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18700,
+          "name": "Corpii C-Type Multispectrum Coating"
+        },
+        {
+          "typeId": 18702,
+          "name": "Centii C-Type Multispectrum Coating"
+        },
+        {
+          "typeId": 18768,
+          "name": "Coreli C-Type Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18704,
+          "name": "Corpii B-Type Multispectrum Coating"
+        },
+        {
+          "typeId": 18706,
+          "name": "Centii B-Type Multispectrum Coating"
+        },
+        {
+          "typeId": 18779,
+          "name": "Coreli B-Type Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18708,
+          "name": "Corpii A-Type Multispectrum Coating"
+        },
+        {
+          "typeId": 18710,
+          "name": "Centii A-Type Multispectrum Coating"
+        },
+        {
+          "typeId": 18789,
+          "name": "Coreli A-Type Multispectrum Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18712,
+          "name": "Corpii C-Type Kinetic Coating"
+        },
+        {
+          "typeId": 18714,
+          "name": "Centii C-Type Kinetic Coating"
+        },
+        {
+          "typeId": 18770,
+          "name": "Coreli C-Type Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18716,
+          "name": "Corpii C-Type Explosive Coating"
+        },
+        {
+          "typeId": 18718,
+          "name": "Centii C-Type Explosive Coating"
+        },
+        {
+          "typeId": 18772,
+          "name": "Coreli C-Type Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18720,
+          "name": "Corpii C-Type EM Coating"
+        },
+        {
+          "typeId": 18722,
+          "name": "Centii C-Type EM Coating"
+        },
+        {
+          "typeId": 18775,
+          "name": "Coreli C-Type EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18724,
+          "name": "Corpii C-Type Thermal Coating"
+        },
+        {
+          "typeId": 18726,
+          "name": "Centii C-Type Thermal Coating"
+        },
+        {
+          "typeId": 18777,
+          "name": "Coreli C-Type Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18728,
+          "name": "Corpii B-Type Thermal Coating"
+        },
+        {
+          "typeId": 18730,
+          "name": "Centii B-Type Thermal Coating"
+        },
+        {
+          "typeId": 18787,
+          "name": "Coreli B-Type Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18740,
+          "name": "Corpii B-Type Kinetic Coating"
+        },
+        {
+          "typeId": 18742,
+          "name": "Centii B-Type Kinetic Coating"
+        },
+        {
+          "typeId": 18781,
+          "name": "Coreli B-Type Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18744,
+          "name": "Corpii B-Type Explosive Coating"
+        },
+        {
+          "typeId": 18746,
+          "name": "Centii B-Type Explosive Coating"
+        },
+        {
+          "typeId": 18783,
+          "name": "Coreli B-Type Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18748,
+          "name": "Corpii B-Type EM Coating"
+        },
+        {
+          "typeId": 18750,
+          "name": "Centii B-Type EM Coating"
+        },
+        {
+          "typeId": 18785,
+          "name": "Coreli B-Type EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18752,
+          "name": "Corpii A-Type Kinetic Coating"
+        },
+        {
+          "typeId": 18754,
+          "name": "Centii A-Type Kinetic Coating"
+        },
+        {
+          "typeId": 18791,
+          "name": "Coreli A-Type Kinetic Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18756,
+          "name": "Corpii A-Type Explosive Coating"
+        },
+        {
+          "typeId": 18758,
+          "name": "Centii A-Type Explosive Coating"
+        },
+        {
+          "typeId": 18793,
+          "name": "Coreli A-Type Explosive Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18760,
+          "name": "Corpii A-Type EM Coating"
+        },
+        {
+          "typeId": 18762,
+          "name": "Centii A-Type EM Coating"
+        },
+        {
+          "typeId": 18795,
+          "name": "Coreli A-Type EM Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 98,
+      "group": "Armor Coating",
+      "items": [
+        {
+          "typeId": 18764,
+          "name": "Corpii A-Type Thermal Coating"
+        },
+        {
+          "typeId": 18766,
+          "name": "Centii A-Type Thermal Coating"
+        },
+        {
+          "typeId": 18797,
+          "name": "Coreli A-Type Thermal Coating"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13970,
+          "name": "True Sansha EM Armor Hardener"
+        },
+        {
+          "typeId": 13972,
+          "name": "Dark Blood EM Armor Hardener"
+        },
+        {
+          "typeId": 14059,
+          "name": "Shadow Serpentis EM Armor Hardener"
+        },
+        {
+          "typeId": 15711,
+          "name": "Imperial Navy EM Armor Hardener"
+        },
+        {
+          "typeId": 17502,
+          "name": "Ammatar Navy EM Armor Hardener"
+        },
+        {
+          "typeId": 17832,
+          "name": "Federation Navy EM Armor Hardener"
+        },
+        {
+          "typeId": 28522,
+          "name": "Khanid Navy EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13974,
+          "name": "True Sansha Explosive Armor Hardener"
+        },
+        {
+          "typeId": 13976,
+          "name": "Dark Blood Explosive Armor Hardener"
+        },
+        {
+          "typeId": 14061,
+          "name": "Shadow Serpentis Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15709,
+          "name": "Imperial Navy Explosive Armor Hardener"
+        },
+        {
+          "typeId": 17504,
+          "name": "Ammatar Navy Explosive Armor Hardener"
+        },
+        {
+          "typeId": 17834,
+          "name": "Federation Navy Explosive Armor Hardener"
+        },
+        {
+          "typeId": 28524,
+          "name": "Khanid Navy Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13978,
+          "name": "True Sansha Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 13980,
+          "name": "Dark Blood Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 14063,
+          "name": "Shadow Serpentis Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15707,
+          "name": "Imperial Navy Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 17506,
+          "name": "Ammatar Navy Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 17836,
+          "name": "Federation Navy Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 28526,
+          "name": "Khanid Navy Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13982,
+          "name": "True Sansha Thermal Armor Hardener"
+        },
+        {
+          "typeId": 13984,
+          "name": "Dark Blood Thermal Armor Hardener"
+        },
+        {
+          "typeId": 14065,
+          "name": "Shadow Serpentis Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15705,
+          "name": "Imperial Navy Thermal Armor Hardener"
+        },
+        {
+          "typeId": 17508,
+          "name": "Ammatar Navy Thermal Armor Hardener"
+        },
+        {
+          "typeId": 17838,
+          "name": "Federation Navy Thermal Armor Hardener"
+        },
+        {
+          "typeId": 28528,
+          "name": "Khanid Navy Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13986,
+          "name": "Domination EM Armor Hardener"
+        },
+        {
+          "typeId": 15719,
+          "name": "Republic Fleet EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13988,
+          "name": "Domination Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15717,
+          "name": "Republic Fleet Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13990,
+          "name": "Domination Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15715,
+          "name": "Republic Fleet Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 13992,
+          "name": "Domination Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15713,
+          "name": "Republic Fleet Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15016,
+          "name": "Brokara's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15018,
+          "name": "Tairei's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15244,
+          "name": "Brynn's Modified EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15020,
+          "name": "Selynne's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15022,
+          "name": "Raysere's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15246,
+          "name": "Tuvan's Modified EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15024,
+          "name": "Vizan's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15026,
+          "name": "Ahremen's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15248,
+          "name": "Setele's Modified EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15028,
+          "name": "Chelm's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15030,
+          "name": "Draclira's Modified EM Armor Hardener"
+        },
+        {
+          "typeId": 15250,
+          "name": "Cormack's Modified EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15032,
+          "name": "Brokara's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15034,
+          "name": "Tairei's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15252,
+          "name": "Brynn's Modified Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15036,
+          "name": "Selynne's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15038,
+          "name": "Raysere's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15254,
+          "name": "Tuvan's Modified Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15040,
+          "name": "Vizan's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15042,
+          "name": "Ahremen's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15256,
+          "name": "Setele's Modified Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15044,
+          "name": "Chelm's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15046,
+          "name": "Draclira's Modified Thermal Armor Hardener"
+        },
+        {
+          "typeId": 15258,
+          "name": "Cormack's Modified Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15048,
+          "name": "Brokara's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15050,
+          "name": "Tairei's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15260,
+          "name": "Brynn's Modified Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15052,
+          "name": "Selynne's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15054,
+          "name": "Raysere's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15262,
+          "name": "Tuvan's Modified Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15056,
+          "name": "Vizan's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15058,
+          "name": "Ahremen's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15264,
+          "name": "Setele's Modified Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15060,
+          "name": "Chelm's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15062,
+          "name": "Draclira's Modified Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 15266,
+          "name": "Cormack's Modified Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15064,
+          "name": "Brokara's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15066,
+          "name": "Tairei's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15268,
+          "name": "Brynn's Modified Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15068,
+          "name": "Selynne's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15070,
+          "name": "Raysere's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15270,
+          "name": "Tuvan's Modified Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15072,
+          "name": "Vizan's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15074,
+          "name": "Ahremen's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15272,
+          "name": "Setele's Modified Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 15076,
+          "name": "Chelm's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15078,
+          "name": "Draclira's Modified Explosive Armor Hardener"
+        },
+        {
+          "typeId": 15274,
+          "name": "Cormack's Modified Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18885,
+          "name": "Corpus C-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18887,
+          "name": "Centus C-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18949,
+          "name": "Core C-Type EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18889,
+          "name": "Corpus C-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18891,
+          "name": "Centus C-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18951,
+          "name": "Core C-Type Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18893,
+          "name": "Corpus C-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18895,
+          "name": "Centus C-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18953,
+          "name": "Core C-Type Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18897,
+          "name": "Corpus C-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18899,
+          "name": "Centus C-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18955,
+          "name": "Core C-Type Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18901,
+          "name": "Corpus B-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18903,
+          "name": "Centus B-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18957,
+          "name": "Core B-Type EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18905,
+          "name": "Corpus B-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18907,
+          "name": "Centus B-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18959,
+          "name": "Core B-Type Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18909,
+          "name": "Corpus B-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18911,
+          "name": "Centus B-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18961,
+          "name": "Core B-Type Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18913,
+          "name": "Corpus B-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18915,
+          "name": "Centus B-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18963,
+          "name": "Core B-Type Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18917,
+          "name": "Corpus A-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18919,
+          "name": "Centus A-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18971,
+          "name": "Core A-Type Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18921,
+          "name": "Corpus A-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18923,
+          "name": "Centus A-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18969,
+          "name": "Core A-Type Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18925,
+          "name": "Corpus A-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18927,
+          "name": "Centus A-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18967,
+          "name": "Core A-Type Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18929,
+          "name": "Corpus A-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18931,
+          "name": "Centus A-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18965,
+          "name": "Core A-Type EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18933,
+          "name": "Corpus X-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18935,
+          "name": "Centus X-Type EM Armor Hardener"
+        },
+        {
+          "typeId": 18973,
+          "name": "Core X-Type EM Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18937,
+          "name": "Corpus X-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18939,
+          "name": "Centus X-Type Explosive Armor Hardener"
+        },
+        {
+          "typeId": 18975,
+          "name": "Core X-Type Explosive Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18941,
+          "name": "Corpus X-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18943,
+          "name": "Centus X-Type Kinetic Armor Hardener"
+        },
+        {
+          "typeId": 18977,
+          "name": "Core X-Type Kinetic Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 328,
+      "group": "Armor Hardener",
+      "items": [
+        {
+          "typeId": 18945,
+          "name": "Corpus X-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18947,
+          "name": "Centus X-Type Thermal Armor Hardener"
+        },
+        {
+          "typeId": 18979,
+          "name": "Core X-Type Thermal Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 329,
+      "group": "Armor Plate",
+      "items": [
+        {
+          "typeId": 41456,
+          "name": "CONCORD 25000mm Steel Plates"
+        },
+        {
+          "typeId": 41457,
+          "name": "Dark Blood 25000mm Steel Plates"
+        },
+        {
+          "typeId": 41458,
+          "name": "Shadow Serpentis 25000mm Steel Plates"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 13955,
+          "name": "Domination Large Armor Repairer"
+        },
+        {
+          "typeId": 17492,
+          "name": "Republic Fleet Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 13956,
+          "name": "True Sansha Large Armor Repairer"
+        },
+        {
+          "typeId": 13957,
+          "name": "Dark Blood Large Armor Repairer"
+        },
+        {
+          "typeId": 15743,
+          "name": "Ammatar Navy Large Armor Repairer"
+        },
+        {
+          "typeId": 17546,
+          "name": "Imperial Navy Large Armor Repairer"
+        },
+        {
+          "typeId": 28544,
+          "name": "Khanid Navy Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 13958,
+          "name": "Domination Medium Armor Repairer"
+        },
+        {
+          "typeId": 17493,
+          "name": "Republic Fleet Medium Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 13959,
+          "name": "True Sansha Medium Armor Repairer"
+        },
+        {
+          "typeId": 13960,
+          "name": "Dark Blood Medium Armor Repairer"
+        },
+        {
+          "typeId": 15742,
+          "name": "Ammatar Navy Medium Armor Repairer"
+        },
+        {
+          "typeId": 17547,
+          "name": "Imperial Navy Medium Armor Repairer"
+        },
+        {
+          "typeId": 28549,
+          "name": "Khanid Navy Medium Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 13962,
+          "name": "Domination Small Armor Repairer"
+        },
+        {
+          "typeId": 17494,
+          "name": "Republic Fleet Small Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 13963,
+          "name": "True Sansha Small Armor Repairer"
+        },
+        {
+          "typeId": 13964,
+          "name": "Dark Blood Small Armor Repairer"
+        },
+        {
+          "typeId": 15741,
+          "name": "Ammatar Navy Small Armor Repairer"
+        },
+        {
+          "typeId": 17548,
+          "name": "Imperial Navy Small Armor Repairer"
+        },
+        {
+          "typeId": 28556,
+          "name": "Khanid Navy Small Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14067,
+          "name": "Shadow Serpentis Large Armor Repairer"
+        },
+        {
+          "typeId": 15746,
+          "name": "Federation Navy Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14068,
+          "name": "Shadow Serpentis Medium Armor Repairer"
+        },
+        {
+          "typeId": 15745,
+          "name": "Federation Navy Medium Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14069,
+          "name": "Shadow Serpentis Small Armor Repairer"
+        },
+        {
+          "typeId": 15744,
+          "name": "Federation Navy Small Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14848,
+          "name": "Brokara's Modified Large Armor Repairer"
+        },
+        {
+          "typeId": 14849,
+          "name": "Tairei's Modified Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14850,
+          "name": "Selynne's Modified Large Armor Repairer"
+        },
+        {
+          "typeId": 14851,
+          "name": "Raysere's Modified Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14852,
+          "name": "Vizan's Modified Large Armor Repairer"
+        },
+        {
+          "typeId": 14853,
+          "name": "Ahremen's Modified Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 14854,
+          "name": "Chelm's Modified Large Armor Repairer"
+        },
+        {
+          "typeId": 14855,
+          "name": "Draclira's Modified Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 18999,
+          "name": "Corpii C-Type Small Armor Repairer"
+        },
+        {
+          "typeId": 19005,
+          "name": "Centii C-Type Small Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19001,
+          "name": "Corpii B-Type Small Armor Repairer"
+        },
+        {
+          "typeId": 19007,
+          "name": "Centii B-Type Small Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19003,
+          "name": "Corpii A-Type Small Armor Repairer"
+        },
+        {
+          "typeId": 19009,
+          "name": "Centii A-Type Small Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19017,
+          "name": "Corpum C-Type Medium Armor Repairer"
+        },
+        {
+          "typeId": 19023,
+          "name": "Centum C-Type Medium Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19019,
+          "name": "Corpum B-Type Medium Armor Repairer"
+        },
+        {
+          "typeId": 19025,
+          "name": "Centum B-Type Medium Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19021,
+          "name": "Corpum A-Type Medium Armor Repairer"
+        },
+        {
+          "typeId": 19027,
+          "name": "Centum A-Type Medium Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19039,
+          "name": "Corpus C-Type Large Armor Repairer"
+        },
+        {
+          "typeId": 19040,
+          "name": "Centus C-Type Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19041,
+          "name": "Corpus B-Type Large Armor Repairer"
+        },
+        {
+          "typeId": 19042,
+          "name": "Centus B-Type Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19043,
+          "name": "Corpus A-Type Large Armor Repairer"
+        },
+        {
+          "typeId": 19044,
+          "name": "Centus A-Type Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 62,
+      "group": "Armor Repair Unit",
+      "items": [
+        {
+          "typeId": 19045,
+          "name": "Corpus X-Type Large Armor Repairer"
+        },
+        {
+          "typeId": 19046,
+          "name": "Centus X-Type Large Armor Repairer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 367,
+      "group": "Ballistic Control System",
+      "items": [
+        {
+          "typeId": 13935,
+          "name": "Domination Ballistic Control System"
+        },
+        {
+          "typeId": 13937,
+          "name": "Dread Guristas Ballistic Control System"
+        },
+        {
+          "typeId": 15681,
+          "name": "Caldari Navy Ballistic Control System"
+        },
+        {
+          "typeId": 15683,
+          "name": "Republic Fleet Ballistic Control System"
+        },
+        {
+          "typeId": 28563,
+          "name": "Khanid Navy Ballistic Control System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 367,
+      "group": "Ballistic Control System",
+      "items": [
+        {
+          "typeId": 14528,
+          "name": "Hakim's Modified Ballistic Control System"
+        },
+        {
+          "typeId": 14686,
+          "name": "Thon's Modified Ballistic Control System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 367,
+      "group": "Ballistic Control System",
+      "items": [
+        {
+          "typeId": 14530,
+          "name": "Mizuro's Modified Ballistic Control System"
+        },
+        {
+          "typeId": 14684,
+          "name": "Kaikka's Modified Ballistic Control System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 367,
+      "group": "Ballistic Control System",
+      "items": [
+        {
+          "typeId": 14532,
+          "name": "Gotan's Modified Ballistic Control System"
+        },
+        {
+          "typeId": 14688,
+          "name": "Vepas' Modified Ballistic Control System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 367,
+      "group": "Ballistic Control System",
+      "items": [
+        {
+          "typeId": 14534,
+          "name": "Tobias' Modified Ballistic Control System"
+        },
+        {
+          "typeId": 14690,
+          "name": "Estamel's Modified Ballistic Control System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 285,
+      "group": "CPU Enhancer",
+      "items": [
+        {
+          "typeId": 14230,
+          "name": "Dread Guristas Co-Processor"
+        },
+        {
+          "typeId": 14232,
+          "name": "Shadow Serpentis Co-Processor"
+        },
+        {
+          "typeId": 15675,
+          "name": "Caldari Navy Co-Processor"
+        },
+        {
+          "typeId": 15677,
+          "name": "Federation Navy Co-Processor"
+        },
+        {
+          "typeId": 28561,
+          "name": "Khanid Navy Co-Processor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 285,
+      "group": "CPU Enhancer",
+      "items": [
+        {
+          "typeId": 14768,
+          "name": "Kaikka's Modified Co-Processor"
+        },
+        {
+          "typeId": 15308,
+          "name": "Brynn's Modified Co-Processor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 285,
+      "group": "CPU Enhancer",
+      "items": [
+        {
+          "typeId": 14770,
+          "name": "Thon's Modified Co-Processor"
+        },
+        {
+          "typeId": 15310,
+          "name": "Tuvan's Modified Co-Processor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 285,
+      "group": "CPU Enhancer",
+      "items": [
+        {
+          "typeId": 14772,
+          "name": "Vepas' Modified Co-Processor"
+        },
+        {
+          "typeId": 15312,
+          "name": "Setele's Modified Co-Processor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 285,
+      "group": "CPU Enhancer",
+      "items": [
+        {
+          "typeId": 14774,
+          "name": "Estamel's Modified Co-Processor"
+        },
+        {
+          "typeId": 15314,
+          "name": "Cormack's Modified Co-Processor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 61,
+      "group": "Capacitor Battery",
+      "items": [
+        {
+          "typeId": 41212,
+          "name": "Republic Fleet Small Cap Battery"
+        },
+        {
+          "typeId": 41213,
+          "name": "Domination Small Cap Battery"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 61,
+      "group": "Capacitor Battery",
+      "items": [
+        {
+          "typeId": 41215,
+          "name": "Republic Fleet Medium Cap Battery"
+        },
+        {
+          "typeId": 41216,
+          "name": "Domination Medium Cap Battery"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 61,
+      "group": "Capacitor Battery",
+      "items": [
+        {
+          "typeId": 41218,
+          "name": "Republic Fleet Large Cap Battery"
+        },
+        {
+          "typeId": 41219,
+          "name": "Domination Large Cap Battery"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 61,
+      "group": "Capacitor Battery",
+      "items": [
+        {
+          "typeId": 41487,
+          "name": "Domination Capital Cap Battery"
+        },
+        {
+          "typeId": 41488,
+          "name": "Dark Blood Capital Cap Battery"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 14172,
+          "name": "Dark Blood Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 14174,
+          "name": "True Sansha Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 15778,
+          "name": "Ammatar Navy Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 15786,
+          "name": "Imperial Navy Heavy Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 14176,
+          "name": "Dark Blood Medium Capacitor Booster"
+        },
+        {
+          "typeId": 14178,
+          "name": "True Sansha Medium Capacitor Booster"
+        },
+        {
+          "typeId": 15776,
+          "name": "Ammatar Navy Medium Capacitor Booster"
+        },
+        {
+          "typeId": 15784,
+          "name": "Imperial Navy Medium Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 14184,
+          "name": "Dark Blood Small Capacitor Booster"
+        },
+        {
+          "typeId": 14186,
+          "name": "True Sansha Small Capacitor Booster"
+        },
+        {
+          "typeId": 15772,
+          "name": "Ammatar Navy Small Capacitor Booster"
+        },
+        {
+          "typeId": 15780,
+          "name": "Imperial Navy Small Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 15128,
+          "name": "Brokara's Modified Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 15130,
+          "name": "Tairei's Modified Heavy Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 15132,
+          "name": "Selynne's Modified Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 15134,
+          "name": "Raysere's Modified Heavy Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 15136,
+          "name": "Vizan's Modified Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 15138,
+          "name": "Ahremen's Modified Heavy Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 15140,
+          "name": "Chelm's Modified Heavy Capacitor Booster"
+        },
+        {
+          "typeId": 15142,
+          "name": "Draclira's Modified Heavy Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 76,
+      "group": "Capacitor Booster",
+      "items": [
+        {
+          "typeId": 41494,
+          "name": "Dark Blood Capital Capacitor Booster"
+        },
+        {
+          "typeId": 41495,
+          "name": "True Sansha Capital Capacitor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 767,
+      "group": "Capacitor Power Relay",
+      "items": [
+        {
+          "typeId": 14144,
+          "name": "Dark Blood Capacitor Power Relay"
+        },
+        {
+          "typeId": 14146,
+          "name": "True Sansha Capacitor Power Relay"
+        },
+        {
+          "typeId": 17510,
+          "name": "Ammatar Navy Capacitor Power Relay"
+        },
+        {
+          "typeId": 17528,
+          "name": "Imperial Navy Capacitor Power Relay"
+        },
+        {
+          "typeId": 28532,
+          "name": "Khanid Navy Capacitor Power Relay"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 767,
+      "group": "Capacitor Power Relay",
+      "items": [
+        {
+          "typeId": 15080,
+          "name": "Brokara's Modified Capacitor Power Relay"
+        },
+        {
+          "typeId": 15082,
+          "name": "Tairei's Modified Capacitor Power Relay"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 767,
+      "group": "Capacitor Power Relay",
+      "items": [
+        {
+          "typeId": 15084,
+          "name": "Selynne's Modified Capacitor Power Relay"
+        },
+        {
+          "typeId": 15086,
+          "name": "Raysere's Modified Capacitor Power Relay"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 767,
+      "group": "Capacitor Power Relay",
+      "items": [
+        {
+          "typeId": 15088,
+          "name": "Vizan's Modified Capacitor Power Relay"
+        },
+        {
+          "typeId": 15090,
+          "name": "Ahremen's Modified Capacitor Power Relay"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 767,
+      "group": "Capacitor Power Relay",
+      "items": [
+        {
+          "typeId": 15092,
+          "name": "Chelm's Modified Capacitor Power Relay"
+        },
+        {
+          "typeId": 15094,
+          "name": "Draclira's Modified Capacitor Power Relay"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 43,
+      "group": "Capacitor Recharger",
+      "items": [
+        {
+          "typeId": 14140,
+          "name": "True Sansha Cap Recharger"
+        },
+        {
+          "typeId": 14142,
+          "name": "Dark Blood Cap Recharger"
+        },
+        {
+          "typeId": 15788,
+          "name": "Ammatar Navy Cap Recharger"
+        },
+        {
+          "typeId": 17526,
+          "name": "Imperial Navy Cap Recharger"
+        },
+        {
+          "typeId": 28530,
+          "name": "Khanid Navy Cap Recharger"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 43,
+      "group": "Capacitor Recharger",
+      "items": [
+        {
+          "typeId": 16599,
+          "name": "Brokara's Modified Cap Recharger"
+        },
+        {
+          "typeId": 21816,
+          "name": "Tairei's Modified Cap Recharger"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 43,
+      "group": "Capacitor Recharger",
+      "items": [
+        {
+          "typeId": 16601,
+          "name": "Selynne's Modified Cap Recharger"
+        },
+        {
+          "typeId": 21817,
+          "name": "Raysere's Modified Cap Recharger"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 43,
+      "group": "Capacitor Recharger",
+      "items": [
+        {
+          "typeId": 16603,
+          "name": "Vizan's Modified Cap Recharger"
+        },
+        {
+          "typeId": 21818,
+          "name": "Ahremen's Modified Cap Recharger"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 43,
+      "group": "Capacitor Recharger",
+      "items": [
+        {
+          "typeId": 16605,
+          "name": "Chelm's Modified Cap Recharger"
+        },
+        {
+          "typeId": 21819,
+          "name": "Draclira's Modified Cap Recharger"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 330,
+      "group": "Cloaking Device",
+      "items": [
+        {
+          "typeId": 14234,
+          "name": "Dread Guristas Cloaking Device"
+        },
+        {
+          "typeId": 15790,
+          "name": "Caldari Navy Cloaking Device"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 60,
+      "group": "Damage Control",
+      "items": [
+        {
+          "typeId": 41200,
+          "name": "Shadow Serpentis Damage Control"
+        },
+        {
+          "typeId": 41201,
+          "name": "Syndicate Damage Control"
+        },
+        {
+          "typeId": 41202,
+          "name": "Sentient Damage Control"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 60,
+      "group": "Damage Control",
+      "items": [
+        {
+          "typeId": 41203,
+          "name": "Brynn's Modified Damage Control"
+        },
+        {
+          "typeId": 41204,
+          "name": "Unit D-34343's Modified Damage Control"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 60,
+      "group": "Damage Control",
+      "items": [
+        {
+          "typeId": 41205,
+          "name": "Tuvan's Modified Damage Control"
+        },
+        {
+          "typeId": 41206,
+          "name": "Unit F-435454's Modified Damage Control"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 60,
+      "group": "Damage Control",
+      "items": [
+        {
+          "typeId": 41207,
+          "name": "Setele's Modified Damage Control"
+        },
+        {
+          "typeId": 41208,
+          "name": "Unit P-343554's Modified Damage Control"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 60,
+      "group": "Damage Control",
+      "items": [
+        {
+          "typeId": 41210,
+          "name": "Cormack's Modified Damage Control"
+        },
+        {
+          "typeId": 41211,
+          "name": "Unit W-634's Modified Damage Control"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 645,
+      "group": "Drone Damage Modules",
+      "items": [
+        {
+          "typeId": 33842,
+          "name": "Federation Navy Drone Damage Amplifier"
+        },
+        {
+          "typeId": 33844,
+          "name": "Imperial Navy Drone Damage Amplifier"
+        },
+        {
+          "typeId": 33846,
+          "name": "Dread Guristas Drone Damage Amplifier"
+        },
+        {
+          "typeId": 33848,
+          "name": "Sentient Drone Damage Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 644,
+      "group": "Drone Navigation Computer",
+      "items": [
+        {
+          "typeId": 33850,
+          "name": "Federation Navy Drone Navigation Computer"
+        },
+        {
+          "typeId": 33852,
+          "name": "Sentient Drone Navigation Computer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 1292,
+      "group": "Drone Tracking Enhancer",
+      "items": [
+        {
+          "typeId": 33828,
+          "name": "Sentient Omnidirectional Tracking Enhancer"
+        },
+        {
+          "typeId": 33830,
+          "name": "Dread Guristas Omnidirectional Tracking Enhancer"
+        },
+        {
+          "typeId": 33832,
+          "name": "Imperial Navy Omnidirectional Tracking Enhancer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 646,
+      "group": "Drone Tracking Modules",
+      "items": [
+        {
+          "typeId": 31942,
+          "name": "Federation Navy Omnidirectional Tracking Link"
+        },
+        {
+          "typeId": 33826,
+          "name": "Sentient Omnidirectional Tracking Link"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 514,
+      "group": "ECM Stabilizer",
+      "items": [
+        {
+          "typeId": 85006,
+          "name": "Dread Guristas Signal Distortion Amplifier"
+        },
+        {
+          "typeId": 94067,
+          "name": "Caldari Navy Signal Distortion Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14070,
+          "name": "Dark Blood Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 14072,
+          "name": "True Sansha Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 15729,
+          "name": "Imperial Navy Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 17536,
+          "name": "Ammatar Navy Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 28534,
+          "name": "Khanid Navy Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14074,
+          "name": "Shadow Serpentis Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 15739,
+          "name": "Federation Navy Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14076,
+          "name": "Dark Blood Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 14078,
+          "name": "True Sansha Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 15727,
+          "name": "Imperial Navy Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 17538,
+          "name": "Ammatar Navy Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 28536,
+          "name": "Khanid Navy Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14080,
+          "name": "Shadow Serpentis Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 15737,
+          "name": "Federation Navy Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14082,
+          "name": "Dark Blood Explosive Energized Membrane"
+        },
+        {
+          "typeId": 14084,
+          "name": "True Sansha Explosive Energized Membrane"
+        },
+        {
+          "typeId": 15725,
+          "name": "Imperial Navy Explosive Energized Membrane"
+        },
+        {
+          "typeId": 17540,
+          "name": "Ammatar Navy Explosive Energized Membrane"
+        },
+        {
+          "typeId": 28538,
+          "name": "Khanid Navy Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14086,
+          "name": "Shadow Serpentis Explosive Energized Membrane"
+        },
+        {
+          "typeId": 15735,
+          "name": "Federation Navy Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14088,
+          "name": "Dark Blood EM Energized Membrane"
+        },
+        {
+          "typeId": 14090,
+          "name": "True Sansha EM Energized Membrane"
+        },
+        {
+          "typeId": 15723,
+          "name": "Imperial Navy EM Energized Membrane"
+        },
+        {
+          "typeId": 17542,
+          "name": "Ammatar Navy EM Energized Membrane"
+        },
+        {
+          "typeId": 28540,
+          "name": "Khanid Navy EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14092,
+          "name": "Shadow Serpentis EM Energized Membrane"
+        },
+        {
+          "typeId": 15733,
+          "name": "Federation Navy EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14094,
+          "name": "Dark Blood Thermal Energized Membrane"
+        },
+        {
+          "typeId": 14096,
+          "name": "True Sansha Thermal Energized Membrane"
+        },
+        {
+          "typeId": 15721,
+          "name": "Imperial Navy Thermal Energized Membrane"
+        },
+        {
+          "typeId": 17544,
+          "name": "Ammatar Navy Thermal Energized Membrane"
+        },
+        {
+          "typeId": 28542,
+          "name": "Khanid Navy Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14098,
+          "name": "Shadow Serpentis Thermal Energized Membrane"
+        },
+        {
+          "typeId": 15731,
+          "name": "Federation Navy Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14936,
+          "name": "Brokara's Modified Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 14938,
+          "name": "Tairei's Modified Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14940,
+          "name": "Selynne's Modified Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 14942,
+          "name": "Raysere's Modified Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14944,
+          "name": "Vizan's Modified Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 14946,
+          "name": "Ahremen's Modified Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14948,
+          "name": "Chelm's Modified Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 14950,
+          "name": "Draclira's Modified Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14952,
+          "name": "Brokara's Modified Thermal Energized Membrane"
+        },
+        {
+          "typeId": 14954,
+          "name": "Tairei's Modified Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14956,
+          "name": "Selynne's Modified Thermal Energized Membrane"
+        },
+        {
+          "typeId": 14958,
+          "name": "Raysere's Modified Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14960,
+          "name": "Vizan's Modified Thermal Energized Membrane"
+        },
+        {
+          "typeId": 14962,
+          "name": "Ahremen's Modified Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14964,
+          "name": "Chelm's Modified Thermal Energized Membrane"
+        },
+        {
+          "typeId": 14966,
+          "name": "Draclira's Modified Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14968,
+          "name": "Brokara's Modified EM Energized Membrane"
+        },
+        {
+          "typeId": 14970,
+          "name": "Tairei's Modified EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14972,
+          "name": "Selynne's Modified EM Energized Membrane"
+        },
+        {
+          "typeId": 14974,
+          "name": "Raysere's Modified EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14976,
+          "name": "Vizan's Modified EM Energized Membrane"
+        },
+        {
+          "typeId": 14978,
+          "name": "Ahremen's Modified EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14980,
+          "name": "Chelm's Modified EM Energized Membrane"
+        },
+        {
+          "typeId": 14982,
+          "name": "Draclira's Modified EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14984,
+          "name": "Brokara's Modified Explosive Energized Membrane"
+        },
+        {
+          "typeId": 14986,
+          "name": "Tairei's Modified Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14988,
+          "name": "Selynne's Modified Explosive Energized Membrane"
+        },
+        {
+          "typeId": 14990,
+          "name": "Raysere's Modified Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14992,
+          "name": "Vizan's Modified Explosive Energized Membrane"
+        },
+        {
+          "typeId": 14994,
+          "name": "Ahremen's Modified Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 14996,
+          "name": "Chelm's Modified Explosive Energized Membrane"
+        },
+        {
+          "typeId": 14998,
+          "name": "Draclira's Modified Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 15000,
+          "name": "Brokara's Modified Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 15002,
+          "name": "Tairei's Modified Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 15004,
+          "name": "Selynne's Modified Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 15006,
+          "name": "Raysere's Modified Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 15008,
+          "name": "Vizan's Modified Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 15010,
+          "name": "Ahremen's Modified Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 15012,
+          "name": "Chelm's Modified Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 15014,
+          "name": "Draclira's Modified Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18829,
+          "name": "Corpum C-Type Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 18831,
+          "name": "Centum C-Type Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18833,
+          "name": "Corpum C-Type Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 18835,
+          "name": "Centum C-Type Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18837,
+          "name": "Corpum C-Type Explosive Energized Membrane"
+        },
+        {
+          "typeId": 18839,
+          "name": "Centum C-Type Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18841,
+          "name": "Corpum C-Type EM Energized Membrane"
+        },
+        {
+          "typeId": 18843,
+          "name": "Centum C-Type EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18845,
+          "name": "Corpum C-Type Thermal Energized Membrane"
+        },
+        {
+          "typeId": 18847,
+          "name": "Centum C-Type Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18849,
+          "name": "Corpum B-Type Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 18851,
+          "name": "Centum B-Type Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18853,
+          "name": "Corpum B-Type Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 18855,
+          "name": "Centum B-Type Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18857,
+          "name": "Corpum B-Type Explosive Energized Membrane"
+        },
+        {
+          "typeId": 18859,
+          "name": "Centum B-Type Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18861,
+          "name": "Corpum B-Type Thermal Energized Membrane"
+        },
+        {
+          "typeId": 18863,
+          "name": "Centum B-Type Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18865,
+          "name": "Corpum A-Type Thermal Energized Membrane"
+        },
+        {
+          "typeId": 18867,
+          "name": "Centum A-Type Thermal Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18869,
+          "name": "Corpum A-Type EM Energized Membrane"
+        },
+        {
+          "typeId": 18871,
+          "name": "Centum A-Type EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18873,
+          "name": "Corpum A-Type Explosive Energized Membrane"
+        },
+        {
+          "typeId": 18875,
+          "name": "Centum A-Type Explosive Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18877,
+          "name": "Corpum A-Type Kinetic Energized Membrane"
+        },
+        {
+          "typeId": 18879,
+          "name": "Centum A-Type Kinetic Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 18881,
+          "name": "Corpum A-Type Multispectrum Energized Membrane"
+        },
+        {
+          "typeId": 18883,
+          "name": "Centum A-Type Multispectrum Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 326,
+      "group": "Energized Armor Membrane",
+      "items": [
+        {
+          "typeId": 19361,
+          "name": "Corpum B-Type EM Energized Membrane"
+        },
+        {
+          "typeId": 19363,
+          "name": "Centum B-Type EM Energized Membrane"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14160,
+          "name": "Dark Blood Small Energy Neutralizer"
+        },
+        {
+          "typeId": 14162,
+          "name": "True Sansha Small Energy Neutralizer"
+        },
+        {
+          "typeId": 15794,
+          "name": "Ammatar Navy Small Energy Neutralizer"
+        },
+        {
+          "typeId": 15800,
+          "name": "Imperial Navy Small Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14164,
+          "name": "Dark Blood Medium Energy Neutralizer"
+        },
+        {
+          "typeId": 14166,
+          "name": "True Sansha Medium Energy Neutralizer"
+        },
+        {
+          "typeId": 15796,
+          "name": "Ammatar Navy Medium Energy Neutralizer"
+        },
+        {
+          "typeId": 15802,
+          "name": "Imperial Navy Medium Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14168,
+          "name": "Dark Blood Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 14170,
+          "name": "True Sansha Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 15798,
+          "name": "Ammatar Navy Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 15804,
+          "name": "Imperial Navy Heavy Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14832,
+          "name": "Brokara's Modified Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 14834,
+          "name": "Tairei's Modified Heavy Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14836,
+          "name": "Selynne's Modified Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 14838,
+          "name": "Raysere's Modified Heavy Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14840,
+          "name": "Vizan's Modified Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 14842,
+          "name": "Ahremen's Modified Heavy Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 14844,
+          "name": "Chelm's Modified Heavy Energy Neutralizer"
+        },
+        {
+          "typeId": 14846,
+          "name": "Draclira's Modified Heavy Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 71,
+      "group": "Energy Neutralizer",
+      "items": [
+        {
+          "typeId": 40663,
+          "name": "True Sansha Capital Energy Neutralizer"
+        },
+        {
+          "typeId": 40664,
+          "name": "Dark Blood Capital Energy Neutralizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14148,
+          "name": "Dark Blood Small Energy Nosferatu"
+        },
+        {
+          "typeId": 14150,
+          "name": "True Sansha Small Energy Nosferatu"
+        },
+        {
+          "typeId": 15875,
+          "name": "Ammatar Navy Small Energy Nosferatu"
+        },
+        {
+          "typeId": 15881,
+          "name": "Imperial Navy Small Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14152,
+          "name": "Dark Blood Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 14154,
+          "name": "True Sansha Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 15879,
+          "name": "Ammatar Navy Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 15885,
+          "name": "Imperial Navy Heavy Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14156,
+          "name": "Dark Blood Medium Energy Nosferatu"
+        },
+        {
+          "typeId": 14158,
+          "name": "True Sansha Medium Energy Nosferatu"
+        },
+        {
+          "typeId": 15877,
+          "name": "Ammatar Navy Medium Energy Nosferatu"
+        },
+        {
+          "typeId": 15883,
+          "name": "Imperial Navy Medium Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14816,
+          "name": "Brokara's Modified Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 14818,
+          "name": "Tairei's Modified Heavy Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14820,
+          "name": "Selynne's Modified Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 14822,
+          "name": "Raysere's Modified Heavy Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14824,
+          "name": "Vizan's Modified Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 14826,
+          "name": "Ahremen's Modified Heavy Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 14828,
+          "name": "Chelm's Modified Heavy Energy Nosferatu"
+        },
+        {
+          "typeId": 14830,
+          "name": "Draclira's Modified Heavy Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 68,
+      "group": "Energy Nosferatu",
+      "items": [
+        {
+          "typeId": 40669,
+          "name": "True Sansha Capital Energy Nosferatu"
+        },
+        {
+          "typeId": 40670,
+          "name": "Dark Blood Capital Energy Nosferatu"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 3559,
+          "name": "CONCORD Dual Giga Pulse Laser"
+        },
+        {
+          "typeId": 41103,
+          "name": "Dark Blood Dual Giga Pulse Laser"
+        },
+        {
+          "typeId": 41104,
+          "name": "True Sansha Dual Giga Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14417,
+          "name": "Selynne's Modified Dual Heavy Beam Laser"
+        },
+        {
+          "typeId": 14421,
+          "name": "Raysere's Modified Dual Heavy Beam Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14419,
+          "name": "Chelm's Modified Dual Heavy Beam Laser"
+        },
+        {
+          "typeId": 14423,
+          "name": "Draclira's Modified Dual Heavy Beam Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14425,
+          "name": "Tairei's Modified Dual Heavy Pulse Laser"
+        },
+        {
+          "typeId": 14429,
+          "name": "Brokara's Modified Dual Heavy Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14427,
+          "name": "Ahremen's Modified Dual Heavy Pulse Laser"
+        },
+        {
+          "typeId": 14431,
+          "name": "Vizan's Modified Dual Heavy Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14433,
+          "name": "Selynne's Modified Mega Beam Laser"
+        },
+        {
+          "typeId": 14437,
+          "name": "Raysere's Modified Mega Beam Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14435,
+          "name": "Chelm's Modified Mega Beam Laser"
+        },
+        {
+          "typeId": 14439,
+          "name": "Draclira's Modified Mega Beam Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14441,
+          "name": "Tairei's Modified Mega Pulse Laser"
+        },
+        {
+          "typeId": 14445,
+          "name": "Brokara's Modified Mega Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14443,
+          "name": "Ahremen's Modified Mega Pulse Laser"
+        },
+        {
+          "typeId": 14447,
+          "name": "Vizan's Modified Mega Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 14451,
+          "name": "Chelm's Modified Tachyon Beam Laser"
+        },
+        {
+          "typeId": 14455,
+          "name": "Draclira's Modified Tachyon Beam Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 41066,
+          "name": "Dark Blood Quad Mega Pulse Laser"
+        },
+        {
+          "typeId": 41067,
+          "name": "True Sansha Quad Mega Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 41118,
+          "name": "Dark Blood Dual Giga Beam Laser"
+        },
+        {
+          "typeId": 41119,
+          "name": "True Sansha Dual Giga Beam Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 85012,
+          "name": "Makra's Modified Small Focused Pulse Laser"
+        },
+        {
+          "typeId": 85013,
+          "name": "Usaras' Modified Small Focused Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 53,
+      "group": "Energy Weapon",
+      "items": [
+        {
+          "typeId": 85014,
+          "name": "Ryhad's Modified Heavy Pulse Laser"
+        },
+        {
+          "typeId": 85015,
+          "name": "Nija's Modified Heavy Pulse Laser"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 407,
+      "group": "Fighter Support Unit",
+      "items": [
+        {
+          "typeId": 32957,
+          "name": "Unit W-634's Modified Fighter Support Unit"
+        },
+        {
+          "typeId": 88264,
+          "name": "Strategos' Modified Fighter Support Unit"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 1699,
+      "group": "Flex Armor Hardener",
+      "items": [
+        {
+          "typeId": 41526,
+          "name": "Dark Blood Capital Flex Armor Hardener"
+        },
+        {
+          "typeId": 41527,
+          "name": "Shadow Serpentis Capital Flex Armor Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 1700,
+      "group": "Flex Shield Hardener",
+      "items": [
+        {
+          "typeId": 41529,
+          "name": "True Sansha Capital Flex Shield Hardener"
+        },
+        {
+          "typeId": 41530,
+          "name": "Dread Guristas Capital Flex Shield Hardener"
+        },
+        {
+          "typeId": 41531,
+          "name": "Domination Capital Flex Shield Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 59,
+      "group": "Gyrostabilizer",
+      "items": [
+        {
+          "typeId": 13939,
+          "name": "Domination Gyrostabilizer"
+        },
+        {
+          "typeId": 15806,
+          "name": "Republic Fleet Gyrostabilizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 205,
+      "group": "Heat Sink",
+      "items": [
+        {
+          "typeId": 13941,
+          "name": "Dark Blood Heat Sink"
+        },
+        {
+          "typeId": 13943,
+          "name": "True Sansha Heat Sink"
+        },
+        {
+          "typeId": 15808,
+          "name": "Ammatar Navy Heat Sink"
+        },
+        {
+          "typeId": 15810,
+          "name": "Imperial Navy Heat Sink"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 205,
+      "group": "Heat Sink",
+      "items": [
+        {
+          "typeId": 14800,
+          "name": "Brokara's Modified Heat Sink"
+        },
+        {
+          "typeId": 14802,
+          "name": "Tairei's Modified Heat Sink"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 205,
+      "group": "Heat Sink",
+      "items": [
+        {
+          "typeId": 14804,
+          "name": "Selynne's Modified Heat Sink"
+        },
+        {
+          "typeId": 14806,
+          "name": "Raysere's Modified Heat Sink"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 205,
+      "group": "Heat Sink",
+      "items": [
+        {
+          "typeId": 14808,
+          "name": "Vizan's Modified Heat Sink"
+        },
+        {
+          "typeId": 14810,
+          "name": "Ahremen's Modified Heat Sink"
+        },
+        {
+          "typeId": 88265,
+          "name": "Strategos' Modified Heat Sink"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 205,
+      "group": "Heat Sink",
+      "items": [
+        {
+          "typeId": 14812,
+          "name": "Chelm's Modified Heat Sink"
+        },
+        {
+          "typeId": 14814,
+          "name": "Draclira's Modified Heat Sink"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 302,
+      "group": "Magnetic Field Stabilizer",
+      "items": [
+        {
+          "typeId": 13945,
+          "name": "Shadow Serpentis Magnetic Field Stabilizer"
+        },
+        {
+          "typeId": 15895,
+          "name": "Federation Navy Magnetic Field Stabilizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 302,
+      "group": "Magnetic Field Stabilizer",
+      "items": [
+        {
+          "typeId": 44113,
+          "name": "Kaatara's Custom Magnetic Field Stabilizer"
+        },
+        {
+          "typeId": 44114,
+          "name": "Torelle's Custom Magnetic Field Stabilizer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 763,
+      "group": "Nanofiber Internal Structure",
+      "items": [
+        {
+          "typeId": 14127,
+          "name": "Domination Nanofiber Structure"
+        },
+        {
+          "typeId": 15813,
+          "name": "Republic Fleet Nanofiber Structure"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 764,
+      "group": "Overdrive Injector System",
+      "items": [
+        {
+          "typeId": 14126,
+          "name": "Domination Overdrive Injector"
+        },
+        {
+          "typeId": 15812,
+          "name": "Republic Fleet Overdrive Injector"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 766,
+      "group": "Power Diagnostic System",
+      "items": [
+        {
+          "typeId": 14134,
+          "name": "Dark Blood Power Diagnostic System"
+        },
+        {
+          "typeId": 14136,
+          "name": "True Sansha Power Diagnostic System"
+        },
+        {
+          "typeId": 14138,
+          "name": "Shadow Serpentis Power Diagnostic System"
+        },
+        {
+          "typeId": 17524,
+          "name": "Ammatar Navy Power Diagnostic System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 766,
+      "group": "Power Diagnostic System",
+      "items": [
+        {
+          "typeId": 15096,
+          "name": "Brokara's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15098,
+          "name": "Tairei's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15292,
+          "name": "Brynn's Modified Power Diagnostic System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 766,
+      "group": "Power Diagnostic System",
+      "items": [
+        {
+          "typeId": 15100,
+          "name": "Selynne's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15102,
+          "name": "Raysere's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15294,
+          "name": "Tuvan's Modified Power Diagnostic System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 766,
+      "group": "Power Diagnostic System",
+      "items": [
+        {
+          "typeId": 15104,
+          "name": "Vizan's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15106,
+          "name": "Ahremen's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15296,
+          "name": "Setele's Modified Power Diagnostic System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 766,
+      "group": "Power Diagnostic System",
+      "items": [
+        {
+          "typeId": 15108,
+          "name": "Chelm's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15110,
+          "name": "Draclira's Modified Power Diagnostic System"
+        },
+        {
+          "typeId": 15298,
+          "name": "Cormack's Modified Power Diagnostic System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 766,
+      "group": "Power Diagnostic System",
+      "items": [
+        {
+          "typeId": 28739,
+          "name": "Thukker Power Diagnostic System"
+        },
+        {
+          "typeId": 31952,
+          "name": "Caldari Navy Power Diagnostic System"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 55,
+      "group": "Projectile Weapon",
+      "items": [
+        {
+          "typeId": 3571,
+          "name": "CONCORD Quad 3500mm Siege Artillery"
+        },
+        {
+          "typeId": 41160,
+          "name": "Domination Quad 3500mm Siege Artillery"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 55,
+      "group": "Projectile Weapon",
+      "items": [
+        {
+          "typeId": 3573,
+          "name": "CONCORD Hexa 2500mm Repeating Cannon"
+        },
+        {
+          "typeId": 41154,
+          "name": "Domination Hexa 2500mm Repeating Cannon"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14102,
+          "name": "Domination 100MN Afterburner"
+        },
+        {
+          "typeId": 15757,
+          "name": "Republic Fleet 100MN Afterburner"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14104,
+          "name": "Shadow Serpentis 100MN Afterburner"
+        },
+        {
+          "typeId": 15770,
+          "name": "Federation Navy 100MN Afterburner"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14106,
+          "name": "Domination 10MN Afterburner"
+        },
+        {
+          "typeId": 15753,
+          "name": "Republic Fleet 10MN Afterburner"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14108,
+          "name": "Shadow Serpentis 10MN Afterburner"
+        },
+        {
+          "typeId": 15766,
+          "name": "Federation Navy 10MN Afterburner"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14110,
+          "name": "Domination 1MN Afterburner"
+        },
+        {
+          "typeId": 15749,
+          "name": "Republic Fleet 1MN Afterburner"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14112,
+          "name": "Shadow Serpentis 1MN Afterburner"
+        },
+        {
+          "typeId": 15761,
+          "name": "Federation Navy 1MN Afterburner"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14114,
+          "name": "Domination 500MN Microwarpdrive"
+        },
+        {
+          "typeId": 15755,
+          "name": "Republic Fleet 500MN Microwarpdrive"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14116,
+          "name": "Shadow Serpentis 500MN Microwarpdrive"
+        },
+        {
+          "typeId": 15768,
+          "name": "Federation Navy 500MN Microwarpdrive"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14118,
+          "name": "Domination 50MN Microwarpdrive"
+        },
+        {
+          "typeId": 15751,
+          "name": "Republic Fleet 50MN Microwarpdrive"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14120,
+          "name": "Shadow Serpentis 50MN Microwarpdrive"
+        },
+        {
+          "typeId": 15764,
+          "name": "Federation Navy 50MN Microwarpdrive"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14122,
+          "name": "Domination 5MN Microwarpdrive"
+        },
+        {
+          "typeId": 15747,
+          "name": "Republic Fleet 5MN Microwarpdrive"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 46,
+      "group": "Propulsion Module",
+      "items": [
+        {
+          "typeId": 14124,
+          "name": "Shadow Serpentis 5MN Microwarpdrive"
+        },
+        {
+          "typeId": 15759,
+          "name": "Federation Navy 5MN Microwarpdrive"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 769,
+      "group": "Reactor Control Unit",
+      "items": [
+        {
+          "typeId": 14128,
+          "name": "Dark Blood Reactor Control Unit"
+        },
+        {
+          "typeId": 14130,
+          "name": "True Sansha Reactor Control Unit"
+        },
+        {
+          "typeId": 14132,
+          "name": "Shadow Serpentis Reactor Control Unit"
+        },
+        {
+          "typeId": 17522,
+          "name": "Ammatar Navy Reactor Control Unit"
+        },
+        {
+          "typeId": 28776,
+          "name": "Syndicate Reactor Control Unit"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 769,
+      "group": "Reactor Control Unit",
+      "items": [
+        {
+          "typeId": 15112,
+          "name": "Brokara's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15114,
+          "name": "Tairei's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15300,
+          "name": "Brynn's Modified Reactor Control Unit"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 769,
+      "group": "Reactor Control Unit",
+      "items": [
+        {
+          "typeId": 15116,
+          "name": "Selynne's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15118,
+          "name": "Raysere's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15302,
+          "name": "Tuvan's Modified Reactor Control Unit"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 769,
+      "group": "Reactor Control Unit",
+      "items": [
+        {
+          "typeId": 15120,
+          "name": "Vizan's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15122,
+          "name": "Ahremen's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15304,
+          "name": "Setele's Modified Reactor Control Unit"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 769,
+      "group": "Reactor Control Unit",
+      "items": [
+        {
+          "typeId": 15124,
+          "name": "Chelm's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15126,
+          "name": "Draclira's Modified Reactor Control Unit"
+        },
+        {
+          "typeId": 15306,
+          "name": "Cormack's Modified Reactor Control Unit"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 290,
+      "group": "Remote Sensor Booster",
+      "items": [
+        {
+          "typeId": 41198,
+          "name": "Sentient Remote Sensor Booster"
+        },
+        {
+          "typeId": 41199,
+          "name": "Shadow Serpentis Remote Sensor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 41,
+      "group": "Remote Shield Booster",
+      "items": [
+        {
+          "typeId": 41472,
+          "name": "True Sansha Capital Remote Shield Booster"
+        },
+        {
+          "typeId": 41474,
+          "name": "Domination Capital Remote Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 209,
+      "group": "Remote Tracking Computer",
+      "items": [
+        {
+          "typeId": 14240,
+          "name": "Shadow Serpentis Remote Tracking Computer"
+        },
+        {
+          "typeId": 15967,
+          "name": "Federation Navy Remote Tracking Computer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 212,
+      "group": "Sensor Booster",
+      "items": [
+        {
+          "typeId": 14236,
+          "name": "Shadow Serpentis Sensor Booster"
+        },
+        {
+          "typeId": 17520,
+          "name": "Federation Navy Sensor Booster"
+        },
+        {
+          "typeId": 41191,
+          "name": "Sentient Sensor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 212,
+      "group": "Sensor Booster",
+      "items": [
+        {
+          "typeId": 15276,
+          "name": "Brynn's Modified Sensor Booster"
+        },
+        {
+          "typeId": 41192,
+          "name": "Unit D-34343's Modified Sensor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 212,
+      "group": "Sensor Booster",
+      "items": [
+        {
+          "typeId": 15278,
+          "name": "Tuvan's Modified Sensor Booster"
+        },
+        {
+          "typeId": 41193,
+          "name": "Unit F-435454's Modified Sensor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 212,
+      "group": "Sensor Booster",
+      "items": [
+        {
+          "typeId": 15280,
+          "name": "Setele's Modified Sensor Booster"
+        },
+        {
+          "typeId": 41194,
+          "name": "Unit P-343554's Modified Sensor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 212,
+      "group": "Sensor Booster",
+      "items": [
+        {
+          "typeId": 15282,
+          "name": "Cormack's Modified Sensor Booster"
+        },
+        {
+          "typeId": 41195,
+          "name": "Unit W-634's Modified Sensor Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 338,
+      "group": "Shield Boost Amplifier",
+      "items": [
+        {
+          "typeId": 14045,
+          "name": "Domination Shield Boost Amplifier"
+        },
+        {
+          "typeId": 15907,
+          "name": "Republic Fleet Shield Boost Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 338,
+      "group": "Shield Boost Amplifier",
+      "items": [
+        {
+          "typeId": 14047,
+          "name": "Dread Guristas Shield Boost Amplifier"
+        },
+        {
+          "typeId": 15905,
+          "name": "Caldari Navy Shield Boost Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13947,
+          "name": "Dread Guristas Large Shield Booster"
+        },
+        {
+          "typeId": 15900,
+          "name": "Caldari Navy Large Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13948,
+          "name": "Domination Large Shield Booster"
+        },
+        {
+          "typeId": 15904,
+          "name": "Republic Fleet Large Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13949,
+          "name": "Dread Guristas Medium Shield Booster"
+        },
+        {
+          "typeId": 15899,
+          "name": "Caldari Navy Medium Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13950,
+          "name": "Domination Medium Shield Booster"
+        },
+        {
+          "typeId": 15903,
+          "name": "Republic Fleet Medium Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13951,
+          "name": "Dread Guristas Small Shield Booster"
+        },
+        {
+          "typeId": 15898,
+          "name": "Caldari Navy Small Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13952,
+          "name": "Domination Small Shield Booster"
+        },
+        {
+          "typeId": 15902,
+          "name": "Republic Fleet Small Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13953,
+          "name": "Dread Guristas X-Large Shield Booster"
+        },
+        {
+          "typeId": 15897,
+          "name": "Caldari Navy X-Large Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 13954,
+          "name": "Domination X-Large Shield Booster"
+        },
+        {
+          "typeId": 15901,
+          "name": "Republic Fleet X-Large Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 40,
+      "group": "Shield Booster",
+      "items": [
+        {
+          "typeId": 41508,
+          "name": "True Sansha Capital Shield Booster"
+        },
+        {
+          "typeId": 41510,
+          "name": "Domination Capital Shield Booster"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 38,
+      "group": "Shield Extender",
+      "items": [
+        {
+          "typeId": 41459,
+          "name": "CONCORD Capital Shield Extender"
+        },
+        {
+          "typeId": 41460,
+          "name": "True Sansha Capital Shield Extender"
+        },
+        {
+          "typeId": 41461,
+          "name": "Dread Guristas Capital Shield Extender"
+        },
+        {
+          "typeId": 41462,
+          "name": "Domination Capital Shield Extender"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 77,
+      "group": "Shield Hardener",
+      "items": [
+        {
+          "typeId": 14765,
+          "name": "Thon's Modified Multispectrum Shield Hardener"
+        },
+        {
+          "typeId": 88262,
+          "name": "Strategos' Modified Multispectrum Shield Hardener"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14029,
+          "name": "Domination Explosive Shield Amplifier"
+        },
+        {
+          "typeId": 15923,
+          "name": "Republic Fleet Explosive Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14031,
+          "name": "Dread Guristas Explosive Shield Amplifier"
+        },
+        {
+          "typeId": 15915,
+          "name": "Caldari Navy Explosive Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14033,
+          "name": "Domination Thermal Shield Amplifier"
+        },
+        {
+          "typeId": 15921,
+          "name": "Republic Fleet Thermal Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14035,
+          "name": "Dread Guristas Thermal Shield Amplifier"
+        },
+        {
+          "typeId": 15913,
+          "name": "Caldari Navy Thermal Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14037,
+          "name": "Domination Kinetic Shield Amplifier"
+        },
+        {
+          "typeId": 15919,
+          "name": "Republic Fleet Kinetic Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14039,
+          "name": "Dread Guristas Kinetic Shield Amplifier"
+        },
+        {
+          "typeId": 15911,
+          "name": "Caldari Navy Kinetic Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14041,
+          "name": "Domination EM Shield Amplifier"
+        },
+        {
+          "typeId": 15917,
+          "name": "Republic Fleet EM Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 295,
+      "group": "Shield Resistance Amplifier",
+      "items": [
+        {
+          "typeId": 14043,
+          "name": "Dread Guristas EM Shield Amplifier"
+        },
+        {
+          "typeId": 15909,
+          "name": "Caldari Navy EM Shield Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 210,
+      "group": "Signal Amplifier",
+      "items": [
+        {
+          "typeId": 41196,
+          "name": "Sentient Signal Amplifier"
+        },
+        {
+          "typeId": 41197,
+          "name": "Syndicate Signal Amplifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14188,
+          "name": "Dark Blood Large EMP Smartbomb"
+        },
+        {
+          "typeId": 14190,
+          "name": "True Sansha Large EMP Smartbomb"
+        },
+        {
+          "typeId": 15947,
+          "name": "Ammatar Navy Large EMP Smartbomb"
+        },
+        {
+          "typeId": 15963,
+          "name": "Imperial Navy Large EMP Smartbomb"
+        },
+        {
+          "typeId": 28545,
+          "name": "Khanid Navy Large EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14192,
+          "name": "Dark Blood Medium EMP Smartbomb"
+        },
+        {
+          "typeId": 14194,
+          "name": "True Sansha Medium EMP Smartbomb"
+        },
+        {
+          "typeId": 15961,
+          "name": "Imperial Navy Medium EMP Smartbomb"
+        },
+        {
+          "typeId": 28550,
+          "name": "Khanid Navy Medium EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14196,
+          "name": "Dark Blood Micro EMP Smartbomb"
+        },
+        {
+          "typeId": 14198,
+          "name": "True Sansha Micro EMP Smartbomb"
+        },
+        {
+          "typeId": 15943,
+          "name": "Ammatar Navy Micro EMP Smartbomb"
+        },
+        {
+          "typeId": 15959,
+          "name": "Imperial Navy Micro EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14200,
+          "name": "Dark Blood Small EMP Smartbomb"
+        },
+        {
+          "typeId": 14202,
+          "name": "True Sansha Small EMP Smartbomb"
+        },
+        {
+          "typeId": 15941,
+          "name": "Ammatar Navy Small EMP Smartbomb"
+        },
+        {
+          "typeId": 15957,
+          "name": "Imperial Navy Small EMP Smartbomb"
+        },
+        {
+          "typeId": 28557,
+          "name": "Khanid Navy Small EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14204,
+          "name": "Dread Guristas Large Graviton Smartbomb"
+        },
+        {
+          "typeId": 15931,
+          "name": "Caldari Navy Large Graviton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14206,
+          "name": "Shadow Serpentis Large Plasma Smartbomb"
+        },
+        {
+          "typeId": 15955,
+          "name": "Federation Navy Large Plasma Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14208,
+          "name": "Domination Large Proton Smartbomb"
+        },
+        {
+          "typeId": 15939,
+          "name": "Republic Fleet Large Proton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14210,
+          "name": "Dread Guristas Medium Graviton Smartbomb"
+        },
+        {
+          "typeId": 15929,
+          "name": "Caldari Navy Medium Graviton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14212,
+          "name": "Dread Guristas Micro Graviton Smartbomb"
+        },
+        {
+          "typeId": 15927,
+          "name": "Caldari Navy Micro Graviton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14214,
+          "name": "Dread Guristas Small Graviton Smartbomb"
+        },
+        {
+          "typeId": 15925,
+          "name": "Caldari Navy Small Graviton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14218,
+          "name": "Shadow Serpentis Micro Plasma Smartbomb"
+        },
+        {
+          "typeId": 15951,
+          "name": "Federation Navy Micro Plasma Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14220,
+          "name": "Shadow Serpentis Medium Plasma Smartbomb"
+        },
+        {
+          "typeId": 15953,
+          "name": "Federation Navy Medium Plasma Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14222,
+          "name": "Domination Medium Proton Smartbomb"
+        },
+        {
+          "typeId": 15937,
+          "name": "Republic Fleet Medium Proton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14224,
+          "name": "Domination Micro Proton Smartbomb"
+        },
+        {
+          "typeId": 15933,
+          "name": "Republic Fleet Micro Proton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14226,
+          "name": "Domination Small Proton Smartbomb"
+        },
+        {
+          "typeId": 15935,
+          "name": "Republic Fleet Small Proton Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14228,
+          "name": "Shadow Serpentis Small Plasma Smartbomb"
+        },
+        {
+          "typeId": 15949,
+          "name": "Federation Navy Small Plasma Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14784,
+          "name": "Brokara's Modified Large EMP Smartbomb"
+        },
+        {
+          "typeId": 14786,
+          "name": "Tairei's Modified Large EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14788,
+          "name": "Selynne's Modified Large EMP Smartbomb"
+        },
+        {
+          "typeId": 14790,
+          "name": "Raysere's Modified Large EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14792,
+          "name": "Vizan's Modified Large EMP Smartbomb"
+        },
+        {
+          "typeId": 14794,
+          "name": "Ahremen's Modified Large EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 72,
+      "group": "Smart Bomb",
+      "items": [
+        {
+          "typeId": 14796,
+          "name": "Chelm's Modified Large EMP Smartbomb"
+        },
+        {
+          "typeId": 14798,
+          "name": "Draclira's Modified Large EMP Smartbomb"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 65,
+      "group": "Stasis Web",
+      "items": [
+        {
+          "typeId": 14262,
+          "name": "Dark Blood Stasis Webifier"
+        },
+        {
+          "typeId": 14268,
+          "name": "True Sansha Stasis Webifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 65,
+      "group": "Stasis Web",
+      "items": [
+        {
+          "typeId": 14264,
+          "name": "Domination Stasis Webifier"
+        },
+        {
+          "typeId": 41038,
+          "name": "Republic Fleet Stasis Webifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 65,
+      "group": "Stasis Web",
+      "items": [
+        {
+          "typeId": 14266,
+          "name": "Dread Guristas Stasis Webifier"
+        },
+        {
+          "typeId": 17500,
+          "name": "Caldari Navy Stasis Webifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 65,
+      "group": "Stasis Web",
+      "items": [
+        {
+          "typeId": 14270,
+          "name": "Shadow Serpentis Stasis Webifier"
+        },
+        {
+          "typeId": 17559,
+          "name": "Federation Navy Stasis Webifier"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 379,
+      "group": "Target Painter",
+      "items": [
+        {
+          "typeId": 31944,
+          "name": "Republic Fleet Target Painter"
+        },
+        {
+          "typeId": 32414,
+          "name": "Domination Target Painter"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 213,
+      "group": "Tracking Computer",
+      "items": [
+        {
+          "typeId": 14238,
+          "name": "Shadow Serpentis Tracking Computer"
+        },
+        {
+          "typeId": 15792,
+          "name": "Federation Navy Tracking Computer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 211,
+      "group": "Tracking Enhancer",
+      "items": [
+        {
+          "typeId": 14100,
+          "name": "Domination Tracking Enhancer"
+        },
+        {
+          "typeId": 15965,
+          "name": "Republic Fleet Tracking Enhancer"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 899,
+      "group": "Warp Disrupt Field Generator",
+      "items": [
+        {
+          "typeId": 37612,
+          "name": "True Sansha Warp Disruption Field Generator"
+        },
+        {
+          "typeId": 37613,
+          "name": "CONCORD Warp Disruption Field Generator"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 52,
+      "group": "Warp Scrambler",
+      "items": [
+        {
+          "typeId": 14242,
+          "name": "Dark Blood Warp Disruptor"
+        },
+        {
+          "typeId": 14244,
+          "name": "Domination Warp Disruptor"
+        },
+        {
+          "typeId": 14248,
+          "name": "True Sansha Warp Disruptor"
+        },
+        {
+          "typeId": 15891,
+          "name": "Republic Fleet Warp Disruptor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 52,
+      "group": "Warp Scrambler",
+      "items": [
+        {
+          "typeId": 14246,
+          "name": "Dread Guristas Warp Disruptor"
+        },
+        {
+          "typeId": 15889,
+          "name": "Caldari Navy Warp Disruptor"
+        },
+        {
+          "typeId": 28516,
+          "name": "Khanid Navy Warp Disruptor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 52,
+      "group": "Warp Scrambler",
+      "items": [
+        {
+          "typeId": 14250,
+          "name": "Shadow Serpentis Warp Disruptor"
+        },
+        {
+          "typeId": 41062,
+          "name": "Federation Navy Warp Disruptor"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 52,
+      "group": "Warp Scrambler",
+      "items": [
+        {
+          "typeId": 14252,
+          "name": "Dark Blood Warp Scrambler"
+        },
+        {
+          "typeId": 14254,
+          "name": "Domination Warp Scrambler"
+        },
+        {
+          "typeId": 14258,
+          "name": "True Sansha Warp Scrambler"
+        },
+        {
+          "typeId": 15893,
+          "name": "Republic Fleet Warp Scrambler"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 52,
+      "group": "Warp Scrambler",
+      "items": [
+        {
+          "typeId": 14256,
+          "name": "Dread Guristas Warp Scrambler"
+        },
+        {
+          "typeId": 15887,
+          "name": "Caldari Navy Warp Scrambler"
+        },
+        {
+          "typeId": 28518,
+          "name": "Khanid Navy Warp Scrambler"
+        }
+      ]
+    },
+    {
+      "category": "Module",
+      "groupId": 52,
+      "group": "Warp Scrambler",
+      "items": [
+        {
+          "typeId": 14260,
+          "name": "Shadow Serpentis Warp Scrambler"
+        },
+        {
+          "typeId": 41061,
+          "name": "Federation Navy Warp Scrambler"
+        }
+      ]
+    },
+    {
+      "category": "Ship",
+      "groupId": 28,
+      "group": "Hauler",
+      "items": [
+        {
+          "typeId": 4388,
+          "name": "Miasmos Quafe Ultramarine Edition"
+        },
+        {
+          "typeId": 32811,
+          "name": "Miasmos Amastris Edition"
+        }
+      ]
+    },
+    {
+      "category": "Ship",
+      "groupId": 5087,
+      "group": "Special Edition Yachts",
+      "items": [
+        {
+          "typeId": 34590,
+          "name": "Victorieux Luxury Yacht"
+        },
+        {
+          "typeId": 92282,
+          "name": "Tenzin YC128 Campaign Bus"
+        },
+        {
+          "typeId": 92283,
+          "name": "Moreau YC128 Campaign Bus"
+        },
+        {
+          "typeId": 92284,
+          "name": "Roden YC128 Campaign Bus"
+        }
+      ]
+    }
+  ]
+}
